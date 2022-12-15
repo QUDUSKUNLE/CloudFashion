@@ -1,0 +1,7 @@
+export enum QueueJobs {
+  PRODUCTS = 'PRODUCTS',
+  ORDERS = 'ORDERS',
+  PAYMENTS = 'PAYMENTS',
+  ITEMS = 'ITEMS',
+  SHIPMENTS = 'SHIPMENTS',
+}
