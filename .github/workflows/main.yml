@@ -1,4 +1,4 @@
-name: HalalMarket CI
+name: CloudFashion CI
 
 on:
   push:
@@ -18,7 +18,7 @@ jobs:
           - 14.x
         architecture:
          - x64
-    name: HalalMarket ${{ matrix.node-version }} - ${{ matrix.architecture }} on ${{ matrix.os }}
+    name: CloudFashion ${{ matrix.node-version }} - ${{ matrix.architecture }} on ${{ matrix.os }}
 
     steps:
       - uses: actions/checkout@v2
@@ -29,7 +29,7 @@ jobs:
       - name: Cache node modules
         uses: actions/cache@v2
         env:
-          cache-name: HalalMarket-Node-Modules
+          cache-name: CloudFashion-Node-Modules
         with:
           path: ~/.npm
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
