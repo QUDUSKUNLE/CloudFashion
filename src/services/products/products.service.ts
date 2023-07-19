@@ -1,25 +1,25 @@
-import * as fs from 'fs';
-import * as path from 'path';
-import * as express from 'express';
-import { v4 } from 'uuid';
-import { Model } from 'mongoose';
-import { InjectModel } from '@nestjs/mongoose';
 import {
-  ConflictException,
-  HttpException,
-  HttpStatus,
-  Injectable,
-  NotFoundException,
+    ConflictException,
+    HttpException,
+    HttpStatus,
+    Injectable,
+    NotFoundException,
 } from '@nestjs/common';
-import { UpdateItemInput } from 'src/services/orders/dto/create-order.input';
-import { Statuses } from 'src/services/products/entities/product.entity';
-import { QueueJobs } from 'src/services/queue/queue.enums';
-import { QueueService } from 'src/services/queue/queue.service';
+import { InjectModel } from '@nestjs/mongoose';
+import * as express from 'express';
+import * as fs from 'fs';
+import { Model } from 'mongoose';
+import * as path from 'path';
+import { v4 } from 'uuid';
 import {
-  Vendor,
-  VendorDocument,
+    Vendor,
+    VendorDocument,
 } from '../../clients/vendors/models/vendor.schema';
+import { UpdateItemInput } from '../orders/dto/create-order.input';
 import { Item, ItemDocument } from '../orders/models/orders.schema';
+import { Statuses } from '../products/entities/product.entity';
+import { QueueJobs } from '../queue/queue.enums';
+import { QueueService } from '../queue/queue.service';
 import { CreateProductInput } from './dto/create-product.input';
 import { UpdateProductInput } from './dto/update-product.input';
 import { Product, ProductDocument } from './models/products.schema';

@@ -2,7 +2,7 @@ import GraphQLJSON from 'graphql-type-json';
 import { Document, Schema as Sch } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Field, GraphQLISODateTime, ObjectType } from '@nestjs/graphql';
-import { CreateClothingInput } from 'src/services/clothing/dto/create-clothing.input';
+import { CreateClothingInput } from '../dto/create-clothing.input';
 import { MeasurementCategories } from '../interface/interface';
 
 export type MeasurementDocument = Measurement & Document;

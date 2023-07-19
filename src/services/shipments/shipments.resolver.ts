@@ -1,7 +1,7 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import * as express from 'express';
-import { UserRole } from 'src/common/interface';
-import { GraphRequest, Roles } from 'src/user.decorator';
+import { UserRole } from '../../common/interface';
+import { GraphRequest, Roles } from '../../user.decorator';
 import {
   CreateShipmentInput,
   FindShipmentInput,
@@ -15,7 +15,7 @@ export class ShipmentsResolver {
   constructor(private readonly shipmentsService: ShipmentsService) {}
 
   @Roles(UserRole.VENDOR)
-  @Mutation(() => Shipment, { name: 'CreateAShipment' })
+  @Mutation(() => Shipment, { name: 'CreateShipment' })
   createShipment(
     @Args('createShipmentInput', { type: () => CreateShipmentInput })
     createShipmentInput: CreateShipmentInput,
@@ -31,7 +31,7 @@ export class ShipmentsResolver {
   }
 
   @Roles(UserRole.VENDOR)
-  @Query(() => Shipment, { name: 'GetAShipment' })
+  @Query(() => Shipment, { name: 'GetShipment' })
   findOne(
     @Args('findShipmentInput', { type: () => FindShipmentInput })
     findShipmentInput: FindShipmentInput,
@@ -41,7 +41,7 @@ export class ShipmentsResolver {
   }
 
   @Roles(UserRole.VENDOR)
-  @Mutation(() => Shipment, { name: 'UpdateAShipment' })
+  @Mutation(() => Shipment, { name: 'UpdateShipment' })
   updateShipment(
     @Args('updateShipmentInput', { type: () => UpdateShipmentInput })
     updateShipmentInput: UpdateShipmentInput,
@@ -51,7 +51,7 @@ export class ShipmentsResolver {
   }
 
   @Roles(UserRole.ADMIN)
-  @Mutation(() => Shipment, { name: 'DeleteAShipment' })
+  @Mutation(() => Shipment, { name: 'DeleteShipment' })
   removeShipment(
     @Args('findShipmentInput', { type: () => FindShipmentInput })
     findShipmentInput: FindShipmentInput,

@@ -7,7 +7,7 @@ import {
   IsArray,
   ValidateNested,
 } from 'class-validator';
-import { Address } from 'src/common/address.input';
+import { Address } from '../../../common/address.input';
 
 @InputType()
 export class CreateUserInput {

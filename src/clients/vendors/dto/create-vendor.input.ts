@@ -7,8 +7,8 @@ import {
   IsString,
   MaxLength,
 } from 'class-validator';
-import { UserRole } from 'src/common/interface';
-import { Address } from 'src/common/address.input';
+import { UserRole } from '../../../common/interface';
+import { Address } from '../../../common/address.input';
 
 @InputType()
 export class CreateVendorInput {

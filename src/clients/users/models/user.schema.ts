@@ -2,8 +2,8 @@ import { Field, GraphQLISODateTime, ObjectType } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import GraphQLJSON from 'graphql-type-json';
 import { Document } from 'mongoose';
-import { Address } from 'src/common/address.input';
-import { UserRole } from 'src/common/interface';
+import { Address } from '../../../common/address.input';
+import { UserRole } from '../../../common/interface';
 
 export type UserDocument = User & Document;
 
@@ -11,16 +11,9 @@ export type UserDocument = User & Document;
 @ObjectType()
 export class User {
   @Field(() => String, { nullable: true, description: 'User Identity.' })
-  @Prop({
-    type: String,
-    unique: true,
-    required: true,
-    description: 'User Identity.',
-  })
   UserID: string;
 
   @Field(() => String, { description: 'User Email' })
-  @Prop({ type: String, maxLength: 50, unique: true })
   Email: string;
 
   @Prop({ type: String, required: false })
@@ -30,40 +23,33 @@ export class User {
     nullable: true,
     description: 'User PhoneNumbers.',
   })
-  @Prop({ type: [String] })
   PhoneNumbers?: string[];
 
   @Field(() => String, { nullable: true, description: 'User FirstName.' })
-  @Prop({ type: String, maxLength: 50 })
-  FirstName: string;
+  FirstName?: string;
 
   @Field(() => String, { nullable: true, description: 'User LastName.' })
-  @Prop({ type: String, maxLength: 50 })
-  LastName: string;
+  LastName?: string;
 
   @Field(() => GraphQLJSON, {
     nullable: true,
     description: 'User Address.',
   })
-  @Prop({ type: Address, required: false })
-  Address: Address;
+  Address?: Address;
 
   @Field(() => [String], { nullable: true, description: 'User Roles.' })
-  @Prop({ type: [String], default: [UserRole.USER] })
   Roles: UserRole[];
 
   @Field(() => GraphQLISODateTime, {
     nullable: true,
     description: 'User CreatedAt.',
   })
-  @Prop({ type: Date, default: Date.now })
   CreatedAt: Date;
 
   @Field(() => GraphQLISODateTime, {
     nullable: true,
     description: 'User UpdatedAt.',
   })
-  @Prop({ type: Date, default: Date.now })
   UpdatedAt: Date;
 }
 

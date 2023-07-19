@@ -1,8 +1,8 @@
 import { BullModule } from '@nestjs/bull';
 import { forwardRef, Module } from '@nestjs/common';
 import { OrdersModule } from '../orders/orders.module';
-import { ProductsModule } from 'src/services/products/products.module';
-import { YoutubeModule } from 'src/services/youtube/youtube.module';
+import { ProductsModule } from '../products/products.module';
+import { YoutubeModule } from '../youtube/youtube.module';
 import { HalalMarketConsumer } from './queue.consumer';
 import { QueueService } from './queue.service';
 

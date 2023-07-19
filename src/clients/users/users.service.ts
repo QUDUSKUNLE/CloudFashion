@@ -1,72 +1,52 @@
-import * as express from 'express';
-import { Model } from 'mongoose';
-import { v4 } from 'uuid';
-import {
-  ConflictException,
-  Injectable,
-  UnauthorizedException,
-} from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
+import * as bcrypt from 'bcryptjs';
+import { Injectable } from '@nestjs/common';
+import { PrismaService } from '../../prisma/prisma.service';
 import { CreateUserInput, FindUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
-import { User, UserDocument } from './models/user.schema';
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectModel(User.name) private UserModel: Model<UserDocument>) {}
+  constructor(private readonly prismaService: PrismaService) {}
   async create(createUserInput: CreateUserInput) {
-    try {
-      const createdUser = new this.UserModel({
-        ...createUserInput,
-        UserID: v4(),
-      });
-      return await createdUser.save();
-    } catch (error) {
-      if (error.message.includes('duplicate key')) {
-        throw new ConflictException(error.message);
-      }
-      throw error;
-    }
+    const hashedPassword = await bcrypt.hash(createUserInput.Password, 10);
+    return await this.prismaService.user.create({
+      data: {
+        Email: createUserInput.Email,
+        Password: <string>hashedPassword,
+        PhoneNumbers: createUserInput.PhoneNumbers,
+        FirstName: createUserInput.FirstName,
+        LastName: createUserInput.LastName,
+      },
+    });
   }
 
   async findAll() {
-    return await this.UserModel.find().exec();
+    return await this.prismaService.user.findMany();
   }
 
-  async findOne(
-    findUserInput: FindUserInput,
-    req: express.Request,
-  ): Promise<User> {
-    if (findUserInput.UserID !== req.sub.UserID)
-      throw new UnauthorizedException('Unauthorized.');
-    return await this.UserModel.findOne({
-      UserID: findUserInput.UserID,
-    }).exec();
+  async findOne(findUserInput: FindUserInput) {
+    return await this.prismaService.user.findUnique({
+      where: { UserID: findUserInput.UserID },
+    });
   }
 
-  async updateOne(
-    updateUserInput: UpdateUserInput,
-    req: express.Request,
-  ): Promise<User> {
-    if (updateUserInput.UserID !== req.sub.UserID)
-      throw new UnauthorizedException('Unauthorized.');
-    return await this.UserModel.findOneAndUpdate(
-      { UserID: updateUserInput.UserID },
-      {
-        ...updateUserInput,
+  async updateOne(updateUserInput: UpdateUserInput) {
+    return await this.prismaService.user.upsert({
+      where: {
+        UserID: updateUserInput.UserID,
       },
-      { new: true },
-    ).exec();
+      update: {
+        Email: updateUserInput.Email,
+      },
+      create: undefined,
+    });
   }
 
-  async deleteOne(findUserInput: FindUserInput, req: express.Request) {
-    if (findUserInput.UserID !== req.sub.UserID)
-      throw new UnauthorizedException('Unauthorized.');
-    return await this.UserModel.findOneAndDelete(
-      {
+  async deleteOne(findUserInput: FindUserInput) {
+    return await this.prismaService.user.deleteMany({
+      where: {
         UserID: findUserInput.UserID,
       },
-      { rawResult: true },
-    ).exec();
+    });
   }
 }

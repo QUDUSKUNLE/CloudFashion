@@ -6,8 +6,8 @@ import {
   IsArray,
   ValidateNested,
 } from 'class-validator';
-import { UserRole, States } from 'src/common/interface';
-import { Address } from 'src/common/address.input';
+import { UserRole, State } from '../../../common/interface';
+import { Address } from '../../../common/address.input';
 
 @InputType()
 export class CreateDesignerInput {
@@ -41,7 +41,7 @@ export class FindDesignerInput {
   DesignerID: string;
 }
 
-registerEnumType(States, {
-  name: 'States',
-  description: 'States',
+registerEnumType(State, {
+  name: 'State',
+  description: 'State',
 });

@@ -1,8 +1,16 @@
 import * as express from 'express';
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
+import {
+  forwardRef,
+  Inject,
+  Injectable,
+  ConflictException,
+  UnauthorizedException,
+  BadRequestException,
+} from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { UserRole } from 'src/common/interface';
-import { GraphRequest, Roles } from 'src/user.decorator';
+import { UserRole } from '../../common/interface';
+import { GraphRequest, Roles } from '../../user.decorator';
 import { AuthService } from '../../services/auth/auth.service';
 import {
   CreateUserInput,
@@ -23,16 +31,26 @@ export class UsersResolver {
   ) {}
 
   @Roles(UserRole.PUBLIC)
-  @Mutation(() => User, { name: 'CreateAUserProfile' })
-  createUser(
+  @Mutation(() => User, { name: 'CreateUserProfile' })
+  async createUser(
     @Args('createUserInput', { type: () => CreateUserInput })
     createUserInput: CreateUserInput,
   ) {
-    return this.usersService.create(createUserInput);
+    try {
+      if (createUserInput.Password !== createUserInput.ConfirmPassword)
+        throw new BadRequestException('Bad Request');
+      return await this.usersService.create(createUserInput);
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if (error.code === 'P2002')
+          throw new ConflictException('User`s already exist.');
+        throw error;
+      }
+    }
   }
 
   @Roles(UserRole.PUBLIC)
-  @Mutation(() => LoginResponse, { name: 'LogInAUser' })
+  @Mutation(() => LoginResponse, { name: 'LogInUser' })
   async login(
     @Args('logInUserInput', { type: () => LogInUserInput })
     logInUserInput: LogInUserInput,
@@ -44,7 +62,7 @@ export class UsersResolver {
   }
 
   @Roles(UserRole.USER)
-  @Mutation(() => LogoutResponse, { name: 'LogOutAUser' })
+  @Mutation(() => LogoutResponse, { name: 'LogOutUser' })
   logout() {
     return this.authService.logOutUser();
   }
@@ -56,32 +74,38 @@ export class UsersResolver {
   }
 
   @Roles(UserRole.USER)
-  @Query(() => User, { name: 'GetAUserProfile' })
-  findOne(
+  @Query(() => User, { name: 'GetUserProfile' })
+  async findOne(
     @Args('findUserInput', { type: () => FindUserInput })
     findUserInput: FindUserInput,
     @GraphRequest() req: express.Request,
   ) {
-    return this.usersService.findOne(findUserInput, req);
+    if (findUserInput.UserID !== req.sub.UserID)
+      throw new UnauthorizedException('Unauthorized.');
+    return await this.usersService.findOne(findUserInput);
   }
 
   @Roles(UserRole.USER)
-  @Mutation(() => User, { name: 'UpdateAUserProfile' })
+  @Mutation(() => User, { name: 'UpdateUserProfile' })
   updateOne(
     @Args('updateUserInput', { type: () => UpdateUserInput })
     updateUserInput: UpdateUserInput,
     @GraphRequest() req: express.Request,
   ) {
-    return this.usersService.updateOne(updateUserInput, req);
+    if (updateUserInput.UserID !== req.sub.UserID)
+      throw new UnauthorizedException('Unauthorized.');
+    return this.usersService.updateOne(updateUserInput);
   }
 
   @Roles(UserRole.ADMIN)
-  @Mutation(() => User, { name: 'DeleteAUserProfile' })
+  @Mutation(() => User, { name: 'DeleteUserProfile' })
   removeOne(
     @Args('findUserInput', { type: () => FindUserInput })
     findUserInput: FindUserInput,
     @GraphRequest() req: express.Request,
   ) {
-    return this.usersService.deleteOne(findUserInput, req);
+    if (findUserInput.UserID !== req.sub.UserID)
+      throw new UnauthorizedException('Unauthorized.');
+    return this.usersService.deleteOne(findUserInput);
   }
 }

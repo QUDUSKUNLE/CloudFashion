@@ -6,8 +6,8 @@ import { InjectModel } from '@nestjs/mongoose';
 import { CreatePaymentInput } from './dto/create-payment.input';
 import { UpdatePaymentInput } from './dto/update-payment.input';
 
-import { QueueJobs } from 'src/services/queue/queue.enums';
-import { QueueService } from 'src/services/queue/queue.service';
+import { QueueJobs } from '../queue/queue.enums';
+import { QueueService } from '../queue/queue.service';
 import { Payment, PaymentDocument } from './models/payment.schema';
 
 @Injectable()

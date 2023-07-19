@@ -1,6 +1,6 @@
 import { InputType, Field, Int } from '@nestjs/graphql';
 import { IsEnum, IsString, IsInt, IsDate } from 'class-validator';
-import { States, ItemStatus } from 'src/common/interface';
+import { State, ItemStatus } from './interface';
 
 @InputType()
 export class Address {
@@ -16,9 +16,9 @@ export class Address {
   @IsString()
   City: string;
 
-  @Field(() => States, { nullable: false, description: 'States' })
-  @IsEnum(States)
-  State: States;
+  @Field(() => State, { nullable: false, description: 'States' })
+  @IsEnum(State)
+  State: State;
 }
 
 @InputType()

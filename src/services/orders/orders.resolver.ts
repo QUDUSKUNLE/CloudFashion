@@ -2,8 +2,8 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { InjectModel } from '@nestjs/mongoose';
 import * as express from 'express';
 import { Model } from 'mongoose';
-import { UserRole } from 'src/common/interface';
-import { GraphRequest, Roles } from 'src/user.decorator';
+import { UserRole } from '../../common/interface';
+import { GraphRequest, Roles } from '../../user.decorator';
 import { HelperService } from '../helpers/index';
 import { Product, ProductDocument } from '../products/models/products.schema';
 import { CreateOrderInput, FindOrderInput } from './dto/create-order.input';
@@ -21,7 +21,7 @@ export class OrdersResolver {
   ) {}
 
   @Roles(UserRole.USER)
-  @Mutation(() => OrderResponse, { name: 'CreateAnOrder' })
+  @Mutation(() => OrderResponse, { name: 'CreateOrder' })
   async createOrder(
     @Args('createOrderInput', { type: () => CreateOrderInput })
     createOrderInput: CreateOrderInput,
@@ -41,7 +41,7 @@ export class OrdersResolver {
   }
 
   @Roles(UserRole.USER)
-  @Query(() => AOrder, { name: 'GetAOrder' })
+  @Query(() => AOrder, { name: 'GetOrder' })
   findAOrder(
     @Args('findOrderInput', { type: () => FindOrderInput })
     findOrderInput: FindOrderInput,
@@ -51,7 +51,7 @@ export class OrdersResolver {
   }
 
   @Roles(UserRole.USER)
-  @Mutation(() => Order, { name: 'UpdateAnOrder' })
+  @Mutation(() => Order, { name: 'UpdateOrder' })
   updateOrder(
     @Args('updateOrderInput', { type: () => UpdateOrderInput })
     updateOrderInput: UpdateOrderInput,
@@ -61,7 +61,7 @@ export class OrdersResolver {
   }
 
   @Roles(UserRole.ADMIN)
-  @Mutation(() => Order, { name: 'DeleteAnOrder' })
+  @Mutation(() => Order, { name: 'DeleteOrder' })
   removeOrder(
     @Args('findOrderInput', { type: () => FindOrderInput })
     findOrderInput: FindOrderInput,

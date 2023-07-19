@@ -1,7 +1,7 @@
 import GraphQLJSON from 'graphql-type-json';
 import { Schema, SchemaFactory, Prop } from '@nestjs/mongoose';
 import { Field, GraphQLISODateTime, ObjectType } from '@nestjs/graphql';
-import { Address } from 'src/common/address.input';
+import { Address } from '../../../common/address.input';
 
 export type VendorDocument = Vendor & Document;
 

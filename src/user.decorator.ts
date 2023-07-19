@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
 
-import { UserRole } from 'src/common/interface';
+import { UserRole } from './common/interface';
 
 export const GraphRequest = createParamDecorator(
   (data: unknown, context: ExecutionContext): express.Request => {

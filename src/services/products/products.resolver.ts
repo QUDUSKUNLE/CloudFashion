@@ -1,24 +1,24 @@
-import * as express from 'express';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { UserRole } from 'src/common/interface';
-import { UpdateItemInput } from 'src/services/orders/dto/create-order.input';
-import { ItemResponse } from 'src/services/orders/entities/order.entity';
-import { GraphRequest, Roles } from 'src/user.decorator';
+import * as express from 'express';
+import { UserRole } from '../../common/interface';
+import { GraphRequest, Roles } from '../../user.decorator';
+import { UpdateItemInput } from '../orders/dto/create-order.input';
+import { ItemResponse } from '../orders/entities/order.entity';
+import { Item } from '../orders/models/orders.schema';
 import {
   CreateProductInput,
   FindProductInput,
 } from './dto/create-product.input';
 import { UpdateProductInput } from './dto/update-product.input';
-import { ProductsService } from './products.service';
 import { Product } from './models/products.schema';
-import { Item } from '../orders/models/orders.schema';
+import { ProductsService } from './products.service';
 
 @Resolver(() => Product)
 export class ProductsResolver {
   constructor(private readonly productsService: ProductsService) {}
 
   @Roles(UserRole.VENDOR)
-  @Mutation(() => Product, { name: 'CreateAProduct' })
+  @Mutation(() => Product, { name: 'CreateProduct' })
   createProduct(
     @Args('createProductInput', { type: () => CreateProductInput })
     createProductInput: CreateProductInput,
@@ -34,13 +34,13 @@ export class ProductsResolver {
   }
 
   @Roles(UserRole.VENDOR)
-  @Query(() => [Product], { name: 'GetAVendorProducts' })
+  @Query(() => [Product], { name: 'GetVendorProducts' })
   find(@GraphRequest() req: express.Request) {
     return this.productsService.find(req);
   }
 
   @Roles(UserRole.VENDOR)
-  @Mutation(() => ItemResponse, { name: 'UpdateAnItemStatus' })
+  @Mutation(() => ItemResponse, { name: 'UpdateItemStatus' })
   updateItemStatus(
     @Args('updateItemStatus', { type: () => UpdateItemInput })
     updateItemStatus: UpdateItemInput,
@@ -55,7 +55,7 @@ export class ProductsResolver {
   }
 
   @Roles(UserRole.VENDOR)
-  @Query(() => Product, { name: 'GetAProduct' })
+  @Query(() => Product, { name: 'GetProduct' })
   findOne(
     @Args('findProductInput', { type: () => FindProductInput })
     findProductInput: FindProductInput,
@@ -65,7 +65,7 @@ export class ProductsResolver {
   }
 
   @Roles(UserRole.VENDOR)
-  @Mutation(() => Product, { name: 'UpdateAProduct' })
+  @Mutation(() => Product, { name: 'UpdateProduct' })
   updateProduct(
     @Args('updateProductInput', { type: () => UpdateProductInput })
     updateProductInput: UpdateProductInput,
@@ -75,7 +75,7 @@ export class ProductsResolver {
   }
 
   @Roles(UserRole.VENDOR)
-  @Mutation(() => Product, { name: 'DeleteAProduct' })
+  @Mutation(() => Product, { name: 'DeleteProduct' })
   removeProduct(
     @Args('findProductInput', { type: () => FindProductInput })
     findProductInput: FindProductInput,

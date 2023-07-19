@@ -11,7 +11,7 @@ import {
 import { User, UserDocument } from '../users/models/user.schema';
 import { CreateDesignerInput } from './dto/create-designer.input';
 import { UpdateDesignerInput } from './dto/update-designer.input';
-import { UserRole } from 'src/common/interface';
+import { UserRole } from '../../common/interface';
 import { Designer, DesignerDocument } from './models/designers.schema';
 import { RedisCacheService } from '../../services/redis-cache/redis-cache.service';
 

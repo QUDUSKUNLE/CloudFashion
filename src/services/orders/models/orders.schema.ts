@@ -8,8 +8,8 @@ import {
 import GraphQLJSON from 'graphql-type-json';
 import { Document } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Address, Status } from 'src/common/address.input';
-import { ItemStatus } from 'src/common/interface';
+import { Address, Status } from '../../../common/address.input';
+import { ItemStatus } from '../../../common/interface';
 
 export type OrderDocument = Order & Document;
 export type ItemDocument = Item & Document;

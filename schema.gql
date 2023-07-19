@@ -297,25 +297,25 @@ type ClothsPayload {
 
 type Query {
   GetVendorsProfile: [Vendor!]!
-  GetAVendorProfile(findVendorInput: FindVendorInput!): Vendor!
+  GetVendorProfile(findVendorInput: FindVendorInput!): Vendor!
   GetUsersProfile: [User!]!
-  GetAUserProfile(findUserInput: FindUserInput!): User!
+  GetUserProfile(findUserInput: FindUserInput!): User!
   GetShipments: [Shipment!]!
-  GetAShipment(findShipmentInput: FindShipmentInput!): Shipment!
+  GetShipment(findShipmentInput: FindShipmentInput!): Shipment!
   GetOrders: [AOrder!]!
-  GetAOrder(findOrderInput: FindOrderInput!): AOrder!
+  GetOrder(findOrderInput: FindOrderInput!): AOrder!
   GetProducts: [Product!]!
-  GetAVendorProducts: [Product!]!
+  GetVendorProducts: [Product!]!
   ProductLists: [Item!]!
-  GetAProduct(findProductInput: FindProductInput!): Product!
+  GetProduct(findProductInput: FindProductInput!): Product!
   GetPayments: [Payment!]!
-  GetAPayment(findPaymentInput: FindPaymentInput!): Payment!
+  GetPayment(findPaymentInput: FindPaymentInput!): Payment!
   GetDesignersProfile: [Designer!]!
-  GetADesigner(findDesignerInput: FindDesignerInput!): Designer!
+  GetDesigner(findDesignerInput: FindDesignerInput!): Designer!
   GetClothsRequest: [ClothsPayload!]!
   GetMeasurements: [Measurement!]!
-  GetAClothRequest(findClothingInput: FindClothingInput!): ClothsPayload!
-  GetAMeasurement(findMeasurementInput: FindMeasurementInput!): Measurement!
+  GetClothRequest(findClothingInput: FindClothingInput!): ClothsPayload!
+  GetMeasurement(findMeasurementInput: FindMeasurementInput!): Measurement!
 }
 
 input FindVendorInput {
@@ -364,35 +364,35 @@ input FindMeasurementInput {
 }
 
 type Mutation {
-  CreateAVendorProfile(createVendorInput: CreateVendorInput!): Vendor!
-  UpdateAVendorProfile(updateVendorInput: UpdateVendorInput!): String!
-  DeleteAVendorProfile(findVendorInput: FindVendorInput!): Vendor!
-  CreateAUserProfile(createUserInput: CreateUserInput!): User!
-  LogInAUser(logInUserInput: LogInUserInput!): LoginResponse!
-  LogOutAUser: LogoutResponse!
-  UpdateAUserProfile(updateUserInput: UpdateUserInput!): User!
-  DeleteAUserProfile(findUserInput: FindUserInput!): User!
-  CreateAShipment(createShipmentInput: CreateShipmentInput!): Shipment!
-  UpdateAShipment(updateShipmentInput: UpdateShipmentInput!): Shipment!
-  DeleteAShipment(findShipmentInput: FindShipmentInput!): Shipment!
-  CreateAnOrder(createOrderInput: CreateOrderInput!): OrderResponse!
-  UpdateAnOrder(updateOrderInput: UpdateOrderInput!): Order!
-  DeleteAnOrder(findOrderInput: FindOrderInput!): Order!
-  CreateAProduct(createProductInput: CreateProductInput!): Product!
-  UpdateAnItemStatus(updateItemStatus: UpdateItemInput!): ItemResponse!
-  UpdateAProduct(updateProductInput: UpdateProductInput!): Product!
-  DeleteAProduct(findProductInput: FindProductInput!): Product!
-  UpdateAPayment(updatePaymentInput: UpdatePaymentInput!): Payment!
-  DeleteAPayment(findPaymentInput: FindPaymentInput!): Payment!
-  CreateADesignerProfile(createDesignerInput: CreateDesignerInput!): Designer!
-  UpdateADesignerProfile(updateDesignerInput: UpdateDesignerInput!): Designer!
-  DeleteADesignerProfile(findDesignerInput: FindDesignerInput!): Designer!
-  CreateAClothRequest(createClothingInput: CreateClothingInput!): ClothsPayload!
-  CreateAMeasurement(createMeasurementInput: CreateMeasurementInput!): Measurement!
-  UpdateAClothRequest(updateClothingInput: UpdateClothingInput!): Clothing!
-  UpdateAMeasurement(updateMeasurementInput: UpdateMeasurementInput!): Measurement!
-  DeleteAClothRequest(findClothingInput: FindClothingInput!): Clothing!
-  DeleteAMeasurement(findMeasurementInput: FindMeasurementInput!): Measurement!
+  CreateVendorProfile(createVendorInput: CreateVendorInput!): Vendor!
+  UpdateVendorProfile(updateVendorInput: UpdateVendorInput!): String!
+  DeleteVendorProfile(findVendorInput: FindVendorInput!): Vendor!
+  CreateUserProfile(createUserInput: CreateUserInput!): User!
+  LogInUser(logInUserInput: LogInUserInput!): LoginResponse!
+  LogOutUser: LogoutResponse!
+  UpdateUserProfile(updateUserInput: UpdateUserInput!): User!
+  DeleteUserProfile(findUserInput: FindUserInput!): User!
+  CreateShipment(createShipmentInput: CreateShipmentInput!): Shipment!
+  UpdateShipment(updateShipmentInput: UpdateShipmentInput!): Shipment!
+  DeleteShipment(findShipmentInput: FindShipmentInput!): Shipment!
+  CreateOrder(createOrderInput: CreateOrderInput!): OrderResponse!
+  UpdateOrder(updateOrderInput: UpdateOrderInput!): Order!
+  DeleteOrder(findOrderInput: FindOrderInput!): Order!
+  CreateProduct(createProductInput: CreateProductInput!): Product!
+  UpdateItemStatus(updateItemStatus: UpdateItemInput!): ItemResponse!
+  UpdateProduct(updateProductInput: UpdateProductInput!): Product!
+  DeleteProduct(findProductInput: FindProductInput!): Product!
+  UpdatePayment(updatePaymentInput: UpdatePaymentInput!): Payment!
+  DeletePayment(findPaymentInput: FindPaymentInput!): Payment!
+  CreateDesignerProfile(createDesignerInput: CreateDesignerInput!): Designer!
+  UpdateDesignerProfile(updateDesignerInput: UpdateDesignerInput!): Designer!
+  DeleteDesignerProfile(findDesignerInput: FindDesignerInput!): Designer!
+  CreateClothRequest(createClothingInput: CreateClothingInput!): ClothsPayload!
+  CreateMeasurement(createMeasurementInput: CreateMeasurementInput!): Measurement!
+  UpdateClothRequest(updateClothingInput: UpdateClothingInput!): Clothing!
+  UpdateMeasurement(updateMeasurementInput: UpdateMeasurementInput!): Measurement!
+  DeleteClothRequest(findClothingInput: FindClothingInput!): Clothing!
+  DeleteMeasurement(findMeasurementInput: FindMeasurementInput!): Measurement!
 }
 
 input CreateVendorInput {
@@ -429,11 +429,11 @@ input Address {
   City: String!
 
   """States"""
-  State: States!
+  State: State!
 }
 
-"""States"""
-enum States {
+"""State"""
+enum State {
   Abia
   Adamawa
   AkwaIbom

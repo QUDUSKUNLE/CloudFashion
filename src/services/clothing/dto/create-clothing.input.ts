@@ -15,7 +15,7 @@ import {
   CustomPickUpDateValidator,
   CustomDeliveryDateValidator,
 } from '../helper/validation';
-import { Address } from 'src/common/address.input';
+import { Address } from '../../../common/address.input';
 
 const todaysDate = new Date();
 

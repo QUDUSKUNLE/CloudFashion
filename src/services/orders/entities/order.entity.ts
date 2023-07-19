@@ -1,5 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { ItemStatus } from 'src/common/interface';
+import { ItemStatus } from '../../../common/interface';
 
 @ObjectType()
 export class OrderResponse {
