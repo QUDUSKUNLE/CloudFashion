@@ -9,14 +9,14 @@ import * as express from 'express';
 import { Model } from 'mongoose';
 import { v4 } from 'uuid';
 
-import { ItemStatus } from 'src/common/interface';
-import { QueueJobs } from 'src/services/queue/queue.enums';
-import { QueueService } from 'src/services/queue/queue.service';
+import { ItemStatus } from '../../common/interface';
 import {
   Vendor,
   VendorDocument,
 } from '../../clients/vendors/models/vendor.schema';
 import { Item, ItemDocument } from '../orders/models/orders.schema';
+import { QueueJobs } from '../queue/queue.enums';
+import { QueueService } from '../queue/queue.service';
 import {
   CreateShipmentInput,
   FindShipmentInput,

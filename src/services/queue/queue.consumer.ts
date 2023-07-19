@@ -1,19 +1,19 @@
-import * as fs from 'fs';
-import { Job } from 'bull';
-import { v4 } from 'uuid';
-import { Model } from 'mongoose';
-import { InjectModel } from '@nestjs/mongoose';
-import { Injectable, Logger } from '@nestjs/common';
 import { OnQueueCompleted, Process, Processor } from '@nestjs/bull';
+import { Injectable, Logger } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Job } from 'bull';
+import * as fs from 'fs';
+import { Model } from 'mongoose';
 import { ItemStatus } from 'src/common/interface';
+import { v4 } from 'uuid';
 import {
-  Item,
-  Order,
-  ItemDocument,
-  OrderDocument,
+    Item,
+    ItemDocument,
+    Order,
+    OrderDocument,
 } from '../orders/models/orders.schema';
 import { Product, ProductDocument } from '../products/models/products.schema';
-import { YoutubeService } from 'src/services/youtube/youtube.service';
+import { YoutubeService } from '../youtube/youtube.service';
 import { QueueJobs } from './queue.enums';
 
 @Processor('halalmarket')

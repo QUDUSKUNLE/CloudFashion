@@ -1,0 +1,104 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("MONGODB_URI")
+}
+
+enum Role {
+  USER
+  ADMIN
+  PUBLIC
+}
+
+enum State {
+  Abia
+  Adamawa
+  AkwaIbom
+  Anambra
+  Bauchi
+  Benue
+  Borno
+  Bayelsa
+  CrossRiver
+  Delta
+  Ebonyi
+  Edo
+  Ekiti
+  Enugu
+  FCT
+  Gombe
+  Imo
+  Jigawa
+  Kebbi
+  Kaduna
+  Kano
+  Kogi
+  Katsina
+  Kwara
+  Lagos
+  Nassarawa
+  Niger
+  Ogun
+  Ondo
+  Osun
+  Oyo
+  Plateau
+  Rivers
+  Sokoto
+  Yobe
+  Zamfara
+}
+
+model User {
+  UserID        String    @id @default(auto()) @map("_id") @db.ObjectId
+  Email         String    @unique
+  Password      String    @map("Password")
+  PhoneNumbers  String[]  @default([])
+  FirstName     String?   @default("")
+  LastName      String?   @default("")
+  Address       Address?  
+  Vendors       Vendor[]
+  BusinessName  String?   @default("")
+  Roles         Role[]    @default([USER])
+  CreatedAt     DateTime  @default(now())
+  UpdatedAt     DateTime  @updatedAt
+}
+
+type Address {
+  StreetNo      Int
+  StreetName    String
+  City          String 
+  State         State?
+}
+
+model Vendor {
+  VendorID              String   @id @default(auto()) @map("_id") @db.ObjectId
+  VendorName            String?
+  VendorPhoneNumbers    String[]
+  VendorAddress         Address?
+  User                  User      @relation(fields: [UserID], references: [UserID])
+  UserID                String    @db.ObjectId
+  CreatedAt             DateTime  @default(now())
+  UpdatedAt             DateTime  @updatedAt
+}
+
+model Customer {
+  CustomerID              String   @id @default(auto()) @map("_id") @db.ObjectId
+  CustomerName            String?
+  CustomerPhoneNumbers    String[]
+  CustomerAddress         Address?
+  CreatedAt               DateTime  @default(now())
+  UpdatedAt               DateTime  @updatedAt
+}
+
+model Ledger {
+  LedgerID                String    @id @default(auto()) @map("_id") @db.ObjectId
+  CreatedAt               DateTime  @db.Timestamp
+  UpdatedAt               DateTime  @db.Timestamp
+}

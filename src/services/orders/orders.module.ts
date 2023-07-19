@@ -5,13 +5,13 @@ import { Item, ItemSchema, Order, OrderSchema } from './models/orders.schema';
 import { OrdersResolver } from './orders.resolver';
 import { OrdersService } from './orders.service';
 
-import { AuthModule } from 'src/services/auth/auth.module';
-import { PaymentsModule } from 'src/services/payments/payments.module';
-import { ProductsModule } from 'src/services/products/products.module';
-import { QueueModule } from 'src/services/queue/queue.module';
-import { RedisCacheModule } from 'src/services/redis-cache/redis-cache.module';
-import { ShipmentsModule } from 'src/services/shipments/shipments.module';
-import { StacksModule } from 'src/services/stack/stack.module';
+import { AuthModule } from '../auth/auth.module';
+import { PaymentsModule } from '../payments/payments.module';
+import { ProductsModule } from '../products/products.module';
+import { QueueModule } from '../queue/queue.module';
+import { RedisCacheModule } from '../redis-cache/redis-cache.module';
+import { ShipmentsModule } from '../shipments/shipments.module';
+import { StacksModule } from '../stack/stack.module';
 
 @Module({
   imports: [

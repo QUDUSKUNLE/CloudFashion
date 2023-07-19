@@ -1,5 +1,5 @@
 {
-  "name": "halal-meats",
+  "name": "cloudcloths",
   "version": "0.0.1",
   "description": "",
   "author": "",
@@ -16,7 +16,7 @@
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest",
     "test:watch": "jest --watch",
-    "test:cov": "jest --coverage",
+    "test:cov": "jest --verbose --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
@@ -33,6 +33,7 @@
     "@nestjs/platform-express": "^9.1.6",
     "@nestjs/throttler": "^3.1.0",
     "@nestjs/typeorm": "^9.0.1",
+    "@prisma/client": "^5.0.0",
     "@types/fs-capacitor": "^2.0.0",
     "apollo-server-core": "^3.10.3",
     "apollo-server-express": "^3.10.3",
@@ -91,6 +92,7 @@
     "eslint-plugin-prettier": "^4.2.1",
     "jest": "^29.2.2",
     "prettier": "^2.7.1",
+    "prisma": "^5.0.0",
     "supertest": "^6.3.1",
     "ts-jest": "^29.0.3",
     "ts-loader": "^9.4.1",

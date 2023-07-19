@@ -1,7 +1,7 @@
 import * as express from 'express';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { UserRole } from 'src/common/interface';
-import { GraphRequest, Roles } from 'src/user.decorator';
+import { UserRole } from '../../common/interface';
+import { GraphRequest, Roles } from '../../user.decorator';
 import { CreateVendorInput, FindVendorInput } from './dto/create-vendor.input';
 import { UpdateVendorInput } from './dto/update-vendor.input';
 import { Vendor } from './models/vendor.schema';
@@ -12,7 +12,7 @@ export class VendorsResolver {
   constructor(private readonly vendorsService: VendorsService) {}
 
   @Roles(UserRole.USER)
-  @Mutation(() => Vendor, { name: 'CreateAVendorProfile' })
+  @Mutation(() => Vendor, { name: 'CreateVendorProfile' })
   createVendor(
     @Args('createVendorInput', { type: () => CreateVendorInput })
     createVendorInput: CreateVendorInput,
@@ -28,7 +28,7 @@ export class VendorsResolver {
   }
 
   @Roles(UserRole.VENDOR)
-  @Query(() => Vendor, { name: 'GetAVendorProfile' })
+  @Query(() => Vendor, { name: 'GetVendorProfile' })
   findOne(
     @Args('findVendorInput', { type: () => FindVendorInput })
     findVendorInput: FindVendorInput,
@@ -38,7 +38,7 @@ export class VendorsResolver {
   }
 
   @Roles(UserRole.VENDOR)
-  @Mutation(() => String, { name: 'UpdateAVendorProfile' })
+  @Mutation(() => String, { name: 'UpdateVendorProfile' })
   updateVendor(
     @Args('updateVendorInput', { type: () => UpdateVendorInput })
     updateVendorInput: UpdateVendorInput,
@@ -48,7 +48,7 @@ export class VendorsResolver {
   }
 
   @Roles(UserRole.VENDOR)
-  @Mutation(() => Vendor, { name: 'DeleteAVendorProfile' })
+  @Mutation(() => Vendor, { name: 'DeleteVendorProfile' })
   removeVendor(
     @Args('findVendorInput', { type: () => FindVendorInput })
     findVendorInput: FindVendorInput,

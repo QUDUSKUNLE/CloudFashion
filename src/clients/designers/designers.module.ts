@@ -2,12 +2,12 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 
-import { Designer, DesignerSchema } from './models/designers.schema';
-import { AuthModule } from 'src/services/auth/auth.module';
-import { UsersModule } from '../users/users.module';
 import { RedisCacheModule } from '../../services/redis-cache/redis-cache.module';
+import { AuthModule } from '../../services/auth/auth.module';
+import { UsersModule } from '../users/users.module';
 import { DesignersResolver } from './designers.resolver';
 import { DesignersService } from './designers.service';
+import { Designer, DesignerSchema } from './models/designers.schema';
 
 @Module({
   imports: [

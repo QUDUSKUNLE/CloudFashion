@@ -8,7 +8,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 
-import { UserRole } from 'src/common/interface';
+import { UserRole } from '../../common/interface';
 import { User, UserDocument } from '../users/models/user.schema';
 import { CreateVendorInput } from './dto/create-vendor.input';
 import { UpdateVendorInput } from './dto/update-vendor.input';

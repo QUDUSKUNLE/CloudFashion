@@ -1,4 +1,5 @@
-import { Address } from 'src/common/address.input';
+import { Address } from '../../../common/address.input';
+
 export interface Measurements {
   MeasurementUnit: Measurement;
   Trouser: {

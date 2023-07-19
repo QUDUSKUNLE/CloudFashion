@@ -8,9 +8,9 @@ import {
   UnprocessableEntityException,
 } from '@nestjs/common';
 
-import { ItemStatus } from 'src/common/interface';
-import { QueueJobs } from 'src/services/queue/queue.enums';
-import { QueueService } from 'src/services/queue/queue.service';
+import { ItemStatus } from '../../common/interface';
+import { QueueJobs } from '../queue/queue.enums';
+import { QueueService } from '../queue/queue.service';
 import { Payment, PaymentDocument } from '../payments/models/payment.schema';
 import { CreateOrderInput, FindOrderInput } from './dto/create-order.input';
 import { UpdateOrderInput } from './dto/update-order.input';

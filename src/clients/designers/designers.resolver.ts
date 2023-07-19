@@ -1,8 +1,8 @@
 import * as express from 'express';
 import { BadRequestException } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { UserRole } from 'src/common/interface';
-import { GraphRequest, Roles } from 'src/user.decorator';
+import { UserRole } from '../../common/interface';
+import { GraphRequest, Roles } from '../../user.decorator';
 import { DesignersService } from './designers.service';
 import {
   CreateDesignerInput,
@@ -16,7 +16,7 @@ export class DesignersResolver {
   constructor(private readonly designersService: DesignersService) {}
 
   @Roles(UserRole.USER)
-  @Mutation(() => Designer, { name: 'CreateADesignerProfile' })
+  @Mutation(() => Designer, { name: 'CreateDesignerProfile' })
   createDesigner(
     @Args('createDesignerInput', { type: () => CreateDesignerInput })
     createDesignerInput: CreateDesignerInput,
@@ -36,7 +36,7 @@ export class DesignersResolver {
   }
 
   @Roles(UserRole.DESIGNER)
-  @Query(() => Designer, { name: 'GetADesigner' })
+  @Query(() => Designer, { name: 'GetDesigner' })
   findOne(
     @Args('findDesignerInput', { type: () => FindDesignerInput })
     findDesignerInput: FindDesignerInput,
@@ -46,7 +46,7 @@ export class DesignersResolver {
   }
 
   @Roles(UserRole.DESIGNER)
-  @Mutation(() => Designer, { name: 'UpdateADesignerProfile' })
+  @Mutation(() => Designer, { name: 'UpdateDesignerProfile' })
   updateDesigner(
     @Args('updateDesignerInput', { type: () => UpdateDesignerInput })
     updateDesignerInput: UpdateDesignerInput,
@@ -56,7 +56,7 @@ export class DesignersResolver {
   }
 
   @Roles(UserRole.ADMIN)
-  @Mutation(() => Designer, { name: 'DeleteADesignerProfile' })
+  @Mutation(() => Designer, { name: 'DeleteDesignerProfile' })
   removeDesigner(
     @Args('findDesignerInput', { type: () => FindDesignerInput })
     findDesignerInput: FindDesignerInput,

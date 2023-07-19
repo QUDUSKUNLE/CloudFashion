@@ -1,4 +1,3 @@
-import * as express from 'express';
 import {
   BadRequestException,
   CanActivate,
@@ -8,8 +7,9 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { GqlExecutionContext } from '@nestjs/graphql';
-import { UserRole } from 'src/common/interface';
-import { AuthService } from 'src/services/auth/auth.service';
+import * as express from 'express';
+import { UserRole } from './common/interface';
+import { AuthService } from './services/auth/auth.service';
 
 @Injectable()
 export class RolesGuard implements CanActivate {

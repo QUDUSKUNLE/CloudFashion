@@ -1,7 +1,7 @@
-import { Document } from 'mongoose';
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Field, Float, GraphQLISODateTime, ObjectType } from '@nestjs/graphql';
-import { PaymentStatus } from 'src/services/payments/interfaces/payment.enums';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Document } from 'mongoose';
+import { PaymentStatus } from '../interfaces/payment.enums';
 
 export type PaymentDocument = Payment & Document;
 

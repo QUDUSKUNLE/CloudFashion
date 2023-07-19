@@ -2,11 +2,12 @@ import * as bcrypt from 'bcryptjs';
 import { forwardRef, Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 
-import { AuthModule } from 'src/services/auth/auth.module';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { AuthModule } from '../../services/auth/auth.module';
 import { User, UserSchema } from './models/user.schema';
 import { UsersResolver } from './users.resolver';
 import { UsersService } from './users.service';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { PrismaService } from '../../prisma/prisma.service';
 
 @Module({
   imports: [
@@ -31,7 +32,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       },
     ]),
   ],
-  providers: [UsersResolver, UsersService],
+  providers: [UsersResolver, UsersService, PrismaService],
   exports: [UsersService, MongooseModule],
 })
 export class UsersModule {}

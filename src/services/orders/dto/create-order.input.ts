@@ -6,17 +6,17 @@ import {
   registerEnumType,
 } from '@nestjs/graphql';
 import {
-  IsUUID,
-  IsString,
-  IsNumber,
   IsArray,
   IsEnum,
-  ValidateNested,
   IsNotEmpty,
+  IsNumber,
+  IsString,
+  IsUUID,
+  ValidateNested,
 } from 'class-validator';
-import { ItemStatus } from 'src/common/interface';
-import { Address } from 'src/common/address.input';
-import { Currency, Channels } from 'src/services/stack/interface';
+import { Address } from '../../../common/address.input';
+import { ItemStatus } from '../../../common/interface';
+import { Channels, Currency } from '../../stack/interface';
 
 @InputType()
 export class OrderPayment {

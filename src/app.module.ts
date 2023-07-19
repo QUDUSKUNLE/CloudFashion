@@ -9,7 +9,7 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { MongooseModule } from '@nestjs/mongoose';
 
-import { RolesGuard } from 'src/roles.guard';
+import { RolesGuard } from './roles.guard';
 import { DesignersModule } from './clients/designers/designers.module';
 import { UsersModule } from './clients/users/users.module';
 import { VendorsModule } from './clients/vendors/vendors.module';
@@ -26,6 +26,7 @@ import { ShipmentsModule } from './services/shipments/shipments.module';
 import { StacksModule } from './services/stack/stack.module';
 import { TerminalService } from './services/terminal/terminal.service';
 import { YoutubeModule } from './services/youtube/youtube.module';
+import { PrismaService } from './prisma/prisma.service';
 
 @Module({
   imports: [
@@ -98,11 +99,12 @@ import { YoutubeModule } from './services/youtube/youtube.module';
   controllers: [],
   providers: [
     InvoiceService,
-    {
-      provide: APP_GUARD,
-      useClass: RolesGuard,
-    },
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: RolesGuard,
+    // },
     TerminalService,
+    PrismaService,
   ],
   exports: [MongooseModule],
 })

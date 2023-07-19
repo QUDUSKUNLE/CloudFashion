@@ -1,6 +1,6 @@
 import { Field, Float, InputType, registerEnumType } from '@nestjs/graphql';
 import { IsEnum, IsNumber, IsString, IsUUID } from 'class-validator';
-import { PaymentStatus } from 'src/services/payments/interfaces/payment.enums';
+import { PaymentStatus } from '../interfaces/payment.enums';
 
 @InputType()
 export class CreatePaymentInput {
