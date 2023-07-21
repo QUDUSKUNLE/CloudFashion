@@ -61,7 +61,7 @@ type Address {
   StreetNo      Int
   StreetName    String
   City          String 
-  State         State
+  State         String             
 }
 
 model Designers {
@@ -71,7 +71,6 @@ model Designers {
   DesignerAddress       Address?
   User                  Users        @relation(fields: [UserID], references: [UserID])
   UserID                String       @unique @db.ObjectId
-  Roles                 Role[]       @default([DESIGNER])
   CreatedAt             DateTime     @default(now())
   UpdatedAt             DateTime     @updatedAt
 }

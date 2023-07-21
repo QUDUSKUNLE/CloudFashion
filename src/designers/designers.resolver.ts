@@ -5,8 +5,8 @@ import { Role } from '../common/interface';
 import { GraphRequest, Roles } from '../user.decorator';
 import { DesignersService } from './designers.service';
 import {
-    CreateDesignerInput,
-    FindDesignerInput,
+  CreateDesignerInput,
+  FindDesignerInput,
 } from './dto/create-designer.input';
 import { UpdateDesignerInput } from './dto/update-designer.input';
 import { Designer } from './models/designers.schema';
@@ -26,6 +26,9 @@ export class DesignersResolver {
       throw new BadRequestException(
         `Invalid Role: ${createDesignerInput.Role}`,
       );
+    if (req.sub.Roles.includes(createDesignerInput.Role))
+      throw new BadRequestException('User`s already a designer.');
+    req.sub.Roles.push(createDesignerInput.Role);
     return this.designersService.create(createDesignerInput, req);
   }
 

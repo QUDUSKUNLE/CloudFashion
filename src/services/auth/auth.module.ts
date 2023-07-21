@@ -4,9 +4,9 @@ import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 
 import { UsersModule } from '../../users/users.module';
+import { RedisCacheModule } from '../redis-cache/redis-cache.module';
 import { AuthService } from './auth.service';
 import { PrismaService } from '../../prisma/prisma.service';
-import { RedisCacheModule } from '../redis-cache/redis-cache.module';
 
 @Module({
   imports: [

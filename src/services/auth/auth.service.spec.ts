@@ -1,12 +1,19 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { PassportModule } from '@nestjs/passport';
+
 import { AuthService } from './auth.service';
+import { UsersModule } from '../../users/users.module';
+import { PrismaService } from '../../prisma/prisma.service';
+import { RedisCacheModule } from '../redis-cache/redis-cache.module';
 
 describe('AuthService', () => {
   let service: AuthService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [AuthService],
+      imports: [UsersModule, RedisCacheModule, PassportModule],
+      providers: [AuthService, PrismaService],
+      exports: [AuthService],
     }).compile();
 
     service = module.get<AuthService>(AuthService);
