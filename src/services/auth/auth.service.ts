@@ -1,16 +1,15 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { InjectModel } from '@nestjs/mongoose';
 import * as bcryptjs from 'bcryptjs';
-import { Model } from 'mongoose';
-import { User, UserDocument } from '../../clients/users/models/user.schema';
+import { PrismaService } from '../../prisma/prisma.service';
+import { User } from '../../users/models/user.schema';
 import { RedisCacheService } from '../redis-cache/redis-cache.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private jwtService: JwtService,
-    @InjectModel(User.name) private UserModel: Model<UserDocument>,
+    private readonly prismaService: PrismaService,
     private readonly redisCacheService: RedisCacheService,
   ) {}
 
@@ -18,7 +17,9 @@ export class AuthService {
     Email: string,
     Password: string,
   ): Promise<{ AccessToken: string }> {
-    const user = await this.UserModel.findOne({ Email }).exec();
+    const user = await this.prismaService.users.findUnique({
+      where: { Email },
+    });
     if (user && (await bcryptjs.compare(Password, user.Password))) {
       return this.signToken(user);
     }
@@ -31,15 +32,15 @@ export class AuthService {
 
   async validateToken(
     token: string,
-  ): Promise<{ isValid: boolean; user?: UserDocument }> {
+  ): Promise<{ isValid: boolean; user?: User }> {
     try {
       const { sub } = this.jwtService.verify(token);
       const getUser = await this.redisCacheService.get(sub);
-      let user: UserDocument = getUser ? JSON.parse(getUser) : undefined;
+      let user = getUser ? JSON.parse(getUser) : undefined;
       if (!user) {
-        user = await this.UserModel.findOne({ UserID: sub })
-          .select({ Password: 0 })
-          .exec();
+        user = await this.prismaService.users.findUnique({
+          where: { UserID: sub },
+        });
         await this.redisCacheService.set(user.UserID, user);
         return { user, isValid: true };
       }
@@ -52,11 +53,11 @@ export class AuthService {
     }
   }
 
-  async signToken(user: UserDocument) {
+  async signToken(user: unknown) {
     return {
       AccessToken: this.jwtService.sign({
-        payload: user.FirstName,
-        sub: user.UserID,
+        payload: (user as User).FirstName,
+        sub: (user as User).UserID,
       }),
     };
   }

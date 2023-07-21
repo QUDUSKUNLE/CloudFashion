@@ -71,23 +71,51 @@ type Designer {
   UpdatedAt: DateTime
 }
 
-type Vendor {
-  """Vendor Identity"""
-  VendorID: String
+type Measurement {
+  """Measurement identity"""
+  MeasurementID: String!
 
-  """Vendor Naame"""
-  VendorName: String
+  """Cloth measurement."""
+  Measurement: JSON
 
-  """Vendor PhoneNumbers."""
-  VendorPhoneNumber: [String!]
-
-  """Vendor Address."""
-  VendorAddress: JSON
-
-  """Vendor CreatedAt"""
+  """Measurement CreatedAt."""
   CreatedAt: DateTime
 
-  """Vendor UpdatedAt"""
+  """Measurement UpdatedAt."""
+  UpdatedAt: DateTime
+}
+
+type Clothing {
+  """Cloth Identity"""
+  ClothID: String!
+
+  """Measurement Identity."""
+  MeasurementID: String
+
+  """Cloth Request Data"""
+  ClothRequestPayload: JSON
+
+  """Clothing CreatedAt."""
+  CreatedAt: DateTime
+
+  """Clothing UpdatedAt."""
+  UpdatedAt: DateTime
+}
+
+type ClothsPayload {
+  """Cloth Identity"""
+  ClothID: String!
+
+  """Measurement Identity."""
+  MeasurementPayload: Measurement
+
+  """Cloth Request Data"""
+  ClothRequestPayload: JSON
+
+  """Clothing CreatedAt."""
+  CreatedAt: DateTime
+
+  """Clothing UpdatedAt."""
   UpdatedAt: DateTime
 }
 
@@ -165,20 +193,6 @@ type AOrder {
   OrderItems: [Item!]!
 }
 
-type Shipment {
-  """Shipment Identity"""
-  ShipmentID: String
-
-  """Item entity."""
-  Item: Item
-
-  """Shipment CreatedAt."""
-  CreatedAt: DateTime
-
-  """Shipment UpdatedAt."""
-  UpdatedAt: DateTime
-}
-
 type Product {
   """Product Identity"""
   ProductID: String
@@ -247,69 +261,33 @@ type Payment {
   UpdatedAt: DateTime
 }
 
-type Measurement {
-  """Measurement identity"""
-  MeasurementID: String!
+type Shipment {
+  """Shipment Identity"""
+  ShipmentID: String
 
-  """Cloth measurement."""
-  Measurement: JSON
+  """Item entity."""
+  Item: Item
 
-  """Measurement CreatedAt."""
+  """Shipment CreatedAt."""
   CreatedAt: DateTime
 
-  """Measurement UpdatedAt."""
-  UpdatedAt: DateTime
-}
-
-type Clothing {
-  """Cloth Identity"""
-  ClothID: String!
-
-  """Measurement Identity."""
-  MeasurementID: String
-
-  """Cloth Request Data"""
-  ClothRequestPayload: JSON
-
-  """Clothing CreatedAt."""
-  CreatedAt: DateTime
-
-  """Clothing UpdatedAt."""
-  UpdatedAt: DateTime
-}
-
-type ClothsPayload {
-  """Cloth Identity"""
-  ClothID: String!
-
-  """Measurement Identity."""
-  MeasurementPayload: Measurement
-
-  """Cloth Request Data"""
-  ClothRequestPayload: JSON
-
-  """Clothing CreatedAt."""
-  CreatedAt: DateTime
-
-  """Clothing UpdatedAt."""
+  """Shipment UpdatedAt."""
   UpdatedAt: DateTime
 }
 
 type Query {
-  GetVendorsProfile: [Vendor!]!
-  GetVendorProfile(findVendorInput: FindVendorInput!): Vendor!
-  GetUsersProfile: [User!]!
-  GetUserProfile(findUserInput: FindUserInput!): User!
-  GetShipments: [Shipment!]!
-  GetShipment(findShipmentInput: FindShipmentInput!): Shipment!
-  GetOrders: [AOrder!]!
-  GetOrder(findOrderInput: FindOrderInput!): AOrder!
   GetProducts: [Product!]!
   GetVendorProducts: [Product!]!
   ProductLists: [Item!]!
   GetProduct(findProductInput: FindProductInput!): Product!
+  GetOrders: [AOrder!]!
+  GetOrder(findOrderInput: FindOrderInput!): AOrder!
+  GetUsersProfile: [User!]!
+  GetUserProfile(findUserInput: FindUserInput!): User!
   GetPayments: [Payment!]!
   GetPayment(findPaymentInput: FindPaymentInput!): Payment!
+  GetShipments: [Shipment!]!
+  GetShipment(findShipmentInput: FindShipmentInput!): Shipment!
   GetDesignersProfile: [Designer!]!
   GetDesigner(findDesignerInput: FindDesignerInput!): Designer!
   GetClothsRequest: [ClothsPayload!]!
@@ -318,19 +296,9 @@ type Query {
   GetMeasurement(findMeasurementInput: FindMeasurementInput!): Measurement!
 }
 
-input FindVendorInput {
-  """Vendor Identity."""
-  VendorID: String!
-}
-
-input FindUserInput {
-  """User ID."""
-  UserID: String!
-}
-
-input FindShipmentInput {
-  """Shipment ID"""
-  ShipmentID: String!
+input FindProductInput {
+  """Product ID"""
+  ProductID: String!
 }
 
 input FindOrderInput {
@@ -338,14 +306,19 @@ input FindOrderInput {
   OrderID: String!
 }
 
-input FindProductInput {
-  """Product ID"""
-  ProductID: String!
+input FindUserInput {
+  """User ID."""
+  UserID: String!
 }
 
 input FindPaymentInput {
   """Payment ID"""
   PaymentID: String!
+}
+
+input FindShipmentInput {
+  """Shipment ID"""
+  ShipmentID: String!
 }
 
 input FindDesignerInput {
@@ -364,26 +337,23 @@ input FindMeasurementInput {
 }
 
 type Mutation {
-  CreateVendorProfile(createVendorInput: CreateVendorInput!): Vendor!
-  UpdateVendorProfile(updateVendorInput: UpdateVendorInput!): String!
-  DeleteVendorProfile(findVendorInput: FindVendorInput!): Vendor!
+  CreateProduct(createProductInput: CreateProductInput!): Product!
+  UpdateItemStatus(updateItemStatus: UpdateItemInput!): ItemResponse!
+  UpdateProduct(updateProductInput: UpdateProductInput!): Product!
+  DeleteProduct(findProductInput: FindProductInput!): Product!
+  CreateOrder(createOrderInput: CreateOrderInput!): OrderResponse!
+  UpdateOrder(updateOrderInput: UpdateOrderInput!): Order!
+  DeleteOrder(findOrderInput: FindOrderInput!): Order!
   CreateUserProfile(createUserInput: CreateUserInput!): User!
   LogInUser(logInUserInput: LogInUserInput!): LoginResponse!
   LogOutUser: LogoutResponse!
   UpdateUserProfile(updateUserInput: UpdateUserInput!): User!
   DeleteUserProfile(findUserInput: FindUserInput!): User!
+  UpdatePayment(updatePaymentInput: UpdatePaymentInput!): Payment!
+  DeletePayment(findPaymentInput: FindPaymentInput!): Payment!
   CreateShipment(createShipmentInput: CreateShipmentInput!): Shipment!
   UpdateShipment(updateShipmentInput: UpdateShipmentInput!): Shipment!
   DeleteShipment(findShipmentInput: FindShipmentInput!): Shipment!
-  CreateOrder(createOrderInput: CreateOrderInput!): OrderResponse!
-  UpdateOrder(updateOrderInput: UpdateOrderInput!): Order!
-  DeleteOrder(findOrderInput: FindOrderInput!): Order!
-  CreateProduct(createProductInput: CreateProductInput!): Product!
-  UpdateItemStatus(updateItemStatus: UpdateItemInput!): ItemResponse!
-  UpdateProduct(updateProductInput: UpdateProductInput!): Product!
-  DeleteProduct(findProductInput: FindProductInput!): Product!
-  UpdatePayment(updatePaymentInput: UpdatePaymentInput!): Payment!
-  DeletePayment(findPaymentInput: FindPaymentInput!): Payment!
   CreateDesignerProfile(createDesignerInput: CreateDesignerInput!): Designer!
   UpdateDesignerProfile(updateDesignerInput: UpdateDesignerInput!): Designer!
   DeleteDesignerProfile(findDesignerInput: FindDesignerInput!): Designer!
@@ -395,27 +365,120 @@ type Mutation {
   DeleteMeasurement(findMeasurementInput: FindMeasurementInput!): Measurement!
 }
 
-input CreateVendorInput {
-  """Vendor Role"""
-  Role: UserRole!
+input CreateProductInput {
+  """Product name."""
+  ProductName: ProductName!
 
-  """Vendor Name"""
-  VendorName: String!
+  """Product video."""
+  ProductVideo: Upload
 
-  """Vendor PhoneNumbers."""
-  VendorPhoneNumber: [String!]!
+  """Product price."""
+  ProductPrice: Float!
 
-  """Vendor Address."""
-  VendorAddress: Address!
+  """Product discount."""
+  ProductDiscount: Float
+
+  """Product quantity."""
+  ProductQuantity: Int!
 }
 
-"""User role"""
-enum UserRole {
-  ADMIN
-  USER
-  VENDOR
-  DESIGNER
-  PUBLIC
+"""Product name"""
+enum ProductName {
+  Kaftan
+  Complete
+  CasualShirt
+  KaftanSenator
+  PalmTrouser
+}
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
+
+input UpdateItemInput {
+  """Item status"""
+  ItemStatus: ItemStatus!
+
+  """Item ID."""
+  ItemID: String!
+}
+
+"""Order status"""
+enum ItemStatus {
+  PROCESSING
+  PENDING
+  COMPLETED
+  CANCELLED
+  SHIPPED
+  RETURNED
+}
+
+input UpdateProductInput {
+  """Product name."""
+  ProductName: ProductName
+
+  """Product video."""
+  ProductVideo: Upload
+
+  """Product price."""
+  ProductPrice: Float
+
+  """Product discount."""
+  ProductDiscount: Float
+
+  """Product quantity."""
+  ProductQuantity: Int
+
+  """Product ID."""
+  ProductID: String!
+}
+
+input CreateOrderInput {
+  """Order status."""
+  OrderStatus: ItemStatus!
+
+  """Payment identity."""
+  Payments: OrderPayment
+
+  """Order address."""
+  OrderAddress: Address!
+
+  """Payment Tracking Identity."""
+  PaymentTrackingID: String!
+
+  """Order total cost."""
+  OrderTotalCost: Float!
+
+  """Product identity"""
+  OrderDetails: [OrderDetails!]!
+}
+
+input OrderPayment {
+  """Payment amount."""
+  Amount: Int!
+
+  """Payment currency"""
+  Currency: Currency!
+
+  """Payment currency"""
+  Channel: Channels!
+}
+
+"""Payment currency"""
+enum Currency {
+  NGN
+  GHS
+  ZAR
+  USD
+}
+
+"""Payment channels"""
+enum Channels {
+  card
+  bank
+  ussd
+  qr
+  mobile_money
+  bank_transfer
 }
 
 input Address {
@@ -472,21 +535,35 @@ enum State {
   Zamfara
 }
 
-input UpdateVendorInput {
-  """Vendor Role"""
-  Role: UserRole
+input OrderDetails {
+  """Product ID."""
+  ProductID: String!
 
-  """Vendor Name"""
-  VendorName: String
+  """Product count."""
+  Count: Int!
+}
 
-  """Vendor PhoneNumbers."""
-  VendorPhoneNumber: [String!]
+input UpdateOrderInput {
+  """Order status."""
+  OrderStatus: ItemStatus
 
-  """Vendor Address."""
-  VendorAddress: Address
+  """Payment identity."""
+  Payments: OrderPayment
 
-  """Vendor ID."""
-  VendorID: String!
+  """Order address."""
+  OrderAddress: Address
+
+  """Payment Tracking Identity."""
+  PaymentTrackingID: String
+
+  """Order total cost."""
+  OrderTotalCost: Float
+
+  """Product identity"""
+  OrderDetails: [OrderDetails!]
+
+  """Order ID"""
+  OrderID: String!
 }
 
 input CreateUserInput {
@@ -546,172 +623,6 @@ input UpdateUserInput {
   UserID: String!
 }
 
-input CreateShipmentInput {
-  """Item identity."""
-  ItemID: String!
-
-  """Order identity."""
-  OrderID: String!
-}
-
-input UpdateShipmentInput {
-  """Item identity."""
-  ItemID: String
-
-  """Order identity."""
-  OrderID: String
-
-  """Shipment ID"""
-  ShipmentID: String!
-}
-
-input CreateOrderInput {
-  """Order status."""
-  OrderStatus: ItemStatus!
-
-  """Payment identity."""
-  Payments: OrderPayment
-
-  """Order address."""
-  OrderAddress: Address!
-
-  """Payment Tracking Identity."""
-  PaymentTrackingID: String!
-
-  """Order total cost."""
-  OrderTotalCost: Float!
-
-  """Product identity"""
-  OrderDetails: [OrderDetails!]!
-}
-
-"""Order status"""
-enum ItemStatus {
-  PROCESSING
-  PENDING
-  COMPLETED
-  CANCELLED
-  SHIPPED
-  RETURNED
-}
-
-input OrderPayment {
-  """Payment amount."""
-  Amount: Int!
-
-  """Payment currency"""
-  Currency: Currency!
-
-  """Payment currency"""
-  Channel: Channels!
-}
-
-"""Payment currency"""
-enum Currency {
-  NGN
-  GHS
-  ZAR
-  USD
-}
-
-"""Payment channels"""
-enum Channels {
-  card
-  bank
-  ussd
-  qr
-  mobile_money
-  bank_transfer
-}
-
-input OrderDetails {
-  """Product ID."""
-  ProductID: String!
-
-  """Product count."""
-  Count: Int!
-}
-
-input UpdateOrderInput {
-  """Order status."""
-  OrderStatus: ItemStatus
-
-  """Payment identity."""
-  Payments: OrderPayment
-
-  """Order address."""
-  OrderAddress: Address
-
-  """Payment Tracking Identity."""
-  PaymentTrackingID: String
-
-  """Order total cost."""
-  OrderTotalCost: Float
-
-  """Product identity"""
-  OrderDetails: [OrderDetails!]
-
-  """Order ID"""
-  OrderID: String!
-}
-
-input CreateProductInput {
-  """Product name."""
-  ProductName: ProductName!
-
-  """Product video."""
-  ProductVideo: Upload
-
-  """Product price."""
-  ProductPrice: Float!
-
-  """Product discount."""
-  ProductDiscount: Float
-
-  """Product quantity."""
-  ProductQuantity: Int!
-}
-
-"""Product name"""
-enum ProductName {
-  Kaftan
-  Complete
-  CasualShirt
-  KaftanSenator
-  PalmTrouser
-}
-
-"""The `Upload` scalar type represents a file upload."""
-scalar Upload
-
-input UpdateItemInput {
-  """Item status"""
-  ItemStatus: ItemStatus!
-
-  """Item ID."""
-  ItemID: String!
-}
-
-input UpdateProductInput {
-  """Product name."""
-  ProductName: ProductName
-
-  """Product video."""
-  ProductVideo: Upload
-
-  """Product price."""
-  ProductPrice: Float
-
-  """Product discount."""
-  ProductDiscount: Float
-
-  """Product quantity."""
-  ProductQuantity: Int
-
-  """Product ID."""
-  ProductID: String!
-}
-
 input UpdatePaymentInput {
   """Payment status."""
   PaymentStatus: PaymentStatus
@@ -738,9 +649,28 @@ enum PaymentStatus {
   RETURNED
 }
 
+input CreateShipmentInput {
+  """Item identity."""
+  ItemID: String!
+
+  """Order identity."""
+  OrderID: String!
+}
+
+input UpdateShipmentInput {
+  """Item identity."""
+  ItemID: String
+
+  """Order identity."""
+  OrderID: String
+
+  """Shipment ID"""
+  ShipmentID: String!
+}
+
 input CreateDesignerInput {
   """Designer role"""
-  Role: UserRole!
+  Role: Role!
 
   """Designer name"""
   DesignerName: String!
@@ -752,9 +682,18 @@ input CreateDesignerInput {
   DesignerAddress: Address!
 }
 
+"""Role"""
+enum Role {
+  ADMIN
+  USER
+  VENDOR
+  DESIGNER
+  PUBLIC
+}
+
 input UpdateDesignerInput {
   """Designer role"""
-  Role: UserRole
+  Role: Role
 
   """Designer name"""
   DesignerName: String

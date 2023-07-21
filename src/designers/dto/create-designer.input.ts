@@ -1,19 +1,19 @@
-import { InputType, Field, registerEnumType } from '@nestjs/graphql';
+import { Field, InputType, registerEnumType } from '@nestjs/graphql';
 import {
-  IsUUID,
-  IsString,
-  IsEnum,
   IsArray,
+  IsEnum,
+  IsString,
+  IsUUID,
   ValidateNested,
 } from 'class-validator';
-import { UserRole, State } from '../../../common/interface';
-import { Address } from '../../../common/address.input';
+import { Address } from '../../common/address.input';
+import { Role, State } from '../../common/interface';
 
 @InputType()
 export class CreateDesignerInput {
-  @Field(() => UserRole, { nullable: false, description: 'Designer role' })
-  @IsEnum(UserRole)
-  Role: UserRole;
+  @Field(() => Role, { nullable: false, description: 'Designer role' })
+  @IsEnum(Role)
+  Role: Role;
 
   @Field(() => String, { nullable: false, description: 'Designer name' })
   @IsString()
@@ -44,4 +44,9 @@ export class FindDesignerInput {
 registerEnumType(State, {
   name: 'State',
   description: 'State',
+});
+
+registerEnumType(Role, {
+  name: 'Role',
+  description: 'Role',
 });

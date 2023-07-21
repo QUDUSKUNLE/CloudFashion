@@ -1,8 +1,7 @@
 import { forwardRef, Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 
-import { UsersModule } from '../../clients/users/users.module';
-import { VendorsModule } from '../../clients/vendors/vendors.module';
+import { UsersModule } from '../../users/users.module';
 import { AuthModule } from '../auth/auth.module';
 import { OrdersModule } from '../orders/orders.module';
 import { QueueModule } from '../queue/queue.module';
@@ -16,7 +15,6 @@ import { ProductsService } from './products.service';
     forwardRef(() => OrdersModule),
     AuthModule,
     UsersModule,
-    forwardRef(() => VendorsModule),
     QueueModule,
   ],
   providers: [ProductsResolver, ProductsService],

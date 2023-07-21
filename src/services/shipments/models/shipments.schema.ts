@@ -1,7 +1,6 @@
-import { Document } from 'mongoose';
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Field, GraphQLISODateTime, ObjectType } from '@nestjs/graphql';
-import { Vendor } from '../../../clients/vendors/models/vendor.schema';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Document } from 'mongoose';
 import { Item } from '../../orders/models/orders.schema';
 
 export type ShipmentDocument = Shipment & Document;
@@ -24,9 +23,6 @@ export class Shipment {
   })
   @Prop({ type: Item })
   Item: Item;
-
-  @Prop({ type: Vendor })
-  Vendor: Vendor;
 
   @Field(() => GraphQLISODateTime, {
     nullable: true,

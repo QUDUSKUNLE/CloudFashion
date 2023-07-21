@@ -1,9 +1,9 @@
 import {
-    ConflictException,
-    HttpException,
-    HttpStatus,
-    Injectable,
-    NotFoundException,
+  ConflictException,
+  HttpException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import * as express from 'express';
@@ -11,10 +11,6 @@ import * as fs from 'fs';
 import { Model } from 'mongoose';
 import * as path from 'path';
 import { v4 } from 'uuid';
-import {
-    Vendor,
-    VendorDocument,
-} from '../../clients/vendors/models/vendor.schema';
 import { UpdateItemInput } from '../orders/dto/create-order.input';
 import { Item, ItemDocument } from '../orders/models/orders.schema';
 import { Statuses } from '../products/entities/product.entity';
@@ -28,7 +24,6 @@ import { Product, ProductDocument } from './models/products.schema';
 export class ProductsService {
   constructor(
     @InjectModel(Product.name) private ProductModel: Model<ProductDocument>,
-    @InjectModel(Vendor.name) private VendorModel: Model<VendorDocument>,
     @InjectModel(Item.name) private ItemModel: Model<ItemDocument>,
     private readonly queueService: QueueService,
   ) {}
@@ -53,12 +48,9 @@ export class ProductsService {
             ),
         );
       }
-      const Vendor = await this.VendorModel.findOne({
-        UserID: req.sub.UserID,
-      }).exec();
       const createdProduct = new this.ProductModel({
         ...createProductInput,
-        VendorID: Vendor.VendorID,
+        // VendorID: Vendor.VendorID,
         ProductID: v4(),
         ProductVideo: process.env.TEST_VIDEO,
       });
@@ -130,24 +122,7 @@ export class ProductsService {
 
   async Items(req: express.Request) {
     try {
-      const Vendor = await this.VendorModel.findOne({
-        UserID: req.sub.UserID,
-      }).select({ VendorID: 1 });
-      const result = await this.ProductModel.aggregate([
-        { $match: { VendorID: Vendor.VendorID } },
-      ])
-        .lookup({
-          from: 'items',
-          localField: 'ProductID',
-          foreignField: 'ProductID',
-          as: 'Products',
-        })
-        .unwind({ path: '$Products', preserveNullAndEmptyArrays: false })
-        .project({ Products: 1, _id: 0 });
-      return result.reduce((acc, prev) => {
-        acc = acc.concat(prev.Products);
-        return acc;
-      }, []);
+      return [];
     } catch (error) {
       throw error;
     }

@@ -1,10 +1,11 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 
-import { UsersModule } from '../../clients/users/users.module';
+import { UsersModule } from '../../users/users.module';
 import { AuthService } from './auth.service';
+import { PrismaService } from '../../prisma/prisma.service';
 import { RedisCacheModule } from '../redis-cache/redis-cache.module';
 
 @Module({
@@ -19,9 +20,9 @@ import { RedisCacheModule } from '../redis-cache/redis-cache.module';
       }),
       inject: [ConfigService],
     }),
-    UsersModule,
+    forwardRef(() => UsersModule),
   ],
-  providers: [AuthService],
+  providers: [AuthService, PrismaService],
   exports: [AuthService],
 })
 export class AuthModule {}

@@ -8,7 +8,7 @@ import {
 import { Reflector } from '@nestjs/core';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import * as express from 'express';
-import { UserRole } from './common/interface';
+import { Role } from './common/interface';
 import { AuthService } from './services/auth/auth.service';
 
 @Injectable()
@@ -21,13 +21,13 @@ export class RolesGuard implements CanActivate {
   }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const requiredRoles = this.reflector.getAllAndOverride<UserRole[]>(
-      'Roles',
-      [context.getHandler(), context.getClass()],
-    );
+    const requiredRoles = this.reflector.getAllAndOverride<Role[]>('Roles', [
+      context.getHandler(),
+      context.getClass(),
+    ]);
     const req = this.getRequest(context);
     // This check for public routes
-    if (requiredRoles[0] === UserRole.PUBLIC) return true;
+    if (requiredRoles[0] === Role.PUBLIC) return true;
     const { authorization } = req.headers;
     if (!authorization) {
       throw new BadRequestException(`Authorization \'header\' not found.`);

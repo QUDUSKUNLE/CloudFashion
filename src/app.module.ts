@@ -1,22 +1,21 @@
-import * as redis from 'cache-manager-redis-store';
-import GraphQLJSON from 'graphql-type-json';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { BullModule } from '@nestjs/bull';
 import { CacheModule, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 import { GraphQLModule } from '@nestjs/graphql';
-import { ThrottlerModule } from '@nestjs/throttler';
 import { MongooseModule } from '@nestjs/mongoose';
+import { ThrottlerModule } from '@nestjs/throttler';
+import * as redis from 'cache-manager-redis-store';
+import GraphQLJSON from 'graphql-type-json';
 
+import { UsersModule } from './users/users.module';
+import { DesignersModule } from './designers/designers.module';
 import { RolesGuard } from './roles.guard';
-import { DesignersModule } from './clients/designers/designers.module';
-import { UsersModule } from './clients/users/users.module';
-import { VendorsModule } from './clients/vendors/vendors.module';
-import { InvoiceModule } from './services/invoice/invoice.module';
-import { InvoiceService } from './services/invoice/invoice.service';
 import { AuthModule } from './services/auth/auth.module';
 import { ClothingModule } from './services/clothing/clothing.module';
+import { InvoiceModule } from './services/invoice/invoice.module';
+import { InvoiceService } from './services/invoice/invoice.service';
 import { OrdersModule } from './services/orders/orders.module';
 import { PaymentsModule } from './services/payments/payments.module';
 import { ProductsModule } from './services/products/products.module';
@@ -81,7 +80,6 @@ import { PrismaService } from './prisma/prisma.service';
         limit: +configService.get<string>('THROTTLE_LIMIT'),
       }),
     }),
-    VendorsModule,
     ProductsModule,
     AuthModule,
     UsersModule,

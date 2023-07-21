@@ -1,6 +1,6 @@
 import * as bcrypt from 'bcryptjs';
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../../prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { CreateUserInput, FindUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 
@@ -9,7 +9,7 @@ export class UsersService {
   constructor(private readonly prismaService: PrismaService) {}
   async create(createUserInput: CreateUserInput) {
     const hashedPassword = await bcrypt.hash(createUserInput.Password, 10);
-    return await this.prismaService.user.create({
+    return await this.prismaService.users.create({
       data: {
         Email: createUserInput.Email,
         Password: <string>hashedPassword,
@@ -21,17 +21,17 @@ export class UsersService {
   }
 
   async findAll() {
-    return await this.prismaService.user.findMany();
+    return await this.prismaService.users.findMany();
   }
 
   async findOne(findUserInput: FindUserInput) {
-    return await this.prismaService.user.findUnique({
+    return await this.prismaService.users.findUnique({
       where: { UserID: findUserInput.UserID },
     });
   }
 
   async updateOne(updateUserInput: UpdateUserInput) {
-    return await this.prismaService.user.upsert({
+    return await this.prismaService.users.upsert({
       where: {
         UserID: updateUserInput.UserID,
       },
@@ -43,7 +43,7 @@ export class UsersService {
   }
 
   async deleteOne(findUserInput: FindUserInput) {
-    return await this.prismaService.user.deleteMany({
+    return await this.prismaService.users.deleteMany({
       where: {
         UserID: findUserInput.UserID,
       },
