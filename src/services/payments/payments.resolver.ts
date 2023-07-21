@@ -1,6 +1,6 @@
-import * as express from 'express';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { UserRole } from '../../common/interface';
+import * as express from 'express';
+import { Role } from '../../common/interface';
 import { GraphRequest, Roles } from '../../user.decorator';
 import { FindPaymentInput } from './dto/create-payment.input';
 import { UpdatePaymentInput } from './dto/update-payment.input';
@@ -11,13 +11,13 @@ import { PaymentsService } from './payments.service';
 export class PaymentsResolver {
   constructor(private readonly paymentsService: PaymentsService) {}
 
-  @Roles(UserRole.USER)
+  @Roles(Role.USER)
   @Query(() => [Payment], { name: 'GetPayments' })
   findAll(@GraphRequest() req: express.Request) {
     return this.paymentsService.findAll(req);
   }
 
-  @Roles(UserRole.USER)
+  @Roles(Role.USER)
   @Query(() => Payment, { name: 'GetPayment' })
   findOne(
     @Args('findPaymentInput', { type: () => FindPaymentInput })
@@ -27,7 +27,7 @@ export class PaymentsResolver {
     return this.paymentsService.findOne(findPaymentInput.PaymentID, req);
   }
 
-  @Roles(UserRole.USER)
+  @Roles(Role.USER)
   @Mutation(() => Payment, { name: 'UpdatePayment' })
   updatePayment(
     @Args('updatePaymentInput', { type: () => UpdatePaymentInput })
@@ -37,7 +37,7 @@ export class PaymentsResolver {
     return this.paymentsService.update(updatePaymentInput, req);
   }
 
-  @Roles(UserRole.ADMIN)
+  @Roles(Role.ADMIN)
   @Mutation(() => Payment, { name: 'DeletePayment' })
   removePayment(
     @Args('findPaymentInput', { type: () => FindPaymentInput })

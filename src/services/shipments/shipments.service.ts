@@ -10,10 +10,6 @@ import { Model } from 'mongoose';
 import { v4 } from 'uuid';
 
 import { ItemStatus } from '../../common/interface';
-import {
-  Vendor,
-  VendorDocument,
-} from '../../clients/vendors/models/vendor.schema';
 import { Item, ItemDocument } from '../orders/models/orders.schema';
 import { QueueJobs } from '../queue/queue.enums';
 import { QueueService } from '../queue/queue.service';
@@ -29,18 +25,16 @@ export class ShipmentsService {
   constructor(
     @InjectModel(Item.name) private ItemModel: Model<ItemDocument>,
     @InjectModel(Shipment.name) private ShipmentModel: Model<ShipmentDocument>,
-    @InjectModel(Vendor.name) private VendorModel: Model<VendorDocument>,
     private readonly queueService: QueueService,
   ) {}
   async create(createShipmentInput: CreateShipmentInput, req: express.Request) {
     try {
-      const [item, vendor] = await Promise.all([
+      const [item] = await Promise.all([
         this.ItemModel.findOne({
           ItemID: createShipmentInput.ItemID,
         }).exec(),
-        this.VendorModel.findOne({ UserID: req.sub.UserID }).exec(),
       ]);
-      if (item && vendor) {
+      if (item) {
         if (item.ItemStatus === ItemStatus.SHIPPED) {
           throw new ConflictException(
             `Item ${createShipmentInput.ItemID} is shipped.`,
@@ -48,7 +42,7 @@ export class ShipmentsService {
         } else if (item.ItemStatus === ItemStatus.COMPLETED) {
           const createdShipment = new this.ShipmentModel({
             Item: item,
-            Vendor: vendor,
+            // Vendor: vendor,
             ShipmentID: v4(),
           });
           const shipment = await createdShipment.save();
@@ -67,53 +61,18 @@ export class ShipmentsService {
   }
 
   async findAll(req: express.Request) {
-    const vendor = await this.VendorModel.findOne({
-      UserID: req.sub.UserID,
-    }).exec();
-    return vendor
-      ? await this.ShipmentModel.find({
-          VendorID: vendor.VendorID,
-        }).exec()
-      : [];
+    return 'ok';
   }
 
   async findOne(findShipmentInput: FindShipmentInput, req: express.Request) {
-    const vendor = await this.VendorModel.findOne({
-      UserID: req.sub.UserID,
-    }).exec();
-    return vendor
-      ? await this.ShipmentModel.findOne({
-          ShipmentID: findShipmentInput.ShipmentID,
-          Vendor: vendor,
-        }).exec()
-      : {};
+    return 'ok';
   }
 
   async update(updateShipmentInput: UpdateShipmentInput, req: express.Request) {
-    const vendor = await this.VendorModel.findOne({
-      UserID: req.sub.UserID,
-    }).exec();
-    return await this.ShipmentModel.findOneAndUpdate(
-      {
-        ShipmentID: updateShipmentInput.ShipmentID,
-        Vendor: vendor,
-      },
-      {
-        ...updateShipmentInput,
-      },
-      {
-        new: true,
-      },
-    ).exec();
+    return 'ok';
   }
 
   async remove(findShipmentInput: FindShipmentInput, req: express.Request) {
-    const vendor = await this.VendorModel.findOne({
-      UserID: req.sub.UserID,
-    }).exec();
-    return await this.ShipmentModel.findOneAndDelete({
-      ShipmentID: findShipmentInput.ShipmentID,
-      Vendor: vendor,
-    }).exec();
+    return 'ok';
   }
 }

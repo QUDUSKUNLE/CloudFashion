@@ -1,24 +1,24 @@
-import * as express from 'express';
-import { Prisma } from '@prisma/client';
 import {
-  forwardRef,
+  BadRequestException,
+  ConflictException,
   Inject,
   Injectable,
-  ConflictException,
   UnauthorizedException,
-  BadRequestException,
+  forwardRef,
 } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { UserRole } from '../../common/interface';
-import { GraphRequest, Roles } from '../../user.decorator';
-import { AuthService } from '../../services/auth/auth.service';
+import { Prisma } from '@prisma/client';
+import * as express from 'express';
+import { Role } from '../common/interface';
+import { AuthService } from '../services/auth/auth.service';
+import { GraphRequest, Roles } from '../user.decorator';
 import {
   CreateUserInput,
   FindUserInput,
   LogInUserInput,
 } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
-import { User, LoginResponse, LogoutResponse } from './models/user.schema';
+import { LoginResponse, LogoutResponse, User } from './models/user.schema';
 import { UsersService } from './users.service';
 
 @Resolver(() => User)
@@ -30,15 +30,13 @@ export class UsersResolver {
     private readonly authService: AuthService,
   ) {}
 
-  @Roles(UserRole.PUBLIC)
+  @Roles(Role.PUBLIC)
   @Mutation(() => User, { name: 'CreateUserProfile' })
   async createUser(
     @Args('createUserInput', { type: () => CreateUserInput })
     createUserInput: CreateUserInput,
   ) {
     try {
-      if (createUserInput.Password !== createUserInput.ConfirmPassword)
-        throw new BadRequestException('Bad Request');
       return await this.usersService.create(createUserInput);
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
@@ -46,10 +44,11 @@ export class UsersResolver {
           throw new ConflictException('User`s already exist.');
         throw error;
       }
+      throw error;
     }
   }
 
-  @Roles(UserRole.PUBLIC)
+  @Roles(Role.PUBLIC)
   @Mutation(() => LoginResponse, { name: 'LogInUser' })
   async login(
     @Args('logInUserInput', { type: () => LogInUserInput })
@@ -61,19 +60,19 @@ export class UsersResolver {
     );
   }
 
-  @Roles(UserRole.USER)
+  @Roles(Role.USER)
   @Mutation(() => LogoutResponse, { name: 'LogOutUser' })
   logout() {
     return this.authService.logOutUser();
   }
 
-  @Roles(UserRole.ADMIN)
+  @Roles(Role.ADMIN)
   @Query(() => [User], { name: 'GetUsersProfile' })
   findAll() {
     return this.usersService.findAll();
   }
 
-  @Roles(UserRole.USER)
+  @Roles(Role.USER)
   @Query(() => User, { name: 'GetUserProfile' })
   async findOne(
     @Args('findUserInput', { type: () => FindUserInput })
@@ -85,7 +84,7 @@ export class UsersResolver {
     return await this.usersService.findOne(findUserInput);
   }
 
-  @Roles(UserRole.USER)
+  @Roles(Role.USER)
   @Mutation(() => User, { name: 'UpdateUserProfile' })
   updateOne(
     @Args('updateUserInput', { type: () => UpdateUserInput })
@@ -97,7 +96,7 @@ export class UsersResolver {
     return this.usersService.updateOne(updateUserInput);
   }
 
-  @Roles(UserRole.ADMIN)
+  @Roles(Role.ADMIN)
   @Mutation(() => User, { name: 'DeleteUserProfile' })
   removeOne(
     @Args('findUserInput', { type: () => FindUserInput })

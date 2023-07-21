@@ -1,8 +1,8 @@
-import { Document } from 'mongoose';
-import GraphQLJSON from 'graphql-type-json';
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Field, GraphQLISODateTime, ObjectType } from '@nestjs/graphql';
-import { Address } from '../../../common/address.input';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import GraphQLJSON from 'graphql-type-json';
+import { Document } from 'mongoose';
+import { Address } from '../../common/address.input';
 
 export type DesignerDocument = Designer & Document;
 

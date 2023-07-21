@@ -37,12 +37,12 @@ export enum State {
   Zamfara,
 }
 
-export enum UserRole {
-  ADMIN = 'ADMIN',
-  USER = 'USER',
-  VENDOR = 'VENDOR',
-  DESIGNER = 'DESIGNER',
-  PUBLIC = 'PUBLIC',
+export enum Role {
+  ADMIN,
+  USER,
+  VENDOR,
+  DESIGNER,
+  PUBLIC,
 }
 
 export enum ItemStatus {

@@ -4,7 +4,6 @@ import { Shipment, ShipmentSchema } from './models/shipments.schema';
 import { ShipmentsResolver } from './shipments.resolver';
 import { ShipmentsService } from './shipments.service';
 
-import { VendorsModule } from '../../clients/vendors/vendors.module';
 import { OrdersModule } from '../orders/orders.module';
 import { QueueModule } from '../queue/queue.module';
 
@@ -15,7 +14,6 @@ import { QueueModule } from '../queue/queue.module';
     ]),
     forwardRef(() => OrdersModule),
     QueueModule,
-    forwardRef(() => VendorsModule),
   ],
   providers: [ShipmentsResolver, ShipmentsService],
   exports: [ShipmentsService, MongooseModule],

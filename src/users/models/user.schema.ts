@@ -1,13 +1,9 @@
 import { Field, GraphQLISODateTime, ObjectType } from '@nestjs/graphql';
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Schema, SchemaFactory } from '@nestjs/mongoose';
 import GraphQLJSON from 'graphql-type-json';
-import { Document } from 'mongoose';
-import { Address } from '../../../common/address.input';
-import { UserRole } from '../../../common/interface';
+import { Address } from '../../common/address.input';
+import { Role } from '../../common/interface';
 
-export type UserDocument = User & Document;
-
-@Schema()
 @ObjectType()
 export class User {
   @Field(() => String, { nullable: true, description: 'User Identity.' })
@@ -16,7 +12,6 @@ export class User {
   @Field(() => String, { description: 'User Email' })
   Email: string;
 
-  @Prop({ type: String, required: false })
   Password: string;
 
   @Field(() => [String], {
@@ -38,7 +33,7 @@ export class User {
   Address?: Address;
 
   @Field(() => [String], { nullable: true, description: 'User Roles.' })
-  Roles: UserRole[];
+  Roles: Role[];
 
   @Field(() => GraphQLISODateTime, {
     nullable: true,

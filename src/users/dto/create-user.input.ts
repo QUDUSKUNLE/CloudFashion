@@ -6,22 +6,25 @@ import {
   IsOptional,
   IsArray,
   ValidateNested,
+  Validate,
 } from 'class-validator';
-import { Address } from '../../../common/address.input';
+import { PasswordValidator } from '../helpers/users.validation';
+import { Address } from '../../common/address.input';
 
 @InputType()
 export class CreateUserInput {
   @Field(() => String, { description: 'User Email.', nullable: false })
   @IsEmail({}, { message: 'Email is not valid.' })
-  Email: string;
+  readonly Email: string;
 
   @Field(() => String, { description: 'User Password', nullable: false })
   @IsString({ message: 'Password is not valid.' })
-  Password: string;
+  readonly Password: string;
 
   @Field(() => String, { description: 'User ConfirmPassword', nullable: false })
   @IsString({ message: 'ConfirmPassword is not valid.' })
-  ConfirmPassword: string;
+  @Validate(PasswordValidator, [], { always: true })
+  readonly ConfirmPassword: string;
 
   @Field(() => [String], { nullable: true, description: 'User PhoneNumber.' })
   @IsOptional()

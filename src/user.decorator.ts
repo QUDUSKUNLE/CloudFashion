@@ -1,12 +1,12 @@
-import * as express from 'express';
 import {
-  createParamDecorator,
-  ExecutionContext,
-  SetMetadata,
+    createParamDecorator,
+    ExecutionContext,
+    SetMetadata,
 } from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
+import * as express from 'express';
 
-import { UserRole } from './common/interface';
+import { Role } from './common/interface';
 
 export const GraphRequest = createParamDecorator(
   (data: unknown, context: ExecutionContext): express.Request => {
@@ -15,4 +15,4 @@ export const GraphRequest = createParamDecorator(
   },
 );
 
-export const Roles = (...roles: UserRole[]) => SetMetadata('Roles', roles);
+export const Roles = (...roles: Role[]) => SetMetadata('Roles', roles);

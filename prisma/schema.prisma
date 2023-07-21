@@ -13,6 +13,8 @@ datasource db {
 enum Role {
   USER
   ADMIN
+  DESIGNER
+  CUSTOMER
   PUBLIC
 }
 
@@ -55,49 +57,55 @@ enum State {
   Zamfara
 }
 
-model User {
-  UserID        String    @id @default(auto()) @map("_id") @db.ObjectId
-  Email         String    @unique
-  Password      String    @map("Password")
-  PhoneNumbers  String[]  @default([])
-  FirstName     String?   @default("")
-  LastName      String?   @default("")
-  Address       Address?  
-  Vendors       Vendor[]
-  BusinessName  String?   @default("")
-  Roles         Role[]    @default([USER])
-  CreatedAt     DateTime  @default(now())
-  UpdatedAt     DateTime  @updatedAt
-}
-
 type Address {
   StreetNo      Int
   StreetName    String
   City          String 
-  State         State?
+  State         State
 }
 
-model Vendor {
-  VendorID              String   @id @default(auto()) @map("_id") @db.ObjectId
-  VendorName            String?
-  VendorPhoneNumbers    String[]
-  VendorAddress         Address?
-  User                  User      @relation(fields: [UserID], references: [UserID])
-  UserID                String    @db.ObjectId
-  CreatedAt             DateTime  @default(now())
-  UpdatedAt             DateTime  @updatedAt
+model Designers {
+  DesignerID            String       @id @default(auto()) @map("_id") @db.ObjectId
+  DesignerName          String       @unique
+  DesignerPhoneNumbers  String[]     @default([])
+  DesignerAddress       Address?
+  User                  Users        @relation(fields: [UserID], references: [UserID])
+  UserID                String       @unique @db.ObjectId
+  Roles                 Role[]       @default([DESIGNER])
+  CreatedAt             DateTime     @default(now())
+  UpdatedAt             DateTime     @updatedAt
 }
 
-model Customer {
-  CustomerID              String   @id @default(auto()) @map("_id") @db.ObjectId
+model Customers {
+  CustomerID              String        @id @default(auto()) @map("_id") @db.ObjectId
   CustomerName            String?
-  CustomerPhoneNumbers    String[]
+  CustomerPhoneNumbers    String[]      @default([])
   CustomerAddress         Address?
-  CreatedAt               DateTime  @default(now())
-  UpdatedAt               DateTime  @updatedAt
+  CreatedAt               DateTime      @default(now())
+  UpdatedAt               DateTime      @updatedAt
 }
 
-model Ledger {
+model Users {
+  UserID        String                @id @default(auto()) @map("_id") @db.ObjectId
+  Email         String                @unique
+  Password      String                @map("Password")
+  PhoneNumbers  String[]              @default([])
+  FirstName     String?               
+  LastName      String?               
+  Address       Address?
+  Designer      Designers?  
+  Roles         Role[]                @default([USER])
+  CreatedAt     DateTime              @default(now())
+  UpdatedAt     DateTime              @updatedAt
+}
+
+
+model Inventories {
+  InventoryID             String        @id @default(auto()) @map("_id") @db.ObjectId
+}
+
+
+model Ledgers {
   LedgerID                String    @id @default(auto()) @map("_id") @db.ObjectId
   CreatedAt               DateTime  @db.Timestamp
   UpdatedAt               DateTime  @db.Timestamp
