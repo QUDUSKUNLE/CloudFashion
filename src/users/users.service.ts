@@ -1,5 +1,6 @@
 import * as bcrypt from 'bcryptjs';
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { FetchArgs } from '../common/address.input';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateUserInput, FindUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
@@ -8,20 +9,30 @@ import { UpdateUserInput } from './dto/update-user.input';
 export class UsersService {
   constructor(private readonly prismaService: PrismaService) {}
   async create(createUserInput: CreateUserInput) {
+    if (createUserInput.Password.length < 8) {
+      throw new BadRequestException(
+        'Password length should be at least 8 characters.',
+      );
+    }
     const hashedPassword = await bcrypt.hash(createUserInput.Password, 10);
-    return await this.prismaService.users.create({
+    const result = await this.prismaService.users.create({
       data: {
         Email: createUserInput.Email,
         Password: <string>hashedPassword,
         PhoneNumbers: createUserInput.PhoneNumbers,
         FirstName: createUserInput.FirstName,
         LastName: createUserInput.LastName,
+        Address: createUserInput.Address,
       },
     });
+    return result;
   }
 
-  async findAll() {
-    return await this.prismaService.users.findMany();
+  async findAll(fetch: FetchArgs) {
+    return await this.prismaService.users.findMany({
+      skip: fetch.skip,
+      take: fetch.take,
+    });
   }
 
   async findOne(findUserInput: FindUserInput) {

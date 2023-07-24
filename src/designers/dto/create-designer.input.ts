@@ -1,11 +1,5 @@
 import { Field, InputType, registerEnumType } from '@nestjs/graphql';
-import {
-  IsArray,
-  IsEnum,
-  IsString,
-  IsUUID,
-  ValidateNested,
-} from 'class-validator';
+import { IsArray, IsEnum, IsString, ValidateNested } from 'class-validator';
 import { Address } from '../../common/address.input';
 import { Role, State } from '../../common/interface';
 
@@ -37,7 +31,7 @@ export class CreateDesignerInput {
 @InputType()
 export class FindDesignerInput {
   @Field(() => String, { description: 'Designer ID' })
-  @IsUUID()
+  @IsString()
   DesignerID: string;
 }
 

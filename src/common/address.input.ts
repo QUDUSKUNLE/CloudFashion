@@ -1,5 +1,5 @@
-import { InputType, Field, Int } from '@nestjs/graphql';
-import { IsEnum, IsString, IsInt, IsDate } from 'class-validator';
+import { InputType, Field, Int, ArgsType } from '@nestjs/graphql';
+import { IsEnum, IsString, IsInt, IsDate, Min, Max } from 'class-validator';
 import { State, ItemStatus } from './interface';
 
 @InputType()
@@ -30,4 +30,16 @@ export class Status {
   @Field(() => Date, { nullable: true, description: 'Item status datetime.' })
   @IsDate()
   DateTime: Date;
+}
+
+@ArgsType()
+export class FetchArgs {
+  @Field(() => Int)
+  @Min(0)
+  skip = 0;
+
+  @Field(() => Int)
+  @Min(1)
+  @Max(50)
+  take = 25;
 }

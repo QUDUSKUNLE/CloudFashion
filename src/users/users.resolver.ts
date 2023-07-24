@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   ConflictException,
   Inject,
   Injectable,
@@ -10,6 +9,7 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { Prisma } from '@prisma/client';
 import * as express from 'express';
 import { Role } from '../common/interface';
+import { FetchArgs } from '../common/address.input';
 import { AuthService } from '../services/auth/auth.service';
 import { GraphRequest, Roles } from '../user.decorator';
 import {
@@ -66,10 +66,10 @@ export class UsersResolver {
     return this.authService.logOutUser();
   }
 
-  @Roles(Role.ADMIN)
+  @Roles(Role.PUBLIC)
   @Query(() => [User], { name: 'GetUsersProfile' })
-  findAll() {
-    return this.usersService.findAll();
+  findAll(@Args() fetch: FetchArgs) {
+    return this.usersService.findAll(fetch);
   }
 
   @Roles(Role.USER)

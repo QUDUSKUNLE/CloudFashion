@@ -5,7 +5,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 import { GraphQLModule } from '@nestjs/graphql';
 import { MongooseModule } from '@nestjs/mongoose';
-import { ThrottlerModule } from '@nestjs/throttler';
+// import { ThrottlerModule } from '@nestjs/throttler';
 import * as redis from 'cache-manager-redis-store';
 import GraphQLJSON from 'graphql-type-json';
 
@@ -26,6 +26,7 @@ import { StacksModule } from './services/stack/stack.module';
 import { TerminalService } from './services/terminal/terminal.service';
 import { YoutubeModule } from './services/youtube/youtube.module';
 import { PrismaService } from './prisma/prisma.service';
+import { CustomersModule } from './customers/customers.module';
 
 @Module({
   imports: [
@@ -72,14 +73,14 @@ import { PrismaService } from './prisma/prisma.service';
       playground: true,
       autoSchemaFile: 'schema.gql',
     }),
-    ThrottlerModule.forRootAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        ttl: +configService.get<string>('THROTTLE_TTL'),
-        limit: +configService.get<string>('THROTTLE_LIMIT'),
-      }),
-    }),
+    // ThrottlerModule.forRootAsync({
+    //   imports: [ConfigModule],
+    //   inject: [ConfigService],
+    //   useFactory: (configService: ConfigService) => ({
+    //     ttl: +configService.get<string>('THROTTLE_TTL'),
+    //     limit: +configService.get<string>('THROTTLE_LIMIT'),
+    //   }),
+    // }),
     ProductsModule,
     AuthModule,
     UsersModule,
@@ -93,14 +94,15 @@ import { PrismaService } from './prisma/prisma.service';
     ClothingModule,
     InvoiceModule,
     StacksModule,
+    CustomersModule,
   ],
   controllers: [],
   providers: [
     InvoiceService,
-    // {
-    //   provide: APP_GUARD,
-    //   useClass: RolesGuard,
-    // },
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
+    },
     TerminalService,
     PrismaService,
   ],

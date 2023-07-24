@@ -1,83 +1,69 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import * as express from 'express';
-import { Model } from 'mongoose';
-import { v4 } from 'uuid';
 
 import { Role } from '../common/interface';
-import { RedisCacheService } from '../services/redis-cache/redis-cache.service';
 import { CreateDesignerInput } from './dto/create-designer.input';
 import { UpdateDesignerInput } from './dto/update-designer.input';
 import { PrismaService } from '../prisma/prisma.service';
-import { Designer, DesignerDocument } from './models/designers.schema';
 
 @Injectable()
 export class DesignersService {
-  constructor(
-    @InjectModel(Designer.name) private DesignerModel: Model<DesignerDocument>,
-    private readonly prismaService: PrismaService,
-    private readonly RedisService: RedisCacheService,
-  ) {}
+  constructor(private readonly prismaService: PrismaService) {}
   async create(createDesignerInput: CreateDesignerInput, req: express.Request) {
-    try {
-      if (req.sub.Roles.includes(createDesignerInput.Role))
-        throw new BadRequestException('User already a designer.');
-      req.sub.Roles.push(createDesignerInput.Role);
-      const designer = new this.DesignerModel({
-        ...createDesignerInput,
+    await this.prismaService.users.update({
+      where: { UserID: req.sub.UserID },
+      data: { Roles: req.sub.Roles as string[] },
+    });
+    return await this.prismaService.designers.create({
+      data: {
         UserID: req.sub.UserID,
-        DesignerID: v4(),
-      });
-      const result = designer.save();
-      // await this.RedisService.set(updatedUser.UserID, updatedUser);
-      return result;
-    } catch (error) {
-      throw error;
-    }
+        DesignerName: createDesignerInput.DesignerName,
+        DesignerPhoneNumbers: createDesignerInput.DesignerPhoneNumbers,
+        DesignerAddress: {
+          StreetNo: createDesignerInput.DesignerAddress.StreetNo,
+          StreetName: createDesignerInput.DesignerAddress.StreetName,
+          City: createDesignerInput.DesignerAddress.City,
+          State: <string>(createDesignerInput.DesignerAddress.State as unknown),
+        },
+      },
+    });
   }
 
   async findAll() {
-    try {
-      return await this.DesignerModel.find().exec();
-    } catch (error) {
-      throw error;
-    }
+    return await this.prismaService.designers.findMany();
   }
 
   async findOne(DesignerID: string, req: express.Request) {
-    const designer = await this.DesignerModel.findOne({
-      DesignerID,
-      UserID: req.sub.UserID,
-    }).exec();
+    const designer = await this.prismaService.designers.findUnique({
+      where: {
+        DesignerID,
+        UserID: req.sub.UserID,
+      },
+    });
     if (designer) return designer;
     throw new NotFoundException(`Designer ${DesignerID} not found.`);
   }
 
   async update(updateDesignerInput: UpdateDesignerInput, req: express.Request) {
-    return await this.DesignerModel.findOneAndUpdate(
-      { DesignerID: updateDesignerInput.DesignerID, UserID: req.sub.UserID },
-      {
-        ...updateDesignerInput,
+    return await this.prismaService.designers.update({
+      where: {
+        DesignerID: updateDesignerInput.DesignerID,
+        UserID: req.sub.UserID,
       },
-      {
-        new: true,
+      data: {
+        DesignerName: updateDesignerInput.DesignerName,
       },
-    ).exec();
+    });
   }
 
   async remove(DesignerID: string, req: express.Request) {
-    const designer = await this.DesignerModel.findOne({
-      DesignerID,
-      UserID: req.sub.UserID,
-    }).exec();
+    const designer = await this.prismaService.designers.findUnique({
+      where: { DesignerID, UserID: req.sub.UserID },
+    });
     if (designer) {
       const index = req.sub.Roles.indexOf(Role.DESIGNER);
       req.sub.Roles.splice(index);
-      return 'ok';
+      return 'Designer archived.';
     }
     throw new NotFoundException(`Designer ${DesignerID} not found.`);
   }

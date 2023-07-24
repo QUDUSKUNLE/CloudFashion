@@ -10,58 +10,11 @@ datasource db {
   url      = env("MONGODB_URI")
 }
 
-enum Role {
-  USER
-  ADMIN
-  DESIGNER
-  CUSTOMER
-  PUBLIC
-}
-
-enum State {
-  Abia
-  Adamawa
-  AkwaIbom
-  Anambra
-  Bauchi
-  Benue
-  Borno
-  Bayelsa
-  CrossRiver
-  Delta
-  Ebonyi
-  Edo
-  Ekiti
-  Enugu
-  FCT
-  Gombe
-  Imo
-  Jigawa
-  Kebbi
-  Kaduna
-  Kano
-  Kogi
-  Katsina
-  Kwara
-  Lagos
-  Nassarawa
-  Niger
-  Ogun
-  Ondo
-  Osun
-  Oyo
-  Plateau
-  Rivers
-  Sokoto
-  Yobe
-  Zamfara
-}
-
 type Address {
   StreetNo      Int
   StreetName    String
   City          String 
-  State         State
+  State         String             
 }
 
 model Designers {
@@ -69,20 +22,26 @@ model Designers {
   DesignerName          String       @unique
   DesignerPhoneNumbers  String[]     @default([])
   DesignerAddress       Address?
-  User                  Users        @relation(fields: [UserID], references: [UserID])
-  UserID                String       @unique @db.ObjectId
-  Roles                 Role[]       @default([DESIGNER])
   CreatedAt             DateTime     @default(now())
   UpdatedAt             DateTime     @updatedAt
+
+  User                  Users        @relation(fields: [UserID], references: [UserID])
+  UserID                String       @unique @db.ObjectId
+
+  Customers              Customers[]
 }
 
 model Customers {
   CustomerID              String        @id @default(auto()) @map("_id") @db.ObjectId
+  CustomerEmail           String        @unique
   CustomerName            String?
   CustomerPhoneNumbers    String[]      @default([])
   CustomerAddress         Address?
   CreatedAt               DateTime      @default(now())
   UpdatedAt               DateTime      @updatedAt
+
+  Designer                Designers     @relation(fields: [DesignerID], references: [DesignerID])
+  DesignerID              String        @db.ObjectId
 }
 
 model Users {
@@ -93,10 +52,11 @@ model Users {
   FirstName     String?               
   LastName      String?               
   Address       Address?
-  Designer      Designers?  
-  Roles         Role[]                @default([USER])
+  Roles         String[]              @default(["USER"])
   CreatedAt     DateTime              @default(now())
   UpdatedAt     DateTime              @updatedAt
+
+  Designer      Designers?  
 }
 
 

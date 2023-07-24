@@ -7,6 +7,7 @@ import {
   IsArray,
   ValidateNested,
   Validate,
+  MinLength,
 } from 'class-validator';
 import { PasswordValidator } from '../helpers/users.validation';
 import { Address } from '../../common/address.input';
@@ -19,6 +20,7 @@ export class CreateUserInput {
 
   @Field(() => String, { description: 'User Password', nullable: false })
   @IsString({ message: 'Password is not valid.' })
+  @MinLength(8, { message: 'Password should be more than 8 characters.' })
   readonly Password: string;
 
   @Field(() => String, { description: 'User ConfirmPassword', nullable: false })
