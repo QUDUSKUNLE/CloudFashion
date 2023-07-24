@@ -1,4 +1,4 @@
-import { BadRequestException } from '@nestjs/common';
+import { BadRequestException, ConflictException } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import * as express from 'express';
 import { Role } from '../common/interface';
@@ -27,7 +27,7 @@ export class DesignersResolver {
         `Invalid Role: ${createDesignerInput.Role}`,
       );
     if (req.sub.Roles.includes(createDesignerInput.Role))
-      throw new BadRequestException('User`s already a designer.');
+      throw new ConflictException('User`s already a designer.');
     req.sub.Roles.push(createDesignerInput.Role);
     return this.designersService.create(createDesignerInput, req);
   }

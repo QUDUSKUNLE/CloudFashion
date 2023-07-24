@@ -1,5 +1,4 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { PassportModule } from '@nestjs/passport';
 
 import { AuthService } from './auth.service';
 import { UsersModule } from '../../users/users.module';
@@ -11,7 +10,7 @@ describe('AuthService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [UsersModule, RedisCacheModule, PassportModule],
+      imports: [UsersModule, RedisCacheModule],
       providers: [AuthService, PrismaService],
       exports: [AuthService],
     }).compile();

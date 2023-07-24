@@ -275,6 +275,11 @@ type Shipment {
   UpdatedAt: DateTime
 }
 
+type Customer {
+  """Customer counts"""
+  Count: Int
+}
+
 type Query {
   GetProducts: [Product!]!
   GetVendorProducts: [Product!]!
@@ -363,6 +368,7 @@ type Mutation {
   UpdateMeasurement(updateMeasurementInput: UpdateMeasurementInput!): Measurement!
   DeleteClothRequest(findClothingInput: FindClothingInput!): Clothing!
   DeleteMeasurement(findMeasurementInput: FindMeasurementInput!): Measurement!
+  createCustomer(createCustomerInput: CreateCustomerInput!): Customer!
 }
 
 input CreateProductInput {
@@ -980,4 +986,23 @@ input UpdateMeasurementInput {
 
   """Measurement ID."""
   MeasurementID: String!
+}
+
+input CreateCustomerInput {
+  """Create Customers"""
+  CreateCustomers: [CreateCustomer!]!
+}
+
+input CreateCustomer {
+  """Customer name"""
+  CustomerName: String!
+
+  """Customer name"""
+  CustomerEmail: String
+
+  """Customer Phonenumbers"""
+  CustomerPhoneNumbers: [String!]
+
+  """User Address."""
+  CustomerAddress: Address
 }

@@ -26,6 +26,7 @@ import { StacksModule } from './services/stack/stack.module';
 import { TerminalService } from './services/terminal/terminal.service';
 import { YoutubeModule } from './services/youtube/youtube.module';
 import { PrismaService } from './prisma/prisma.service';
+import { CustomersModule } from './customers/customers.module';
 
 @Module({
   imports: [
@@ -93,14 +94,15 @@ import { PrismaService } from './prisma/prisma.service';
     ClothingModule,
     InvoiceModule,
     StacksModule,
+    CustomersModule,
   ],
   controllers: [],
   providers: [
     InvoiceService,
-    // {
-    //   provide: APP_GUARD,
-    //   useClass: RolesGuard,
-    // },
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
+    },
     TerminalService,
     PrismaService,
   ],

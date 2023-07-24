@@ -34,9 +34,7 @@ export class RolesGuard implements CanActivate {
     }
     const [type, token] = authorization.split(' ');
     if (type !== 'Bearer') {
-      throw new BadRequestException(
-        `Authentication type \'Bearer\' required. Found \'${type}\'`,
-      );
+      throw new BadRequestException(`Authentication type \'Bearer\' required.`);
     }
     const { isValid, user } = await this.authService.validateToken(token);
     if (isValid && user) {

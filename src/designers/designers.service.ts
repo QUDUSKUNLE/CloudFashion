@@ -10,6 +10,10 @@ import { PrismaService } from '../prisma/prisma.service';
 export class DesignersService {
   constructor(private readonly prismaService: PrismaService) {}
   async create(createDesignerInput: CreateDesignerInput, req: express.Request) {
+    await this.prismaService.users.update({
+      where: { UserID: req.sub.UserID },
+      data: { Roles: req.sub.Roles as string[] },
+    });
     return await this.prismaService.designers.create({
       data: {
         UserID: req.sub.UserID,
@@ -59,7 +63,7 @@ export class DesignersService {
     if (designer) {
       const index = req.sub.Roles.indexOf(Role.DESIGNER);
       req.sub.Roles.splice(index);
-      return 'Done';
+      return 'Designer archived.';
     }
     throw new NotFoundException(`Designer ${DesignerID} not found.`);
   }
