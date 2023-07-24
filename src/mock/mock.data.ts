@@ -1,4 +1,5 @@
 import { State } from '../common/interface';
+import { Role } from '../common/interface';
 
 export enum MODULE {
   CUSTOMER = 'CUSTOMER',
@@ -25,6 +26,15 @@ export const SERVICES = {
       CreateCustomers: [],
     },
     ERROR_MESSAGE: 'Customer Name can not be empty',
+    UNAUTHORIZED_MESSAGE: 'Unauthorized to perform this operation',
+  },
+  USER: {
+    UserID: '1',
+    Email: 'qud@gmail.com',
+    Password: '',
+    Roles: [Role.DESIGNER],
+    CreatedAt: new Date(),
+    UpdatedAt: new Date(),
   },
 };
 

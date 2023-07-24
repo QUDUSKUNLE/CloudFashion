@@ -29,7 +29,6 @@
     "@nestjs/graphql": "^10.1.5",
     "@nestjs/jwt": "^9.0.0",
     "@nestjs/mongoose": "^9.2.1",
-    "@nestjs/passport": "^9.0.0",
     "@nestjs/platform-express": "^9.1.6",
     "@nestjs/throttler": "^3.1.0",
     "@nestjs/typeorm": "^9.0.1",
@@ -51,6 +50,7 @@
     "mongodb": "^3.7.3",
     "mongoose": "^6.7.0",
     "mysql2": "^2.3.3",
+    "node-mocks-http": "^1.12.2",
     "passport-jwt": "^4.0.0"
   },
   "jest": {

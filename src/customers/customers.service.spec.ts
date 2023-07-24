@@ -1,13 +1,18 @@
-import * as express from 'express';
 import { Test, TestingModule } from '@nestjs/testing';
 import { CustomersService } from './customers.service';
+import { createRequest } from 'node-mocks-http';
 import { PrismaService } from '../prisma/prisma.service';
 import { MockData, MODULE } from '../mock/mock.data';
 
 describe('CustomersService', () => {
   let service: CustomersService;
   let prisma: PrismaService;
-  let req: express.Request;
+
+  const req = createRequest({
+    method: 'POST',
+    url: '/',
+  });
+  req.sub = MockData.SERVICES.USER;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -23,14 +28,17 @@ describe('CustomersService', () => {
   });
   describe('Create method', () => {
     it('should create a new customer', async () => {
+      prisma.designers.findUnique = jest
+        .fn()
+        .mockReturnValue({ DesignerID: '1' });
       prisma.customers.createMany = jest.fn().mockReturnValue({ count: 1 });
-      const result = await service.create(
+      const { Count } = await service.create(
         {
           ...MockData.SERVICES[MODULE.CUSTOMER].CREATE_CUSTOMER,
         },
         req,
       );
-      expect(result.Count).toBeDefined();
+      expect(Count).toBeDefined();
     });
     it('should throw error when Customer name is not defined', () => {
       return service
@@ -43,6 +51,23 @@ describe('CustomersService', () => {
         .catch((e) =>
           expect(e?.message).toEqual(
             MockData.SERVICES[MODULE.CUSTOMER].ERROR_MESSAGE,
+          ),
+        );
+    });
+    it('should throw error when Unauthorized to perform this operation', () => {
+      prisma.designers.findUnique = jest
+        .fn()
+        .mockReturnValue({ DesignerID: null });
+      return service
+        .create(
+          {
+            ...MockData.SERVICES[MODULE.CUSTOMER].CREATE_CUSTOMER,
+          },
+          req,
+        )
+        .catch((e) =>
+          expect(e?.message).toEqual(
+            MockData.SERVICES[MODULE.CUSTOMER].UNAUTHORIZED_MESSAGE,
           ),
         );
     });
