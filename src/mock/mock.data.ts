@@ -3,6 +3,7 @@ import { Role } from '../common/interface';
 
 export enum MODULE {
   CUSTOMER = 'CUSTOMER',
+  USER = 'USER',
 }
 
 export const SERVICES = {
@@ -28,13 +29,29 @@ export const SERVICES = {
     ERROR_MESSAGE: 'Customer Name can not be empty',
     UNAUTHORIZED_MESSAGE: 'Unauthorized to perform this operation',
   },
-  USER: {
-    UserID: '1',
-    Email: 'qud@gmail.com',
-    Password: '',
-    Roles: [Role.DESIGNER],
-    CreatedAt: new Date(),
-    UpdatedAt: new Date(),
+  [MODULE.USER]: {
+    CREATE_USER: {
+      Email: 'qud@gmail.com',
+      Password: 'boluwatife@mail.com',
+      ConfirmPassword: 'boluwatife@mail.com',
+      PhoneNumbers: ['+234701187334'],
+    },
+    CREATE_LESS_PASSWORD: {
+      Email: 'qud@gmail.com',
+      Password: 'boluw',
+      ConfirmPassword: 'boluwatife@mail.com',
+      PhoneNumbers: ['+234701187334'],
+    },
+    CREATE_LESS_PASSWORD_ERROR:
+      'Password length should be at least 8 characters.',
+    USER: {
+      UserID: '1',
+      Email: 'qud@gmail.com',
+      Password: 'boluwatife@mail.com',
+      Roles: [Role.DESIGNER],
+      CreatedAt: new Date(),
+      UpdatedAt: new Date(),
+    },
   },
 };
 

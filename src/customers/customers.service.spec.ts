@@ -12,7 +12,7 @@ describe('CustomersService', () => {
     method: 'POST',
     url: '/',
   });
-  req.sub = MockData.SERVICES.USER;
+  req.sub = MockData.SERVICES[MODULE.USER].USER;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({

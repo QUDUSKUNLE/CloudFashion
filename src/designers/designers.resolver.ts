@@ -1,6 +1,6 @@
-import { BadRequestException, ConflictException } from '@nestjs/common';
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import * as express from 'express';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { BadRequestException, ConflictException } from '@nestjs/common';
 import { Role } from '../common/interface';
 import { GraphRequest, Roles } from '../user.decorator';
 import { DesignersService } from './designers.service';

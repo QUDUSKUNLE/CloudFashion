@@ -1,5 +1,4 @@
 import { Field, GraphQLISODateTime, ObjectType } from '@nestjs/graphql';
-import { Schema, SchemaFactory } from '@nestjs/mongoose';
 import GraphQLJSON from 'graphql-type-json';
 import { Address } from '../../common/address.input';
 import { Role } from '../../common/interface';
@@ -60,9 +59,6 @@ export class LogoutResponse {
   Message: string;
 }
 
-export const UserSchema = SchemaFactory.createForClass(User);
-
-@Schema()
 @ObjectType()
 export class Sabi extends User {}
 

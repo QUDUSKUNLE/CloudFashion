@@ -287,12 +287,12 @@ type Query {
   GetProduct(findProductInput: FindProductInput!): Product!
   GetOrders: [AOrder!]!
   GetOrder(findOrderInput: FindOrderInput!): AOrder!
-  GetUsersProfile: [User!]!
-  GetUserProfile(findUserInput: FindUserInput!): User!
   GetPayments: [Payment!]!
   GetPayment(findPaymentInput: FindPaymentInput!): Payment!
   GetShipments: [Shipment!]!
   GetShipment(findShipmentInput: FindShipmentInput!): Shipment!
+  GetUsersProfile: [User!]!
+  GetUserProfile(findUserInput: FindUserInput!): User!
   GetDesignersProfile: [Designer!]!
   GetDesigner(findDesignerInput: FindDesignerInput!): Designer!
   GetClothsRequest: [ClothsPayload!]!
@@ -311,11 +311,6 @@ input FindOrderInput {
   OrderID: String!
 }
 
-input FindUserInput {
-  """User ID."""
-  UserID: String!
-}
-
 input FindPaymentInput {
   """Payment ID"""
   PaymentID: String!
@@ -324,6 +319,11 @@ input FindPaymentInput {
 input FindShipmentInput {
   """Shipment ID"""
   ShipmentID: String!
+}
+
+input FindUserInput {
+  """User ID."""
+  UserID: String!
 }
 
 input FindDesignerInput {
@@ -349,16 +349,16 @@ type Mutation {
   CreateOrder(createOrderInput: CreateOrderInput!): OrderResponse!
   UpdateOrder(updateOrderInput: UpdateOrderInput!): Order!
   DeleteOrder(findOrderInput: FindOrderInput!): Order!
-  CreateUserProfile(createUserInput: CreateUserInput!): User!
-  LogInUser(logInUserInput: LogInUserInput!): LoginResponse!
-  LogOutUser: LogoutResponse!
-  UpdateUserProfile(updateUserInput: UpdateUserInput!): User!
-  DeleteUserProfile(findUserInput: FindUserInput!): User!
   UpdatePayment(updatePaymentInput: UpdatePaymentInput!): Payment!
   DeletePayment(findPaymentInput: FindPaymentInput!): Payment!
   CreateShipment(createShipmentInput: CreateShipmentInput!): Shipment!
   UpdateShipment(updateShipmentInput: UpdateShipmentInput!): Shipment!
   DeleteShipment(findShipmentInput: FindShipmentInput!): Shipment!
+  CreateUserProfile(createUserInput: CreateUserInput!): User!
+  LogInUser(logInUserInput: LogInUserInput!): LoginResponse!
+  LogOutUser: LogoutResponse!
+  UpdateUserProfile(updateUserInput: UpdateUserInput!): User!
+  DeleteUserProfile(findUserInput: FindUserInput!): User!
   CreateDesignerProfile(createDesignerInput: CreateDesignerInput!): Designer!
   UpdateDesignerProfile(updateDesignerInput: UpdateDesignerInput!): Designer!
   DeleteDesignerProfile(findDesignerInput: FindDesignerInput!): Designer!
@@ -572,6 +572,51 @@ input UpdateOrderInput {
   OrderID: String!
 }
 
+input UpdatePaymentInput {
+  """Payment status."""
+  PaymentStatus: PaymentStatus
+
+  """Payment Amount."""
+  PaymentAmount: Float
+
+  """Payment Tracking identity"""
+  PaymentTrackingID: String
+
+  """Orders identity."""
+  OrderID: String
+
+  """Payment identity."""
+  PaymentID: String!
+}
+
+"""Payment status"""
+enum PaymentStatus {
+  PROCESSING
+  PENDING
+  COMPLETED
+  CANCELLED
+  RETURNED
+}
+
+input CreateShipmentInput {
+  """Item identity."""
+  ItemID: String!
+
+  """Order identity."""
+  OrderID: String!
+}
+
+input UpdateShipmentInput {
+  """Item identity."""
+  ItemID: String
+
+  """Order identity."""
+  OrderID: String
+
+  """Shipment ID"""
+  ShipmentID: String!
+}
+
 input CreateUserInput {
   """User Email."""
   Email: String!
@@ -627,51 +672,6 @@ input UpdateUserInput {
 
   """User Identity."""
   UserID: String!
-}
-
-input UpdatePaymentInput {
-  """Payment status."""
-  PaymentStatus: PaymentStatus
-
-  """Payment Amount."""
-  PaymentAmount: Float
-
-  """Payment Tracking identity"""
-  PaymentTrackingID: String
-
-  """Orders identity."""
-  OrderID: String
-
-  """Payment identity."""
-  PaymentID: String!
-}
-
-"""Payment status"""
-enum PaymentStatus {
-  PROCESSING
-  PENDING
-  COMPLETED
-  CANCELLED
-  RETURNED
-}
-
-input CreateShipmentInput {
-  """Item identity."""
-  ItemID: String!
-
-  """Order identity."""
-  OrderID: String!
-}
-
-input UpdateShipmentInput {
-  """Item identity."""
-  ItemID: String
-
-  """Order identity."""
-  OrderID: String
-
-  """Shipment ID"""
-  ShipmentID: String!
 }
 
 input CreateDesignerInput {

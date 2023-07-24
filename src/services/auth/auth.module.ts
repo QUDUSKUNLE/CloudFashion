@@ -1,15 +1,12 @@
-import { Module, forwardRef } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 
-import { UsersModule } from '../../users/users.module';
-import { RedisCacheModule } from '../redis-cache/redis-cache.module';
 import { AuthService } from './auth.service';
 import { PrismaService } from '../../prisma/prisma.service';
 
 @Module({
   imports: [
-    RedisCacheModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
@@ -18,7 +15,6 @@ import { PrismaService } from '../../prisma/prisma.service';
       }),
       inject: [ConfigService],
     }),
-    forwardRef(() => UsersModule),
   ],
   providers: [AuthService, PrismaService],
   exports: [AuthService],
