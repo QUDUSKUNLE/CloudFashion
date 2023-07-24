@@ -313,7 +313,7 @@ type Query {
   GetShipment(findShipmentInput: FindShipmentInput!): Shipment!
   GetUsersProfile(skip: Int = 0, take: Int = 25): [User!]!
   GetUserProfile(findUserInput: FindUserInput!): User!
-  GetDesignersProfile: [Designer!]!
+  GetDesignersProfile(skip: Int = 0, take: Int = 25): [Designer!]!
   GetDesigner(findDesignerInput: FindDesignerInput!): Designer!
   GetClothsRequest: [ClothsPayload!]!
   GetMeasurements: [Measurement!]!
