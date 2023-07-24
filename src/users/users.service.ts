@@ -1,5 +1,6 @@
 import * as bcrypt from 'bcryptjs';
 import { BadRequestException, Injectable } from '@nestjs/common';
+import { FetchArgs } from '../common/address.input';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateUserInput, FindUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
@@ -27,8 +28,11 @@ export class UsersService {
     return result;
   }
 
-  async findAll() {
-    return await this.prismaService.users.findMany();
+  async findAll(fetch: FetchArgs) {
+    return await this.prismaService.users.findMany({
+      skip: fetch.skip,
+      take: fetch.take,
+    });
   }
 
   async findOne(findUserInput: FindUserInput) {

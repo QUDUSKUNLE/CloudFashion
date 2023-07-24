@@ -23,6 +23,22 @@ export const SERVICES = {
         },
       ],
     },
+    FIND_ALL: {
+      ARGS: {
+        skip: 0,
+        take: 2,
+      },
+      RESULT: [
+        {
+          CustomerID: '64be92970c4d228143dafab0',
+          CustomerEmail: 'Kemi@gmail.com',
+          CustomerAddress: null,
+          CreatedAt: '2023-07-24T15:02:47.498Z',
+          UpdatedAt: '2023-07-24T15:02:47.498Z',
+          CustomerPhoneNumbers: [],
+        },
+      ],
+    },
     CreateEmpty: {
       CreateCustomers: [],
     },

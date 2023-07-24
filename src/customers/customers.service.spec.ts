@@ -32,7 +32,7 @@ describe('CustomersService', () => {
         .fn()
         .mockReturnValue({ DesignerID: '1' });
       prisma.customers.createMany = jest.fn().mockReturnValue({ count: 1 });
-      const { Count } = await service.create(
+      const { Count } = await service.Create(
         {
           ...MockData.SERVICES[MODULE.CUSTOMER].CREATE_CUSTOMER,
         },
@@ -42,7 +42,7 @@ describe('CustomersService', () => {
     });
     it('should throw error when Customer name is not defined', () => {
       return service
-        .create(
+        .Create(
           {
             ...MockData.SERVICES[MODULE.CUSTOMER].CreateEmpty,
           },
@@ -59,7 +59,7 @@ describe('CustomersService', () => {
         .fn()
         .mockReturnValue({ DesignerID: null });
       return service
-        .create(
+        .Create(
           {
             ...MockData.SERVICES[MODULE.CUSTOMER].CREATE_CUSTOMER,
           },
@@ -70,6 +70,22 @@ describe('CustomersService', () => {
             MockData.SERVICES[MODULE.CUSTOMER].UNAUTHORIZED_MESSAGE,
           ),
         );
+    });
+  });
+  describe('Find All', () => {
+    it('should return array of customers', async () => {
+      prisma.designers.findUnique = jest
+        .fn()
+        .mockReturnValue({ DesignerID: '1' });
+      prisma.customers.findMany = jest
+        .fn()
+        .mockReturnValue(MockData.SERVICES[MODULE.CUSTOMER].FIND_ALL.RESULT);
+      const result = await service.FindAll(
+        MockData.SERVICES[MODULE.CUSTOMER].FIND_ALL.ARGS,
+        req,
+      );
+      expect(prisma.customers.findMany).toHaveBeenCalled();
+      expect(result.length).toBeGreaterThanOrEqual(1);
     });
   });
 });

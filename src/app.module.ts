@@ -5,7 +5,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 import { GraphQLModule } from '@nestjs/graphql';
 import { MongooseModule } from '@nestjs/mongoose';
-import { ThrottlerModule } from '@nestjs/throttler';
+// import { ThrottlerModule } from '@nestjs/throttler';
 import * as redis from 'cache-manager-redis-store';
 import GraphQLJSON from 'graphql-type-json';
 
@@ -73,14 +73,14 @@ import { CustomersModule } from './customers/customers.module';
       playground: true,
       autoSchemaFile: 'schema.gql',
     }),
-    ThrottlerModule.forRootAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        ttl: +configService.get<string>('THROTTLE_TTL'),
-        limit: +configService.get<string>('THROTTLE_LIMIT'),
-      }),
-    }),
+    // ThrottlerModule.forRootAsync({
+    //   imports: [ConfigModule],
+    //   inject: [ConfigService],
+    //   useFactory: (configService: ConfigService) => ({
+    //     ttl: +configService.get<string>('THROTTLE_TTL'),
+    //     limit: +configService.get<string>('THROTTLE_LIMIT'),
+    //   }),
+    // }),
     ProductsModule,
     AuthModule,
     UsersModule,

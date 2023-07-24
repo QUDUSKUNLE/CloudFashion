@@ -280,6 +280,26 @@ type Customer {
   Count: Int
 }
 
+type Customers {
+  """Customer Identity."""
+  CustomerID: String
+
+  """Customer Email"""
+  CustomerEmail: String!
+
+  """Customer PhoneNumbers."""
+  CustomerPhoneNumbers: [String!]!
+
+  """Customer Address"""
+  CustomerAddress: JSON
+
+  """Customer CreatedAt."""
+  CreatedAt: DateTime
+
+  """Customer UpdatedAt."""
+  UpdatedAt: DateTime
+}
+
 type Query {
   GetProducts: [Product!]!
   GetVendorProducts: [Product!]!
@@ -291,7 +311,7 @@ type Query {
   GetPayment(findPaymentInput: FindPaymentInput!): Payment!
   GetShipments: [Shipment!]!
   GetShipment(findShipmentInput: FindShipmentInput!): Shipment!
-  GetUsersProfile: [User!]!
+  GetUsersProfile(skip: Int = 0, take: Int = 25): [User!]!
   GetUserProfile(findUserInput: FindUserInput!): User!
   GetDesignersProfile: [Designer!]!
   GetDesigner(findDesignerInput: FindDesignerInput!): Designer!
@@ -299,6 +319,7 @@ type Query {
   GetMeasurements: [Measurement!]!
   GetClothRequest(findClothingInput: FindClothingInput!): ClothsPayload!
   GetMeasurement(findMeasurementInput: FindMeasurementInput!): Measurement!
+  FetchCustomers(skip: Int = 0, take: Int = 25): [Customers!]!
 }
 
 input FindProductInput {
@@ -368,7 +389,7 @@ type Mutation {
   UpdateMeasurement(updateMeasurementInput: UpdateMeasurementInput!): Measurement!
   DeleteClothRequest(findClothingInput: FindClothingInput!): Clothing!
   DeleteMeasurement(findMeasurementInput: FindMeasurementInput!): Measurement!
-  createCustomer(createCustomerInput: CreateCustomerInput!): Customer!
+  CreateCustomer(createCustomerInput: CreateCustomerInput!): Customer!
 }
 
 input CreateProductInput {
@@ -997,8 +1018,8 @@ input CreateCustomer {
   """Customer name"""
   CustomerName: String!
 
-  """Customer name"""
-  CustomerEmail: String
+  """Customer Email"""
+  CustomerEmail: String!
 
   """Customer Phonenumbers"""
   CustomerPhoneNumbers: [String!]

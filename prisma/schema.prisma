@@ -33,15 +33,15 @@ model Designers {
 
 model Customers {
   CustomerID              String        @id @default(auto()) @map("_id") @db.ObjectId
-  CustomerEmail           String?
+  CustomerEmail           String        @unique
   CustomerName            String?
   CustomerPhoneNumbers    String[]      @default([])
   CustomerAddress         Address?
   CreatedAt               DateTime      @default(now())
   UpdatedAt               DateTime      @updatedAt
 
-  Designers               Designers     @relation(fields: [DesignerID], references: [DesignerID])
-  DesignerID              String        @unique @db.ObjectId
+  Designer                Designers     @relation(fields: [DesignerID], references: [DesignerID])
+  DesignerID              String        @db.ObjectId
 }
 
 model Users {

@@ -14,10 +14,9 @@ export class CreateCustomer {
   @IsString()
   CustomerName: string;
 
-  @Field(() => String, { nullable: true, description: 'Customer name' })
+  @Field(() => String, { description: 'Customer Email' })
   @IsEmail({}, { message: 'Email is not valid' })
-  @IsOptional()
-  CustomerEmail?: string;
+  CustomerEmail: string;
 
   @Field(() => [String], {
     nullable: true,
@@ -31,6 +30,11 @@ export class CreateCustomer {
   @ValidateNested()
   @IsOptional()
   CustomerAddress?: Address;
+}
+
+@InputType()
+export class CustomerEntity extends CreateCustomer {
+  DesignerID: string;
 }
 
 @InputType()
