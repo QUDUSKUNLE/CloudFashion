@@ -24,12 +24,14 @@ export class DesignersResolver {
     @GraphRequest() req: express.Request,
   ) {
     try {
-      if (createDesignerInput.Role !== Role.DESIGNER)
+      if (createDesignerInput.Role !== Role.DESIGNER) {
         throw new BadRequestException(
           `Invalid Role: ${createDesignerInput.Role}`,
         );
-      if (req.sub.Roles.includes(createDesignerInput.Role))
+      }
+      if (req.sub.Roles.includes(createDesignerInput.Role)) {
         throw new ConflictException('User`s already a designer.');
+      }
       req.sub.Roles.push(createDesignerInput.Role);
       return await this.designersService.Create(createDesignerInput, req);
     } catch (e) {

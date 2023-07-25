@@ -73,7 +73,7 @@ export class DesignersService {
     });
     if (designer) {
       const index = req.sub.Roles.indexOf(Role.DESIGNER);
-      req.sub.Roles.splice(index);
+      req.sub.Roles.splice(index, 1);
       return 'Designer archived.';
     }
     throw new NotFoundException(`Designer ${DesignerID} not found.`);

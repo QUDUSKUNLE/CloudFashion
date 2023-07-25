@@ -92,6 +92,20 @@ export const SERVICES = {
         State: State.Lagos,
       },
     },
+    FIND_ALL: [
+      {
+        DesignerName: 'The Comet',
+        DesignerPhoneNumbers: ['+2347023232334'],
+        DesignerAddress: {
+          StreetNo: 41,
+          StreetName: 'Jibowu Estate',
+          City: 'Abule-Egba',
+          State: State.Lagos,
+        },
+        CreatedAt: new Date(),
+        UpdatedAt: new Date(),
+      },
+    ],
     REMOVE_MESSAGE: 'Designer archived.',
     ERROR_MESSAGE: 'User`s already a designer',
   },
