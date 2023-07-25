@@ -9,7 +9,6 @@ import { ProductsModule } from '../../products/products.module';
 import { AuthModule } from '../auth/auth.module';
 import { PaymentsModule } from '../payments/payments.module';
 import { QueueModule } from '../queue/queue.module';
-import { RedisCacheModule } from '../redis-cache/redis-cache.module';
 import { ShipmentsModule } from '../shipments/shipments.module';
 import { StacksModule } from '../stack/stack.module';
 import { PrismaService } from '../../prisma/prisma.service';
@@ -23,7 +22,6 @@ import { PrismaService } from '../../prisma/prisma.service';
     AuthModule,
     QueueModule,
     forwardRef(() => ProductsModule),
-    RedisCacheModule,
     PaymentsModule,
     StacksModule,
     forwardRef(() => ShipmentsModule),
