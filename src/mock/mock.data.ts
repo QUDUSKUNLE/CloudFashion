@@ -3,6 +3,7 @@ import { Role } from '../common/interface';
 
 export enum MODULE {
   CUSTOMER = 'CUSTOMER',
+  DESIGNER = 'DESIGNER',
   USER = 'USER',
 }
 
@@ -64,10 +65,53 @@ export const SERVICES = {
       UserID: '1',
       Email: 'qud@gmail.com',
       Password: 'boluwatife@mail.com',
-      Roles: [Role.DESIGNER],
+      Roles: [Role.DESIGNER, Role.USER],
       CreatedAt: new Date(),
       UpdatedAt: new Date(),
     },
+  },
+  [MODULE.DESIGNER]: {
+    CREATE_DESIGNER: {
+      DesignerName: 'The Comet',
+      DesignerPhoneNumbers: ['+2347023232334'],
+      Role: Role.DESIGNER,
+      DesignerAddress: {
+        StreetNo: 41,
+        StreetName: 'Jibowu Estate',
+        City: 'Abule-Egba',
+        State: State.Lagos,
+      },
+    },
+    FIND_ONE: {
+      DesignerName: 'The Comet',
+      DesignerPhoneNumbers: ['+2347023232334'],
+      DesignerAddress: {
+        StreetNo: 41,
+        StreetName: 'Jibowu Estate',
+        City: 'Abule-Egba',
+        State: State.Lagos,
+      },
+    },
+    FIND_ALL: [
+      {
+        DesignerName: 'The Comet',
+        DesignerPhoneNumbers: ['+2347023232334'],
+        DesignerAddress: {
+          StreetNo: 41,
+          StreetName: 'Jibowu Estate',
+          City: 'Abule-Egba',
+          State: State.Lagos,
+        },
+        CreatedAt: new Date(),
+        UpdatedAt: new Date(),
+      },
+    ],
+    REMOVE_MESSAGE: 'Designer archived.',
+    ERROR_MESSAGE: 'User`s already a designer',
+  },
+  ARGS: {
+    skip: 0,
+    take: 2,
   },
 };
 

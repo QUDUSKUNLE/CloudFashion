@@ -2,6 +2,7 @@ import * as express from 'express';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { BadRequestException, ConflictException } from '@nestjs/common';
 import { Role } from '../common/interface';
+import { FetchArgs } from '../common/address.input';
 import { GraphRequest, Roles } from '../user.decorator';
 import { DesignersService } from './designers.service';
 import {
@@ -17,54 +18,63 @@ export class DesignersResolver {
 
   @Roles(Role.USER)
   @Mutation(() => Designer, { name: 'CreateDesignerProfile' })
-  createDesigner(
+  async CreateDesigner(
     @Args('createDesignerInput', { type: () => CreateDesignerInput })
     createDesignerInput: CreateDesignerInput,
     @GraphRequest() req: express.Request,
   ) {
-    if (createDesignerInput.Role !== Role.DESIGNER)
-      throw new BadRequestException(
-        `Invalid Role: ${createDesignerInput.Role}`,
-      );
-    if (req.sub.Roles.includes(createDesignerInput.Role))
-      throw new ConflictException('User`s already a designer.');
-    req.sub.Roles.push(createDesignerInput.Role);
-    return this.designersService.create(createDesignerInput, req);
+    try {
+      if (createDesignerInput.Role !== Role.DESIGNER) {
+        throw new BadRequestException(
+          `Invalid Role: ${createDesignerInput.Role}`,
+        );
+      }
+      if (req.sub.Roles.includes(createDesignerInput.Role)) {
+        throw new ConflictException('User`s already a designer.');
+      }
+      req.sub.Roles.push(createDesignerInput.Role);
+      return await this.designersService.Create(createDesignerInput, req);
+    } catch (e) {
+      if (e.code === 'P2002') {
+        throw new ConflictException(e?.message);
+      }
+      throw e;
+    }
   }
 
   @Roles(Role.DESIGNER)
   @Query(() => [Designer], { name: 'GetDesignersProfile' })
-  findAll() {
-    return this.designersService.findAll();
+  FindAll(@Args() fetchArgs: FetchArgs) {
+    return this.designersService.FindAll(fetchArgs);
   }
 
   @Roles(Role.DESIGNER)
   @Query(() => Designer, { name: 'GetDesigner' })
-  findOne(
+  FindOne(
     @Args('findDesignerInput', { type: () => FindDesignerInput })
     findDesignerInput: FindDesignerInput,
     @GraphRequest() req: express.Request,
   ) {
-    return this.designersService.findOne(findDesignerInput.DesignerID, req);
+    return this.designersService.FindOne(findDesignerInput.DesignerID, req);
   }
 
   @Roles(Role.DESIGNER)
   @Mutation(() => Designer, { name: 'UpdateDesignerProfile' })
-  updateDesigner(
+  UpdateDesigner(
     @Args('updateDesignerInput', { type: () => UpdateDesignerInput })
     updateDesignerInput: UpdateDesignerInput,
     @GraphRequest() req: express.Request,
   ) {
-    return this.designersService.update(updateDesignerInput, req);
+    return this.designersService.Update(updateDesignerInput, req);
   }
 
   @Roles(Role.ADMIN)
   @Mutation(() => Designer, { name: 'DeleteDesignerProfile' })
-  removeDesigner(
+  RemoveDesigner(
     @Args('findDesignerInput', { type: () => FindDesignerInput })
     findDesignerInput: FindDesignerInput,
     @GraphRequest() req: express.Request,
   ) {
-    return this.designersService.remove(findDesignerInput.DesignerID, req);
+    return this.designersService.Remove(findDesignerInput.DesignerID, req);
   }
 }
