@@ -1,27 +1,20 @@
 import { Injectable, UnprocessableEntityException } from '@nestjs/common';
-import { Model } from 'mongoose';
-
-import { ProductDocument } from '../../products/models/products.schema';
+import { PrismaService } from '../../prisma/prisma.service';
 import { CreateOrderInput } from '../orders/dto/create-order.input';
 
 @Injectable()
 export class HelperService {
-  async orderValidations(
-    createOrderInput: CreateOrderInput,
-    model: typeof Model,
-  ) {
-    const ProductIDs: string[] = createOrderInput.OrderDetails.reduce(
-      (acc, prev) => {
-        acc.push(prev.ProductID);
-        return acc;
-      },
-      [],
-    );
-    const Products: ProductDocument[] = await model
-      .find({
-        ProductID: { $in: ProductIDs },
-      })
-      .select({ ProductID: 1 });
+  constructor(private readonly prismaService: PrismaService) {}
+  async orderValidations(createOrderInput: CreateOrderInput) {
+    const ProductIDs = createOrderInput.OrderDetails.reduce<
+      { ProductID: string }[]
+    >((acc, prev) => {
+      acc.push({ ProductID: prev.ProductID });
+      return acc;
+    }, []);
+    const Products = await this.prismaService.products.findMany({
+      where: { OR: ProductIDs },
+    });
     if (Products.length > 0) {
       const NotFoundProducts = createOrderInput.OrderDetails.filter(
         (prev) =>

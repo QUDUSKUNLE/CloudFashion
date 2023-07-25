@@ -170,32 +170,6 @@ type AOrder {
   OrderItems: [Item!]!
 }
 
-type Product {
-  """Product Identity"""
-  ProductID: String
-
-  """Product Name"""
-  ProductName: String!
-
-  """Product Quantity"""
-  ProductQuantity: Int!
-
-  """Product Video."""
-  ProductVideo: String
-
-  """Product Price"""
-  ProductPrice: Float!
-
-  """Product Discount."""
-  ProductDiscount: Float!
-
-  """Product CreatedAt."""
-  CreatedAt: DateTime
-
-  """Product UpdatedAt."""
-  UpdatedAt: DateTime
-}
-
 type OrderResponse {
   """Order Response."""
   OrderMessage: String!
@@ -252,6 +226,32 @@ type Shipment {
   UpdatedAt: DateTime
 }
 
+type Product {
+  """Product Identity"""
+  ProductID: String
+
+  """Product Name"""
+  ProductName: String!
+
+  """Product Quantity"""
+  ProductQuantity: Int!
+
+  """Product Video."""
+  ProductVideo: String
+
+  """Product Price"""
+  ProductPrice: Float!
+
+  """Product Discount."""
+  ProductDiscount: Float!
+
+  """Product CreatedAt."""
+  CreatedAt: DateTime
+
+  """Product UpdatedAt."""
+  UpdatedAt: DateTime
+}
+
 type Measurement {
   """Measurement identity"""
   MeasurementID: String!
@@ -301,7 +301,7 @@ type ClothsPayload {
 }
 
 type Query {
-  GetProducts: [Product!]!
+  GetProducts(skip: Int = 0, take: Int = 25): [Product!]!
   GetVendorProducts: [Product!]!
   ProductLists: [Item!]!
   GetProduct(findProductInput: FindProductInput!): Product!

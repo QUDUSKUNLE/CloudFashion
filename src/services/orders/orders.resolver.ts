@@ -1,9 +1,6 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { InjectModel } from '@nestjs/mongoose';
 import * as express from 'express';
-import { Model } from 'mongoose';
 import { Role } from '../../common/interface';
-import { Product, ProductDocument } from '../../products/models/products.schema';
 import { GraphRequest, Roles } from '../../user.decorator';
 import { HelperService } from '../helpers/index';
 import { CreateOrderInput, FindOrderInput } from './dto/create-order.input';
@@ -17,30 +14,26 @@ export class OrdersResolver {
   constructor(
     private readonly ordersService: OrdersService,
     private readonly helperService: HelperService,
-    @InjectModel(Product.name) private ProductModel: Model<ProductDocument>,
   ) {}
 
-  @Roles(Role.USER)
+  @Roles(Role.DESIGNER)
   @Mutation(() => OrderResponse, { name: 'CreateOrder' })
   async createOrder(
     @Args('createOrderInput', { type: () => CreateOrderInput })
     createOrderInput: CreateOrderInput,
     @GraphRequest() req: express.Request,
   ) {
-    await this.helperService.orderValidations(
-      createOrderInput,
-      this.ProductModel,
-    );
+    await this.helperService.orderValidations(createOrderInput);
     return this.ordersService.create(createOrderInput, req);
   }
 
-  @Roles(Role.USER)
+  @Roles(Role.DESIGNER)
   @Query(() => [AOrder], { name: 'GetOrders' })
   findAll(@GraphRequest() req: express.Request) {
     return this.ordersService.findAll(req);
   }
 
-  @Roles(Role.USER)
+  @Roles(Role.DESIGNER)
   @Query(() => AOrder, { name: 'GetOrder' })
   findAOrder(
     @Args('findOrderInput', { type: () => FindOrderInput })
@@ -50,7 +43,7 @@ export class OrdersResolver {
     return this.ordersService.findOrder(findOrderInput, req);
   }
 
-  @Roles(Role.USER)
+  @Roles(Role.DESIGNER)
   @Mutation(() => Order, { name: 'UpdateOrder' })
   updateOrder(
     @Args('updateOrderInput', { type: () => UpdateOrderInput })
@@ -60,7 +53,7 @@ export class OrdersResolver {
     return this.ordersService.update(updateOrderInput, req);
   }
 
-  @Roles(Role.ADMIN)
+  @Roles(Role.DESIGNER)
   @Mutation(() => Order, { name: 'DeleteOrder' })
   removeOrder(
     @Args('findOrderInput', { type: () => FindOrderInput })

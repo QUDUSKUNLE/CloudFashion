@@ -17,14 +17,13 @@ import { Statuses } from '../products/entities/product.entity';
 import { QueueJobs } from '../services/queue/queue.enums';
 import { QueueService } from '../services/queue/queue.service';
 import { PrismaService } from '../prisma/prisma.service';
+import { FetchArgs } from '../common/address.input';
 import { CreateProductInput } from './dto/create-product.input';
 import { UpdateProductInput } from './dto/update-product.input';
-import { Product, ProductDocument } from './models/products.schema';
 
 @Injectable()
 export class ProductsService {
   constructor(
-    @InjectModel(Product.name) private ProductModel: Model<ProductDocument>,
     @InjectModel(Item.name) private ItemModel: Model<ItemDocument>,
     private readonly queueService: QueueService,
     private readonly prismaService: PrismaService,
@@ -70,18 +69,23 @@ export class ProductsService {
         },
         QueueJobs.PRODUCTS,
       );
-      return '';
+      return 'Product Created';
     } catch (error) {
       throw error;
     }
   }
 
-  async findAll() {
-    return await this.ProductModel.find({ ProductQuantity: { $gt: 0 } }).exec();
+  async findAll(fetchArgs: FetchArgs) {
+    return await this.prismaService.products.findMany({
+      skip: fetchArgs.skip,
+      take: fetchArgs.take,
+    });
   }
 
   async find(req: express.Request) {
-    return await this.ProductModel.find({ UserID: req.sub.UserID }).exec();
+    return await this.prismaService.products.findUnique({
+      where: { ProductID: req.sub.UserID },
+    });
   }
 
   async updateItemStatus(updateItemStatus: UpdateItemInput) {
@@ -136,10 +140,10 @@ export class ProductsService {
   }
 
   async findOne(ProductID: string, req: express.Request) {
-    return await this.ProductModel.findOne({
-      ProductID,
-      UserID: req.sub.UserID,
-    }).exec();
+    return await this.prismaService.products.findUnique({
+      where: { ProductID },
+      // UserID: req.sub.UserID,
+    });
   }
 
   async update(updateProductInput: UpdateProductInput, req: express.Request) {
@@ -170,17 +174,17 @@ export class ProductsService {
       },
       QueueJobs.PRODUCTS,
     );
-    return await this.ProductModel.findOneAndUpdate(
-      { ProductID: updateProductInput.ProductID, UserID: req.sub.UserID },
-      { ...updateProductInput, ProductVideo: process.env.TEST_VIDEO },
-      { new: true },
-    ).exec();
+    return await this.prismaService.products.update({
+      where: {
+        ProductID: updateProductInput.ProductID,
+      },
+      data: { ...updateProductInput, ProductVideo: process.env.TEST_VIDEO },
+    });
   }
 
   remove(ProductID: string, req: express.Request) {
-    return this.ProductModel.findOneAndDelete(
-      { ProductID, UserID: req.sub.UserID },
-      { rawResult: true },
-    ).exec();
+    return this.prismaService.products.delete({
+      where: { ProductID },
+    });
   }
 }

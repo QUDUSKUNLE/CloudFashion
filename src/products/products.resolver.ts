@@ -11,6 +11,7 @@ import {
 } from './dto/create-product.input';
 import { UpdateProductInput } from './dto/update-product.input';
 import { Product } from './models/products.schema';
+import { FetchArgs } from '../common/address.input';
 import { ProductsService } from './products.service';
 
 @Resolver(() => Product)
@@ -29,8 +30,8 @@ export class ProductsResolver {
 
   @Roles(Role.PUBLIC)
   @Query(() => [Product], { name: 'GetProducts' })
-  findAll() {
-    return this.productsService.findAll();
+  findAll(@Args() fetchArgs: FetchArgs) {
+    return this.productsService.findAll(fetchArgs);
   }
 
   @Roles(Role.VENDOR)
