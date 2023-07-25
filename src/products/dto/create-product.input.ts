@@ -5,7 +5,7 @@ import {
   Float,
   Int,
 } from '@nestjs/graphql';
-import { IsUUID, IsEnum, IsNumber, IsInt, IsString } from 'class-validator';
+import { IsUUID, IsEnum, IsNumber, IsInt, IsMongoId } from 'class-validator';
 import { ProductEnum } from '../interfaces/product.enums';
 import * as GraphQLUpload from 'graphql-upload/GraphQLUpload.js';
 import { FileUpload } from 'graphql-upload/processRequest.js';
@@ -31,7 +31,7 @@ export class CreateProductInput {
   ProductQuantity: number;
 
   @Field(() => Int, { description: 'Product quantity.' })
-  @IsString()
+  @IsMongoId()
   CustomerID: string;
 }
 
