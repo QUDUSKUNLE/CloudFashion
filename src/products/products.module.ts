@@ -1,13 +1,14 @@
 import { forwardRef, Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 
-import { UsersModule } from '../../users/users.module';
-import { AuthModule } from '../auth/auth.module';
-import { OrdersModule } from '../orders/orders.module';
-import { QueueModule } from '../queue/queue.module';
+import { UsersModule } from '../users/users.module';
+import { AuthModule } from '../services/auth/auth.module';
+import { OrdersModule } from '../services/orders/orders.module';
+import { QueueModule } from '../services/queue/queue.module';
 import { Product, ProductSchema } from './models/products.schema';
 import { ProductsResolver } from './products.resolver';
 import { ProductsService } from './products.service';
+import { PrismaService } from '../prisma/prisma.service';
 
 @Module({
   imports: [
@@ -17,7 +18,7 @@ import { ProductsService } from './products.service';
     UsersModule,
     QueueModule,
   ],
-  providers: [ProductsResolver, ProductsService],
+  providers: [ProductsResolver, ProductsService, PrismaService],
   exports: [ProductsService, MongooseModule],
 })
 export class ProductsModule {}

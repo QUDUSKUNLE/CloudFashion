@@ -11,11 +11,12 @@ import * as fs from 'fs';
 import { Model } from 'mongoose';
 import * as path from 'path';
 import { v4 } from 'uuid';
-import { UpdateItemInput } from '../orders/dto/create-order.input';
-import { Item, ItemDocument } from '../orders/models/orders.schema';
+import { UpdateItemInput } from '../services/orders/dto/create-order.input';
+import { Item, ItemDocument } from '../services/orders/models/orders.schema';
 import { Statuses } from '../products/entities/product.entity';
-import { QueueJobs } from '../queue/queue.enums';
-import { QueueService } from '../queue/queue.service';
+import { QueueJobs } from '../services/queue/queue.enums';
+import { QueueService } from '../services/queue/queue.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { CreateProductInput } from './dto/create-product.input';
 import { UpdateProductInput } from './dto/update-product.input';
 import { Product, ProductDocument } from './models/products.schema';
@@ -26,6 +27,7 @@ export class ProductsService {
     @InjectModel(Product.name) private ProductModel: Model<ProductDocument>,
     @InjectModel(Item.name) private ItemModel: Model<ItemDocument>,
     private readonly queueService: QueueService,
+    private readonly prismaService: PrismaService,
   ) {}
   async create(createProductInput: CreateProductInput, req: express.Request) {
     let [filePath] = [''];
@@ -48,22 +50,27 @@ export class ProductsService {
             ),
         );
       }
-      const createdProduct = new this.ProductModel({
-        ...createProductInput,
-        // VendorID: Vendor.VendorID,
-        ProductID: v4(),
-        ProductVideo: process.env.TEST_VIDEO,
+      const createdProduct = await this.prismaService.products.create({
+        data: {
+          ProductName: createProductInput.ProductName,
+          ProductQuantity: createProductInput.ProductQuantity,
+          ProductPrice: createProductInput.ProductPrice,
+          ProductCosts:
+            createProductInput.ProductPrice *
+            createProductInput.ProductQuantity,
+          ProductVideo: process.env.TEST_VIDEO,
+          CustomerID: createProductInput.CustomerID,
+        },
       });
-      const result = await createdProduct.save();
       this.queueService.queueJobs(
         {
           filePath,
           createProductInput,
-          ProductID: result.ProductID,
+          ProductID: createdProduct.ProductID,
         },
         QueueJobs.PRODUCTS,
       );
-      return result;
+      return '';
     } catch (error) {
       throw error;
     }

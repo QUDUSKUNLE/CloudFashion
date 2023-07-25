@@ -7,12 +7,15 @@ import { Model } from 'mongoose';
 import { ItemStatus } from 'src/common/interface';
 import { v4 } from 'uuid';
 import {
-    Item,
-    ItemDocument,
-    Order,
-    OrderDocument,
+  Product,
+  ProductDocument,
+} from '../../products/models/products.schema';
+import {
+  Item,
+  ItemDocument,
+  Order,
+  OrderDocument,
 } from '../orders/models/orders.schema';
-import { Product, ProductDocument } from '../products/models/products.schema';
 import { YoutubeService } from '../youtube/youtube.service';
 import { QueueJobs } from './queue.enums';
 

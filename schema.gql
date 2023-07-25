@@ -2,6 +2,41 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Customer {
+  """Customer counts"""
+  Count: Int
+}
+
+type Customers {
+  """Customer Identity."""
+  CustomerID: String
+
+  """Customer Email"""
+  CustomerEmail: String!
+
+  """Customer PhoneNumbers."""
+  CustomerPhoneNumbers: [String!]!
+
+  """Customer Address"""
+  CustomerAddress: JSON
+
+  """Customer CreatedAt."""
+  CreatedAt: DateTime
+
+  """Customer UpdatedAt."""
+  UpdatedAt: DateTime
+}
+
+"""
+The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+"""
+scalar JSON
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
 type User {
   """User Identity."""
   UserID: String
@@ -31,16 +66,6 @@ type User {
   UpdatedAt: DateTime
 }
 
-"""
-The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
-"""
-scalar JSON
-
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
-
 type LoginResponse {
   """User AccessToken."""
   AccessToken: String!
@@ -68,54 +93,6 @@ type Designer {
   CreatedAt: DateTime
 
   """Designer UpdatedAt."""
-  UpdatedAt: DateTime
-}
-
-type Measurement {
-  """Measurement identity"""
-  MeasurementID: String!
-
-  """Cloth measurement."""
-  Measurement: JSON
-
-  """Measurement CreatedAt."""
-  CreatedAt: DateTime
-
-  """Measurement UpdatedAt."""
-  UpdatedAt: DateTime
-}
-
-type Clothing {
-  """Cloth Identity"""
-  ClothID: String!
-
-  """Measurement Identity."""
-  MeasurementID: String
-
-  """Cloth Request Data"""
-  ClothRequestPayload: JSON
-
-  """Clothing CreatedAt."""
-  CreatedAt: DateTime
-
-  """Clothing UpdatedAt."""
-  UpdatedAt: DateTime
-}
-
-type ClothsPayload {
-  """Cloth Identity"""
-  ClothID: String!
-
-  """Measurement Identity."""
-  MeasurementPayload: Measurement
-
-  """Cloth Request Data"""
-  ClothRequestPayload: JSON
-
-  """Clothing CreatedAt."""
-  CreatedAt: DateTime
-
-  """Clothing UpdatedAt."""
   UpdatedAt: DateTime
 }
 
@@ -275,28 +252,51 @@ type Shipment {
   UpdatedAt: DateTime
 }
 
-type Customer {
-  """Customer counts"""
-  Count: Int
-}
+type Measurement {
+  """Measurement identity"""
+  MeasurementID: String!
 
-type Customers {
-  """Customer Identity."""
-  CustomerID: String
+  """Cloth measurement."""
+  Measurement: JSON
 
-  """Customer Email"""
-  CustomerEmail: String!
-
-  """Customer PhoneNumbers."""
-  CustomerPhoneNumbers: [String!]!
-
-  """Customer Address"""
-  CustomerAddress: JSON
-
-  """Customer CreatedAt."""
+  """Measurement CreatedAt."""
   CreatedAt: DateTime
 
-  """Customer UpdatedAt."""
+  """Measurement UpdatedAt."""
+  UpdatedAt: DateTime
+}
+
+type Clothing {
+  """Cloth Identity"""
+  ClothID: String!
+
+  """Measurement Identity."""
+  MeasurementID: String
+
+  """Cloth Request Data"""
+  ClothRequestPayload: JSON
+
+  """Clothing CreatedAt."""
+  CreatedAt: DateTime
+
+  """Clothing UpdatedAt."""
+  UpdatedAt: DateTime
+}
+
+type ClothsPayload {
+  """Cloth Identity"""
+  ClothID: String!
+
+  """Measurement Identity."""
+  MeasurementPayload: Measurement
+
+  """Cloth Request Data"""
+  ClothRequestPayload: JSON
+
+  """Clothing CreatedAt."""
+  CreatedAt: DateTime
+
+  """Clothing UpdatedAt."""
   UpdatedAt: DateTime
 }
 
@@ -307,12 +307,12 @@ type Query {
   GetProduct(findProductInput: FindProductInput!): Product!
   GetOrders: [AOrder!]!
   GetOrder(findOrderInput: FindOrderInput!): AOrder!
+  GetUsersProfile(skip: Int = 0, take: Int = 25): [User!]!
+  GetUserProfile(findUserInput: FindUserInput!): User!
   GetPayments: [Payment!]!
   GetPayment(findPaymentInput: FindPaymentInput!): Payment!
   GetShipments: [Shipment!]!
   GetShipment(findShipmentInput: FindShipmentInput!): Shipment!
-  GetUsersProfile(skip: Int = 0, take: Int = 25): [User!]!
-  GetUserProfile(findUserInput: FindUserInput!): User!
   GetDesignersProfile(skip: Int = 0, take: Int = 25): [Designer!]!
   GetDesigner(findDesignerInput: FindDesignerInput!): Designer!
   GetClothsRequest: [ClothsPayload!]!
@@ -332,6 +332,11 @@ input FindOrderInput {
   OrderID: String!
 }
 
+input FindUserInput {
+  """User ID."""
+  UserID: String!
+}
+
 input FindPaymentInput {
   """Payment ID"""
   PaymentID: String!
@@ -340,11 +345,6 @@ input FindPaymentInput {
 input FindShipmentInput {
   """Shipment ID"""
   ShipmentID: String!
-}
-
-input FindUserInput {
-  """User ID."""
-  UserID: String!
 }
 
 input FindDesignerInput {
@@ -370,16 +370,16 @@ type Mutation {
   CreateOrder(createOrderInput: CreateOrderInput!): OrderResponse!
   UpdateOrder(updateOrderInput: UpdateOrderInput!): Order!
   DeleteOrder(findOrderInput: FindOrderInput!): Order!
-  UpdatePayment(updatePaymentInput: UpdatePaymentInput!): Payment!
-  DeletePayment(findPaymentInput: FindPaymentInput!): Payment!
-  CreateShipment(createShipmentInput: CreateShipmentInput!): Shipment!
-  UpdateShipment(updateShipmentInput: UpdateShipmentInput!): Shipment!
-  DeleteShipment(findShipmentInput: FindShipmentInput!): Shipment!
   CreateUserProfile(createUserInput: CreateUserInput!): User!
   LogInUser(logInUserInput: LogInUserInput!): LoginResponse!
   LogOutUser: LogoutResponse!
   UpdateUserProfile(updateUserInput: UpdateUserInput!): User!
   DeleteUserProfile(findUserInput: FindUserInput!): User!
+  UpdatePayment(updatePaymentInput: UpdatePaymentInput!): Payment!
+  DeletePayment(findPaymentInput: FindPaymentInput!): Payment!
+  CreateShipment(createShipmentInput: CreateShipmentInput!): Shipment!
+  UpdateShipment(updateShipmentInput: UpdateShipmentInput!): Shipment!
+  DeleteShipment(findShipmentInput: FindShipmentInput!): Shipment!
   CreateDesignerProfile(createDesignerInput: CreateDesignerInput!): Designer!
   UpdateDesignerProfile(updateDesignerInput: UpdateDesignerInput!): Designer!
   DeleteDesignerProfile(findDesignerInput: FindDesignerInput!): Designer!
@@ -407,6 +407,9 @@ input CreateProductInput {
 
   """Product quantity."""
   ProductQuantity: Int!
+
+  """Product quantity."""
+  CustomerID: Int!
 }
 
 """Product name"""
@@ -454,6 +457,9 @@ input UpdateProductInput {
 
   """Product quantity."""
   ProductQuantity: Int
+
+  """Product quantity."""
+  CustomerID: Int
 
   """Product ID."""
   ProductID: String!
@@ -593,51 +599,6 @@ input UpdateOrderInput {
   OrderID: String!
 }
 
-input UpdatePaymentInput {
-  """Payment status."""
-  PaymentStatus: PaymentStatus
-
-  """Payment Amount."""
-  PaymentAmount: Float
-
-  """Payment Tracking identity"""
-  PaymentTrackingID: String
-
-  """Orders identity."""
-  OrderID: String
-
-  """Payment identity."""
-  PaymentID: String!
-}
-
-"""Payment status"""
-enum PaymentStatus {
-  PROCESSING
-  PENDING
-  COMPLETED
-  CANCELLED
-  RETURNED
-}
-
-input CreateShipmentInput {
-  """Item identity."""
-  ItemID: String!
-
-  """Order identity."""
-  OrderID: String!
-}
-
-input UpdateShipmentInput {
-  """Item identity."""
-  ItemID: String
-
-  """Order identity."""
-  OrderID: String
-
-  """Shipment ID"""
-  ShipmentID: String!
-}
-
 input CreateUserInput {
   """User Email."""
   Email: String!
@@ -693,6 +654,51 @@ input UpdateUserInput {
 
   """User Identity."""
   UserID: String!
+}
+
+input UpdatePaymentInput {
+  """Payment status."""
+  PaymentStatus: PaymentStatus
+
+  """Payment Amount."""
+  PaymentAmount: Float
+
+  """Payment Tracking identity"""
+  PaymentTrackingID: String
+
+  """Orders identity."""
+  OrderID: String
+
+  """Payment identity."""
+  PaymentID: String!
+}
+
+"""Payment status"""
+enum PaymentStatus {
+  PROCESSING
+  PENDING
+  COMPLETED
+  CANCELLED
+  RETURNED
+}
+
+input CreateShipmentInput {
+  """Item identity."""
+  ItemID: String!
+
+  """Order identity."""
+  OrderID: String!
+}
+
+input UpdateShipmentInput {
+  """Item identity."""
+  ItemID: String
+
+  """Order identity."""
+  OrderID: String
+
+  """Shipment ID"""
+  ShipmentID: String!
 }
 
 input CreateDesignerInput {

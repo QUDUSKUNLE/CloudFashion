@@ -1,8 +1,8 @@
 import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { Model } from 'mongoose';
 
+import { ProductDocument } from '../../products/models/products.schema';
 import { CreateOrderInput } from '../orders/dto/create-order.input';
-import { ProductDocument } from '../products/models/products.schema';
 
 @Injectable()
 export class HelperService {

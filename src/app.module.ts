@@ -5,12 +5,13 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 import { GraphQLModule } from '@nestjs/graphql';
 import { MongooseModule } from '@nestjs/mongoose';
-// import { ThrottlerModule } from '@nestjs/throttler';
 import * as redis from 'cache-manager-redis-store';
 import GraphQLJSON from 'graphql-type-json';
 
-import { UsersModule } from './users/users.module';
+import { CustomersModule } from './customers/customers.module';
 import { DesignersModule } from './designers/designers.module';
+import { PrismaService } from './prisma/prisma.service';
+import { ProductsModule } from './products/products.module';
 import { RolesGuard } from './roles.guard';
 import { AuthModule } from './services/auth/auth.module';
 import { ClothingModule } from './services/clothing/clothing.module';
@@ -18,15 +19,13 @@ import { InvoiceModule } from './services/invoice/invoice.module';
 import { InvoiceService } from './services/invoice/invoice.service';
 import { OrdersModule } from './services/orders/orders.module';
 import { PaymentsModule } from './services/payments/payments.module';
-import { ProductsModule } from './services/products/products.module';
 import { QueueModule } from './services/queue/queue.module';
 import { RedisCacheModule } from './services/redis-cache/redis-cache.module';
 import { ShipmentsModule } from './services/shipments/shipments.module';
 import { StacksModule } from './services/stack/stack.module';
 import { TerminalService } from './services/terminal/terminal.service';
 import { YoutubeModule } from './services/youtube/youtube.module';
-import { PrismaService } from './prisma/prisma.service';
-import { CustomersModule } from './customers/customers.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [

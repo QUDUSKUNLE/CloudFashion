@@ -42,6 +42,8 @@ model Customers {
 
   Designer                Designers     @relation(fields: [DesignerID], references: [DesignerID])
   DesignerID              String        @db.ObjectId
+
+  Products                Products[]
 }
 
 model Users {
@@ -56,17 +58,20 @@ model Users {
   CreatedAt     DateTime              @default(now())
   UpdatedAt     DateTime              @updatedAt
 
-  Designer      Designers?  
+  Designer      Designers?
 }
 
 
-model Inventories {
-  InventoryID             String        @id @default(auto()) @map("_id") @db.ObjectId
-}
+model Products {
+  ProductID             String        @id @default(auto()) @map("_id") @db.ObjectId
+  ProductName           String
+  ProductQuantity       Int
+  ProductVideo          String?       
+  ProductPrice          Float
+  ProductCosts          Float
+  CreatedAt             DateTime      @default(now())
+  UpdatedAt             DateTime      @updatedAt
 
-
-model Ledgers {
-  LedgerID                String    @id @default(auto()) @map("_id") @db.ObjectId
-  CreatedAt               DateTime  @db.Timestamp
-  UpdatedAt               DateTime  @db.Timestamp
+  Customer              Customers     @relation(fields: [CustomerID], references: [CustomerID], onDelete: Cascade, onUpdate: Cascade)
+  CustomerID            String        @db.ObjectId
 }

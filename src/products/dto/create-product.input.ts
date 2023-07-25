@@ -5,7 +5,7 @@ import {
   Float,
   Int,
 } from '@nestjs/graphql';
-import { IsUUID, IsEnum, IsNumber, IsInt } from 'class-validator';
+import { IsUUID, IsEnum, IsNumber, IsInt, IsString } from 'class-validator';
 import { ProductEnum } from '../interfaces/product.enums';
 import * as GraphQLUpload from 'graphql-upload/GraphQLUpload.js';
 import { FileUpload } from 'graphql-upload/processRequest.js';
@@ -14,7 +14,7 @@ import { FileUpload } from 'graphql-upload/processRequest.js';
 export class CreateProductInput {
   @Field(() => ProductEnum, { nullable: false, description: 'Product name.' })
   @IsEnum(ProductEnum)
-  ProductName: ProductEnum;
+  ProductName: string;
 
   @Field(() => GraphQLUpload, { nullable: true, description: 'Product video.' })
   ProductVideo: FileUpload;
@@ -29,6 +29,10 @@ export class CreateProductInput {
   @Field(() => Int, { description: 'Product quantity.' })
   @IsInt()
   ProductQuantity: number;
+
+  @Field(() => Int, { description: 'Product quantity.' })
+  @IsString()
+  CustomerID: string;
 }
 
 registerEnumType(ProductEnum, {

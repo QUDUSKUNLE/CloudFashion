@@ -5,9 +5,9 @@ import { Item, ItemSchema, Order, OrderSchema } from './models/orders.schema';
 import { OrdersResolver } from './orders.resolver';
 import { OrdersService } from './orders.service';
 
+import { ProductsModule } from '../../products/products.module';
 import { AuthModule } from '../auth/auth.module';
 import { PaymentsModule } from '../payments/payments.module';
-import { ProductsModule } from '../products/products.module';
 import { QueueModule } from '../queue/queue.module';
 import { RedisCacheModule } from '../redis-cache/redis-cache.module';
 import { ShipmentsModule } from '../shipments/shipments.module';
@@ -21,7 +21,7 @@ import { StacksModule } from '../stack/stack.module';
     ]),
     AuthModule,
     QueueModule,
-    ProductsModule,
+    forwardRef(() => ProductsModule),
     RedisCacheModule,
     PaymentsModule,
     StacksModule,
