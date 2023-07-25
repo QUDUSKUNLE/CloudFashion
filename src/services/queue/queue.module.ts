@@ -1,10 +1,11 @@
 import { BullModule } from '@nestjs/bull';
 import { forwardRef, Module } from '@nestjs/common';
+import { ProductsModule } from '../../products/products.module';
 import { OrdersModule } from '../orders/orders.module';
-import { ProductsModule } from '../products/products.module';
 import { YoutubeModule } from '../youtube/youtube.module';
 import { HalalMarketConsumer } from './queue.consumer';
 import { QueueService } from './queue.service';
+import { PrismaService } from '../../prisma/prisma.service';
 
 @Module({
   imports: [
@@ -13,7 +14,7 @@ import { QueueService } from './queue.service';
     forwardRef(() => ProductsModule),
     BullModule.registerQueue({ name: 'halalmarket' }),
   ],
-  providers: [QueueService, HalalMarketConsumer],
+  providers: [QueueService, HalalMarketConsumer, PrismaService],
   exports: [QueueService, HalalMarketConsumer],
 })
 export class QueueModule {}

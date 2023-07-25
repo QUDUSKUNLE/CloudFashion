@@ -7,12 +7,12 @@ import { Model } from 'mongoose';
 import { ItemStatus } from 'src/common/interface';
 import { v4 } from 'uuid';
 import {
-    Item,
-    ItemDocument,
-    Order,
-    OrderDocument,
+  Item,
+  ItemDocument,
+  Order,
+  OrderDocument,
 } from '../orders/models/orders.schema';
-import { Product, ProductDocument } from '../products/models/products.schema';
+import { PrismaService } from '../../prisma/prisma.service';
 import { YoutubeService } from '../youtube/youtube.service';
 import { QueueJobs } from './queue.enums';
 
@@ -21,10 +21,10 @@ import { QueueJobs } from './queue.enums';
 export class HalalMarketConsumer {
   progress = 0;
   constructor(
-    @InjectModel(Product.name) private ProductModel: Model<ProductDocument>,
     @InjectModel(Item.name) private ItemModel: Model<ItemDocument>,
     @InjectModel(Order.name) private OrderModel: Model<OrderDocument>,
     private readonly cloudinaryService: YoutubeService,
+    private readonly prismaService: PrismaService,
   ) {}
 
   @Process(QueueJobs.PRODUCTS)
@@ -100,10 +100,10 @@ export class HalalMarketConsumer {
     const { secure_url } = await this.cloudinaryService.uploadToCloud(
       data.filePath,
     );
-    await this.ProductModel.findOneAndUpdate(
-      { ProductID: data.ProductID },
-      { $set: { ProductVideo: secure_url as string } },
-    ).exec();
+    await this.prismaService.products.update({
+      where: { ProductID: data.ProductID },
+      data: { ProductVideo: secure_url as string },
+    });
     fs.unlink(data.filePath, (error) => {
       if (error) throw error;
     });
@@ -124,22 +124,12 @@ export class HalalMarketConsumer {
     const Items: string[] = [];
     let [toTalDiscount, OrderAmount] = [0, 0];
     for (const orderDetail of data.OrderDetails) {
-      const product = await this.ProductModel.findOne({
-        ProductID: orderDetail.ProductID,
-      }).exec();
+      const product = await this.prismaService.products.findUnique({
+        where: { ProductID: orderDetail.ProductID },
+      });
       if (product) {
         product.ProductQuantity -= orderDetail.Count;
-        toTalDiscount += product.ProductDiscount ? product.ProductDiscount : 0;
-        await this.ProductModel.findOneAndUpdate(
-          { ProductID: orderDetail.ProductID },
-          {
-            $set: {
-              ProductQuantity: product.ProductQuantity,
-            },
-          },
-        )
-          .lean()
-          .exec();
+        toTalDiscount += 0;
         let item = new this.ItemModel({
           ItemID: v4(),
           ItemCount: orderDetail.Count,

@@ -1,16 +1,17 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import * as express from 'express';
-import { Role } from '../../common/interface';
-import { GraphRequest, Roles } from '../../user.decorator';
-import { UpdateItemInput } from '../orders/dto/create-order.input';
-import { ItemResponse } from '../orders/entities/order.entity';
-import { Item } from '../orders/models/orders.schema';
+import { Role } from '../common/interface';
+import { UpdateItemInput } from '../services/orders/dto/create-order.input';
+import { ItemResponse } from '../services/orders/entities/order.entity';
+import { Item } from '../services/orders/models/orders.schema';
+import { GraphRequest, Roles } from '../user.decorator';
 import {
-    CreateProductInput,
-    FindProductInput,
+  CreateProductInput,
+  FindProductInput,
 } from './dto/create-product.input';
 import { UpdateProductInput } from './dto/update-product.input';
 import { Product } from './models/products.schema';
+import { FetchArgs } from '../common/address.input';
 import { ProductsService } from './products.service';
 
 @Resolver(() => Product)
@@ -29,8 +30,8 @@ export class ProductsResolver {
 
   @Roles(Role.PUBLIC)
   @Query(() => [Product], { name: 'GetProducts' })
-  findAll() {
-    return this.productsService.findAll();
+  findAll(@Args() fetchArgs: FetchArgs) {
+    return this.productsService.findAll(fetchArgs);
   }
 
   @Roles(Role.VENDOR)
