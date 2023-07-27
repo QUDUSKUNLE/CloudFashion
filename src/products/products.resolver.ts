@@ -20,49 +20,52 @@ export class ProductsResolver {
 
   @Roles(Role.DESIGNER)
   @Mutation(() => Product, { name: 'CreateProduct' })
-  createProduct(
+  CreateProduct(
     @Args('createProductInput', { type: () => CreateProductInput })
     createProductInput: CreateProductInput,
     @GraphRequest() req: express.Request,
   ) {
-    return this.productsService.create(createProductInput, req);
+    return this.productsService.Create(createProductInput, req);
   }
 
-  @Roles(Role.PUBLIC)
+  @Roles(Role.DESIGNER)
   @Query(() => [Product], { name: 'GetProducts' })
-  findAll(@Args() fetchArgs: FetchArgs) {
-    return this.productsService.findAll(fetchArgs);
+  FindAll(@Args() fetchArgs: FetchArgs, @GraphRequest() req: express.Request) {
+    return this.productsService.FindAll(fetchArgs, req);
   }
 
-  @Roles(Role.VENDOR)
-  @Query(() => [Product], { name: 'GetVendorProducts' })
-  find(@GraphRequest() req: express.Request) {
-    return this.productsService.find(req);
+  @Roles(Role.DESIGNER)
+  @Query(() => [Product], { name: 'GetCustomerProducts' })
+  Find(
+    @Args('findProductInput', { type: () => FindProductInput })
+    findProductInput: FindProductInput,
+  ) {
+    return this.productsService.Find(findProductInput);
   }
 
-  @Roles(Role.VENDOR)
+  @Roles(Role.DESIGNER)
   @Mutation(() => ItemResponse, { name: 'UpdateItemStatus' })
-  updateItemStatus(
+  UpdateItemStatus(
     @Args('updateItemStatus', { type: () => UpdateItemInput })
     updateItemStatus: UpdateItemInput,
   ) {
-    return this.productsService.updateItemStatus(updateItemStatus);
+    return this.productsService.UpdateItemStatus(updateItemStatus);
   }
 
-  @Roles(Role.VENDOR)
+  @Roles(Role.ADMIN)
   @Query(() => [Item], { name: 'ProductLists' })
   ProcessProducts(@GraphRequest() req: express.Request) {
     return this.productsService.Items(req);
   }
 
-  @Roles(Role.VENDOR)
+  @Roles(Role.DESIGNER)
   @Query(() => Product, { name: 'GetProduct' })
-  findOne(
+  FindOne(
     @Args('findProductInput', { type: () => FindProductInput })
     findProductInput: FindProductInput,
     @GraphRequest() req: express.Request,
   ) {
-    return this.productsService.findOne(findProductInput.ProductID, req);
+    return this.productsService.FindOne(findProductInput.ProductID, req);
   }
 
   @Roles(Role.VENDOR)
@@ -72,7 +75,7 @@ export class ProductsResolver {
     updateProductInput: UpdateProductInput,
     @GraphRequest() req: express.Request,
   ) {
-    return this.productsService.update(updateProductInput, req);
+    return this.productsService.Update(updateProductInput, req);
   }
 
   @Roles(Role.VENDOR)
@@ -82,6 +85,6 @@ export class ProductsResolver {
     findProductInput: FindProductInput,
     @GraphRequest() req: express.Request,
   ) {
-    return this.productsService.remove(findProductInput.ProductID, req);
+    return this.productsService.Remove(findProductInput.ProductID, req);
   }
 }

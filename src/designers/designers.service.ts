@@ -39,8 +39,8 @@ export class DesignersService {
 
   async FindAll(fetchArgs: FetchArgs) {
     return await this.prismaService.designers.findMany({
-      skip: fetchArgs.skip,
-      take: fetchArgs.take,
+      skip: fetchArgs.Skip,
+      take: fetchArgs.Take,
     });
   }
 

@@ -1,5 +1,18 @@
-import { Field, InputType, registerEnumType } from '@nestjs/graphql';
-import { IsArray, IsEnum, IsString, ValidateNested } from 'class-validator';
+import {
+  Field,
+  InputType,
+  registerEnumType,
+  Int,
+  ArgsType,
+} from '@nestjs/graphql';
+import {
+  IsArray,
+  IsEnum,
+  IsString,
+  ValidateNested,
+  Min,
+  Max,
+} from 'class-validator';
 import { Address } from '../../common/address.input';
 import { Role, State } from '../../common/interface';
 
@@ -44,3 +57,18 @@ registerEnumType(Role, {
   name: 'Role',
   description: 'Role',
 });
+
+@ArgsType()
+export class FetchDesignerArguments {
+  @Field(() => Int)
+  @Min(0)
+  Skip = 0;
+
+  @Field(() => Int)
+  @Min(1)
+  @Max(50)
+  Take = 25;
+
+  @Field(() => String, { nullable: true, description: 'Designer Identity.' })
+  DesignerID?: string;
+}

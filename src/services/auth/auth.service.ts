@@ -37,6 +37,9 @@ export class AuthService {
       if (mongoose.Types.ObjectId.isValid(sub)) {
         const user = await this.prismaService.users.findUnique({
           where: { UserID: sub },
+          include: {
+            Designer: true,
+          },
         });
         if (user) return { ...user, isValid: true };
         throw new UnauthorizedException('User`s not found.');

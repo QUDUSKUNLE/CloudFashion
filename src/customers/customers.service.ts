@@ -36,7 +36,7 @@ export class CustomersService {
       const result = await this.prismaService.customers.createMany({
         data: createCustomerInput.CreateCustomers.reduce<CustomerEntity[]>(
           (accumulator, customer) => {
-            customer['DesignerID'] = DesignerID;
+            customer['DesignerID'] = [DesignerID];
             accumulator.push(<CustomerEntity>customer);
             return accumulator;
           },
@@ -55,9 +55,9 @@ export class CustomersService {
     });
     return designer
       ? await this.prismaService.customers.findMany({
-          skip: fetchCustomersArgs.skip,
-          take: fetchCustomersArgs.take,
-          where: { DesignerID: designer.DesignerID },
+          skip: fetchCustomersArgs.Skip,
+          take: fetchCustomersArgs.Take,
+          where: { DesignerID: { hasSome: [designer.DesignerID] } },
         })
       : [];
   }

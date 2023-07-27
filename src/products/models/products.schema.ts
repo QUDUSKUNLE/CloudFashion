@@ -26,11 +26,6 @@ export class Product {
   @Field(() => Float, { description: 'Product Price' })
   ProductPrice: number;
 
-  @Field(() => Float, { description: 'Product Discount.' })
-  ProductDiscount: number;
-
-  VendorID: string;
-
   @Field(() => GraphQLISODateTime, {
     nullable: true,
     description: 'Product CreatedAt.',

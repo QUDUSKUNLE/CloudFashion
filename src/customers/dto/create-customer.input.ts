@@ -1,10 +1,12 @@
-import { InputType, Field } from '@nestjs/graphql';
+import { InputType, Field, Int, ArgsType } from '@nestjs/graphql';
 import {
   IsArray,
   IsString,
   IsEmail,
   IsOptional,
   ValidateNested,
+  Min,
+  Max,
 } from 'class-validator';
 import { Address } from '../../common/address.input';
 
@@ -34,7 +36,7 @@ export class CreateCustomer {
 
 @InputType()
 export class CustomerEntity extends CreateCustomer {
-  DesignerID: string;
+  DesignerID: string[];
 }
 
 @InputType()
@@ -45,4 +47,19 @@ export class CreateCustomerInput {
   })
   @IsArray()
   readonly CreateCustomers: CreateCustomer[];
+}
+
+@ArgsType()
+export class FetchCustomerArguments {
+  @Field(() => Int)
+  @Min(0)
+  Skip = 0;
+
+  @Field(() => Int)
+  @Min(1)
+  @Max(50)
+  Take = 25;
+
+  @Field(() => String, { nullable: true, description: 'Customer Identity.' })
+  CustomerID?: string;
 }

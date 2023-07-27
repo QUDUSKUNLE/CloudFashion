@@ -36,10 +36,13 @@ export class Status {
 export class FetchArgs {
   @Field(() => Int)
   @Min(0)
-  skip = 0;
+  Skip = 0;
 
   @Field(() => Int)
   @Min(1)
   @Max(50)
-  take = 25;
+  Take = 25;
+
+  @Field(() => String, { nullable: true, description: 'Customer Identity.' })
+  CustomerID?: string;
 }

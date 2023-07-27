@@ -30,8 +30,8 @@ export class UsersService {
 
   async findAll(fetch: FetchArgs) {
     return await this.prismaService.users.findMany({
-      skip: fetch.skip,
-      take: fetch.take,
+      skip: fetch.Skip,
+      take: fetch.Take,
     });
   }
 
