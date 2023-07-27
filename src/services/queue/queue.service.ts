@@ -7,7 +7,7 @@ import { QueueJobs } from './queue.enums';
 export class QueueService {
   constructor(@InjectQueue('halalmarket') private halalMarketQueue: Queue) {}
 
-  queueJobs(job: unknown, queueJob: QueueJobs) {
+  QueueJobs(job: unknown, queueJob: QueueJobs) {
     this.halalMarketQueue.add(queueJob, job, {
       delay: 2000,
       lifo: true,

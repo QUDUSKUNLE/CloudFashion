@@ -47,7 +47,7 @@ export class OrdersService {
           UserID: req.sub.UserID,
         });
         const Order = await createdOrder.save();
-        this.queueService.queueJobs(
+        this.queueService.QueueJobs(
           {
             ...createOrderInput,
             user: req.sub,

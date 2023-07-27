@@ -5,10 +5,11 @@ import {
   Float,
   Int,
 } from '@nestjs/graphql';
-import { IsUUID, IsEnum, IsNumber, IsInt, IsMongoId } from 'class-validator';
+import { IsUUID, IsEnum, IsNumber, IsInt, Validate } from 'class-validator';
 import { ProductEnum } from '../interfaces/product.enums';
 import * as GraphQLUpload from 'graphql-upload/GraphQLUpload.js';
 import { FileUpload } from 'graphql-upload/processRequest.js';
+import { CustomerIDValidator } from '../helper/products.validation';
 
 @InputType()
 export class CreateProductInput {
@@ -30,8 +31,8 @@ export class CreateProductInput {
   @IsInt()
   ProductQuantity: number;
 
-  @Field(() => Int, { description: 'Product quantity.' })
-  @IsMongoId()
+  @Field(() => String, { description: 'Customer Identity.' })
+  @Validate(CustomerIDValidator, [], { always: true })
   CustomerID: string;
 }
 

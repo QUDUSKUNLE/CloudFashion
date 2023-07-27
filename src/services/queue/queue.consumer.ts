@@ -96,18 +96,22 @@ export class HalalMarketConsumer {
   };
 
   processProductJobs = async (job: Job): Promise<string> => {
-    const { data } = job;
-    const { secure_url } = await this.cloudinaryService.uploadToCloud(
-      data.filePath,
-    );
-    await this.prismaService.products.update({
-      where: { ProductID: data.ProductID },
-      data: { ProductVideo: secure_url as string },
-    });
-    fs.unlink(data.filePath, (error) => {
-      if (error) throw error;
-    });
-    return 'Done';
+    try {
+      const { data } = job;
+      const { secure_url } = await this.cloudinaryService.uploadToCloud(
+        data.filePath,
+      );
+      await this.prismaService.products.update({
+        where: { ProductID: data.ProductID },
+        data: { ProductVideo: secure_url as string },
+      });
+      fs.unlink(data.filePath, (error) => {
+        if (error) throw error;
+      });
+      return 'Done';
+    } catch (error) {
+      throw error;
+    }
   };
 
   processPaymentJobs = async (job: Job): Promise<string> => {

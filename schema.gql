@@ -408,8 +408,8 @@ input CreateProductInput {
   """Product quantity."""
   ProductQuantity: Int!
 
-  """Product quantity."""
-  CustomerID: Int!
+  """Customer Identity."""
+  CustomerID: String!
 }
 
 """Product name"""
@@ -458,8 +458,8 @@ input UpdateProductInput {
   """Product quantity."""
   ProductQuantity: Int
 
-  """Product quantity."""
-  CustomerID: Int
+  """Customer Identity."""
+  CustomerID: String
 
   """Product ID."""
   ProductID: String!

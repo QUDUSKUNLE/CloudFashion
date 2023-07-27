@@ -18,7 +18,7 @@ import { ProductsService } from './products.service';
 export class ProductsResolver {
   constructor(private readonly productsService: ProductsService) {}
 
-  @Roles(Role.VENDOR)
+  @Roles(Role.DESIGNER)
   @Mutation(() => Product, { name: 'CreateProduct' })
   createProduct(
     @Args('createProductInput', { type: () => CreateProductInput })

@@ -61,7 +61,7 @@ export class ProductsService {
           CustomerID: createProductInput.CustomerID,
         },
       });
-      this.queueService.queueJobs(
+      this.queueService.QueueJobs(
         {
           filePath,
           createProductInput,
@@ -69,7 +69,7 @@ export class ProductsService {
         },
         QueueJobs.PRODUCTS,
       );
-      return 'Product Created';
+      return createdProduct;
     } catch (error) {
       throw error;
     }
@@ -166,7 +166,7 @@ export class ProductsService {
           ),
       );
     }
-    this.queueService.queueJobs(
+    this.queueService.QueueJobs(
       {
         filePath,
         updateProductInput,
