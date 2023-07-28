@@ -1,20 +1,15 @@
 import {
-  ConflictException,
   HttpException,
   HttpStatus,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
 import * as express from 'express';
 import * as fs from 'fs';
-import { Model } from 'mongoose';
 import * as path from 'path';
 import { v4 } from 'uuid';
 import { FetchArguments, PrismaService } from '../common';
-import { Statuses } from '../products/entities/product.entity';
 import { UpdateItemInput } from '../services/orders/dto/create-order.input';
-import { Item, ItemDocument } from '../services/orders/models/orders.schema';
 import { QueueJobs } from '../services/queue/queue.enums';
 import { QueueService } from '../services/queue/queue.service';
 import {
@@ -31,11 +26,13 @@ import { UpdateProductInput } from './dto/update-product.input';
 @Injectable()
 export class ProductsService {
   constructor(
-    @InjectModel(Item.name) private ItemModel: Model<ItemDocument>,
     private readonly queueService: QueueService,
     private readonly prismaService: PrismaService,
   ) {}
-  async Create(createProductInput: CreateProductInput, req: express.Request) {
+  async CreateProduct(
+    createProductInput: CreateProductInput,
+    req: express.Request,
+  ) {
     let [filePath] = [''];
     try {
       if (createProductInput.ProductVideo) {
@@ -170,41 +167,6 @@ export class ProductsService {
 
   async UpdateItemStatus(updateItemStatus: UpdateItemInput) {
     try {
-      const item = await this.ItemModel.findOne({
-        ItemID: updateItemStatus.ItemID,
-      }).exec();
-      if (item && item.Statuses) {
-        const statuses: Statuses[] = item.Statuses;
-        if (
-          statuses.some(
-            (prev) => prev.ItemStatus === updateItemStatus.ItemStatus,
-          )
-        ) {
-          throw new ConflictException(
-            `Item already ${updateItemStatus.ItemStatus}.`,
-          );
-        }
-        statuses.push({
-          ItemStatus: updateItemStatus.ItemStatus,
-          DateTime: new Date(),
-        });
-        await this.ItemModel.findOneAndUpdate(
-          {
-            ItemID: updateItemStatus.ItemID,
-          },
-          {
-            $set: {
-              Statuses: statuses,
-              ItemStatus: updateItemStatus.ItemStatus,
-            },
-          },
-        ).exec();
-        return {
-          ItemMessage: 'Item updated.',
-          ItemStatus: updateItemStatus.ItemStatus,
-          ItemID: updateItemStatus.ItemID,
-        };
-      }
       throw new NotFoundException('Item not found.');
     } catch (error) {
       throw error;

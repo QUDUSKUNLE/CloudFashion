@@ -13,7 +13,7 @@ import { QueueModule } from '../queue/queue.module';
       { name: Shipment.name, schema: ShipmentSchema },
     ]),
     forwardRef(() => OrdersModule),
-    QueueModule,
+    forwardRef(() => QueueModule),
   ],
   providers: [ShipmentsResolver, ShipmentsService],
   exports: [ShipmentsService, MongooseModule],

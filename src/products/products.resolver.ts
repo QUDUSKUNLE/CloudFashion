@@ -28,7 +28,7 @@ export class ProductsResolver {
     createProductInput: CreateProductInput,
     @GraphRequest() req: express.Request,
   ) {
-    return await this.productsService.Create(createProductInput, req);
+    return await this.productsService.CreateProduct(createProductInput, req);
   }
 
   @Roles(Role.ADMIN)
@@ -82,7 +82,7 @@ export class ProductsResolver {
     );
   }
 
-  @Roles(Role.CUSTOMER)
+  @Roles(Role.ADMIN)
   @Query(() => [Product], { name: 'CustomerFetchProducts' })
   async CustomerFetchProducts(
     @Args() customerFetchProducts: CustomerFetchProducts,
@@ -92,7 +92,7 @@ export class ProductsResolver {
     );
   }
 
-  @Roles(Role.CUSTOMER)
+  @Roles(Role.ADMIN)
   @Query(() => Product, { name: 'CustomerFetchProduct' })
   async CustomerFetchProduct(
     @Args() customerFetchProduct: CustomerFetchProduct,

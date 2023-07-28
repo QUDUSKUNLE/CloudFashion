@@ -327,10 +327,10 @@ type Query {
   ): Product!
   ProductLists: [Item!]!
   GetProduct(findProductInput: FindProductInput!): Product!
-  GetOrders: [AOrder!]!
-  GetOrder(findOrderInput: FindOrderInput!): AOrder!
   GetUsersProfile(Skip: Int = 0, Take: Int = 25): [User!]!
   GetUserProfile(findUserInput: FindUserInput!): User!
+  GetOrders: [AOrder!]!
+  GetOrder(findOrderInput: FindOrderInput!): AOrder!
   GetPayments: [Payment!]!
   GetPayment(findPaymentInput: FindPaymentInput!): Payment!
   GetShipments: [Shipment!]!
@@ -349,14 +349,14 @@ input FindProductInput {
   ProductID: String!
 }
 
-input FindOrderInput {
-  """Order ID"""
-  OrderID: String!
-}
-
 input FindUserInput {
   """User ID."""
   UserID: String!
+}
+
+input FindOrderInput {
+  """Order ID"""
+  OrderID: String!
 }
 
 input FindPaymentInput {
@@ -389,14 +389,14 @@ type Mutation {
   UpdateItemStatus(updateItemStatus: UpdateItemInput!): ItemResponse!
   UpdateProduct(updateProductInput: UpdateProductInput!): Product!
   DeleteProduct(findProductInput: FindProductInput!): Product!
-  CreateOrder(createOrderInput: CreateOrderInput!): OrderResponse!
-  UpdateOrder(updateOrderInput: UpdateOrderInput!): Order!
-  DeleteOrder(findOrderInput: FindOrderInput!): Order!
   CreateUserProfile(createUserInput: CreateUserInput!): User!
   LogInUser(logInUserInput: LogInUserInput!): LoginResponse!
   LogOutUser: LogoutResponse!
   UpdateUserProfile(updateUserInput: UpdateUserInput!): User!
   DeleteUserProfile(findUserInput: FindUserInput!): User!
+  CreateOrder(createOrderInput: CreateOrderInput!): OrderResponse!
+  UpdateOrder(updateOrderInput: UpdateOrderInput!): Order!
+  DeleteOrder(findOrderInput: FindOrderInput!): Order!
   UpdatePayment(updatePaymentInput: UpdatePaymentInput!): Payment!
   DeletePayment(findPaymentInput: FindPaymentInput!): Payment!
   CreateShipment(createShipmentInput: CreateShipmentInput!): Shipment!
@@ -487,53 +487,27 @@ input UpdateProductInput {
   ProductID: String!
 }
 
-input CreateOrderInput {
-  """Order status."""
-  OrderStatus: ItemStatus!
+input CreateUserInput {
+  """User Email."""
+  Email: String!
 
-  """Payment identity."""
-  Payments: OrderPayment
+  """User Password"""
+  Password: String!
 
-  """Order address."""
-  OrderAddress: Address!
+  """User ConfirmPassword"""
+  ConfirmPassword: String!
 
-  """Payment Tracking Identity."""
-  PaymentTrackingID: String!
+  """User PhoneNumber."""
+  PhoneNumbers: [String!]
 
-  """Order total cost."""
-  OrderTotalCost: Float!
+  """User FirstName."""
+  FirstName: String
 
-  """Product identity"""
-  OrderDetails: [OrderDetails!]!
-}
+  """User LastName."""
+  LastName: String
 
-input OrderPayment {
-  """Payment amount."""
-  Amount: Int!
-
-  """Payment currency"""
-  Currency: Currency!
-
-  """Payment currency"""
-  Channel: Channels!
-}
-
-"""Payment currency"""
-enum Currency {
-  NGN
-  GHS
-  ZAR
-  USD
-}
-
-"""Payment channels"""
-enum Channels {
-  card
-  bank
-  ussd
-  qr
-  mobile_money
-  bank_transfer
+  """User Address."""
+  Address: Address
 }
 
 input Address {
@@ -590,60 +564,6 @@ enum State {
   Zamfara
 }
 
-input OrderDetails {
-  """Product ID."""
-  ProductID: String!
-
-  """Product count."""
-  Count: Int!
-}
-
-input UpdateOrderInput {
-  """Order status."""
-  OrderStatus: ItemStatus
-
-  """Payment identity."""
-  Payments: OrderPayment
-
-  """Order address."""
-  OrderAddress: Address
-
-  """Payment Tracking Identity."""
-  PaymentTrackingID: String
-
-  """Order total cost."""
-  OrderTotalCost: Float
-
-  """Product identity"""
-  OrderDetails: [OrderDetails!]
-
-  """Order ID"""
-  OrderID: String!
-}
-
-input CreateUserInput {
-  """User Email."""
-  Email: String!
-
-  """User Password"""
-  Password: String!
-
-  """User ConfirmPassword"""
-  ConfirmPassword: String!
-
-  """User PhoneNumber."""
-  PhoneNumbers: [String!]
-
-  """User FirstName."""
-  FirstName: String
-
-  """User LastName."""
-  LastName: String
-
-  """User Address."""
-  Address: Address
-}
-
 input LogInUserInput {
   """User email."""
   Email: String!
@@ -676,6 +596,86 @@ input UpdateUserInput {
 
   """User Identity."""
   UserID: String!
+}
+
+input CreateOrderInput {
+  """Order status."""
+  OrderStatus: ItemStatus!
+
+  """Payment identity."""
+  Payments: OrderPayment
+
+  """Order address."""
+  OrderAddress: Address!
+
+  """Payment Tracking Identity."""
+  PaymentTrackingID: String!
+
+  """Order total cost."""
+  OrderTotalCost: Float!
+
+  """Product identity"""
+  OrderDetails: [OrderDetails!]!
+}
+
+input OrderPayment {
+  """Payment amount."""
+  Amount: Int!
+
+  """Payment currency"""
+  Currency: Currency!
+
+  """Payment currency"""
+  Channel: Channels!
+}
+
+"""Payment currency"""
+enum Currency {
+  NGN
+  GHS
+  ZAR
+  USD
+}
+
+"""Payment channels"""
+enum Channels {
+  card
+  bank
+  ussd
+  qr
+  mobile_money
+  bank_transfer
+}
+
+input OrderDetails {
+  """Product ID."""
+  ProductID: String!
+
+  """Product count."""
+  Count: Int!
+}
+
+input UpdateOrderInput {
+  """Order status."""
+  OrderStatus: ItemStatus
+
+  """Payment identity."""
+  Payments: OrderPayment
+
+  """Order address."""
+  OrderAddress: Address
+
+  """Payment Tracking Identity."""
+  PaymentTrackingID: String
+
+  """Order total cost."""
+  OrderTotalCost: Float
+
+  """Product identity"""
+  OrderDetails: [OrderDetails!]
+
+  """Order ID"""
+  OrderID: String!
 }
 
 input UpdatePaymentInput {

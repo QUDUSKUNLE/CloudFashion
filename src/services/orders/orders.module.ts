@@ -20,7 +20,7 @@ import { StacksModule } from '../stack/stack.module';
       { name: Order.name, schema: OrderSchema },
     ]),
     AuthModule,
-    QueueModule,
+    forwardRef(() => QueueModule),
     forwardRef(() => ProductsModule),
     PaymentsModule,
     StacksModule,

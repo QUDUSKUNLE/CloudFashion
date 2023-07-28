@@ -3,6 +3,7 @@
 
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["fullTextIndex"]
 }
 
 datasource db {
@@ -37,9 +38,10 @@ model Customers {
   CustomerEmail           String        @unique
   CustomerName            String?
   CustomerPhoneNumbers    String[]      @default([])
+  Roles                   String        @default("CUSTOMER")
   CustomerAddress         Address?
-  CreatedAt               DateTime      @default(now())
-  UpdatedAt               DateTime      @updatedAt
+  CreatedAt               DateTime       @default(now())
+  UpdatedAt               DateTime       @updatedAt
 
   Designers               Designers[]     @relation(fields: [DesignerID], references: [DesignerID])
   DesignerID              String[]        @db.ObjectId
@@ -63,6 +65,8 @@ model Designers {
 
   Products               Products[]  @relation(fields: [ProductID], references: [ProductID])
   ProductID              String[]    @db.ObjectId
+
+  @@fulltext([UserID, CreatedAt(sort: Desc)])
 }
 
 
@@ -81,4 +85,6 @@ model Products {
 
   Designers             Designers[]   @relation(fields: [DesignerID], references: [DesignerID])
   DesignerID            String[]      @db.ObjectId
+
+  @@fulltext([CustomerID, CreatedAt(sort: Desc)])
 }
