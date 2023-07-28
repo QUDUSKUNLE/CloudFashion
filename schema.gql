@@ -300,6 +300,31 @@ type ClothsPayload {
 type Query {
   GetProducts(Skip: Int = 0, Take: Int = 25): [Product!]!
   GetCustomerProducts(findProductInput: FindProductInput!): [Product!]!
+  DesignerGetCustomersProducts(Skip: Int = 0, Take: Int = 25): [Product!]!
+  DesignerGetCustomerProducts(
+    Skip: Int = 0
+    Take: Int = 25
+
+    """Customer Identity."""
+    CustomerID: String!
+  ): [Product!]!
+  DesignerGetCustomerProduct(
+    """Product Identity."""
+    ProductID: String!
+  ): Product!
+  CustomerFetchProducts(
+    """Customer Identity."""
+    CustomerID: String!
+    Skip: Int = 0
+    Take: Int = 25
+  ): [Product!]!
+  CustomerFetchProduct(
+    """Product Identity."""
+    ProductID: String!
+
+    """Customer Identity."""
+    CustomerID: String!
+  ): Product!
   ProductLists: [Item!]!
   GetProduct(findProductInput: FindProductInput!): Product!
   GetOrders: [AOrder!]!
@@ -717,6 +742,7 @@ enum Role {
   ADMIN
   USER
   VENDOR
+  CUSTOMER
   DESIGNER
   PUBLIC
 }

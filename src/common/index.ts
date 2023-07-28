@@ -1,4 +1,4 @@
-import { FetchArgs, Address } from './address.input';
+import { Address, FetchArguments } from './address.input';
 import { FetchCustomersArgument } from './customers';
 import { FetchDesignersArgument } from './designers';
 import { ItemStatus, Role, State } from './interface';
@@ -11,7 +11,7 @@ import { FetchUsersArgument } from './users';
 
 export {
   Address,
-  FetchArgs,
+  FetchArguments,
   FetchCustomersArgument,
   FetchDesignersArgument,
   FetchProductsArgument,
@@ -23,5 +23,6 @@ export {
   Role,
   Roles,
   RolesGuard,
-  State,
+  State
 };
+

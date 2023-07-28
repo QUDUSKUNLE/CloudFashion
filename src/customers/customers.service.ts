@@ -4,11 +4,11 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import * as express from 'express';
+import { FetchArguments, PrismaService } from '../common';
 import {
   CreateCustomerInput,
   CustomerEntity,
 } from './dto/create-customer.input';
-import { FetchArgs, PrismaService } from '../common';
 
 @Injectable()
 export class CustomersService {
@@ -48,7 +48,7 @@ export class CustomersService {
     }
   }
 
-  async FindAll(fetchArgs: FetchArgs) {
+  async FindAll(fetchArgs: FetchArguments) {
     return await this.prismaService.customers.findMany({
       skip: fetchArgs.Skip,
       take: fetchArgs.Take,

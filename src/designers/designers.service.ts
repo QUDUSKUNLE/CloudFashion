@@ -1,9 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import * as express from 'express';
 
+import { FetchArguments, PrismaService, Role } from '../common';
 import { CreateDesignerInput } from './dto/create-designer.input';
 import { UpdateDesignerInput } from './dto/update-designer.input';
-import { FetchArgs, Role, PrismaService } from '../common';
 
 @Injectable()
 export class DesignersService {
@@ -35,7 +35,7 @@ export class DesignersService {
     }
   }
 
-  async FindAll(fetchArgs: FetchArgs) {
+  async FindAll(fetchArgs: FetchArguments) {
     return await this.prismaService.designers.findMany({
       skip: fetchArgs.Skip,
       take: fetchArgs.Take,

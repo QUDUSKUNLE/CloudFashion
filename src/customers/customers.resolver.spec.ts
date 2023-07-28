@@ -1,9 +1,9 @@
-import * as express from 'express';
 import { Test, TestingModule } from '@nestjs/testing';
+import * as express from 'express';
+import { FetchArguments } from '../common';
 import { CustomersResolver } from './customers.resolver';
 import { CustomersService } from './customers.service';
 import { CreateCustomerInput } from './dto/create-customer.input';
-import { FetchArgs } from '../common';
 
 describe('CustomersResolver', () => {
   let resolver: CustomersResolver;
@@ -56,7 +56,7 @@ describe('CustomersResolver', () => {
   });
   describe('FetchCustomers', () => {
     it('should be able to fetch customers', () => {
-      const fetch = new FetchArgs();
+      const fetch = new FetchArguments();
       const result = resolver.FetchCustomers(fetch);
       expect(customerService.FindAll).toHaveBeenCalled();
       expect(result).not.toEqual(null);

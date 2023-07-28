@@ -11,7 +11,7 @@ import * as fs from 'fs';
 import { Model } from 'mongoose';
 import * as path from 'path';
 import { v4 } from 'uuid';
-import { FetchArgs, FetchCustomersArgument, PrismaService } from '../common';
+import { FetchArguments, PrismaService } from '../common';
 import { Statuses } from '../products/entities/product.entity';
 import { UpdateItemInput } from '../services/orders/dto/create-order.input';
 import { Item, ItemDocument } from '../services/orders/models/orders.schema';
@@ -20,6 +20,11 @@ import { QueueService } from '../services/queue/queue.service';
 import {
   CreateProductInput,
   FindProductInput,
+  DesignerFetchCustomersProducts,
+  DesignerFetchCustomerProducts,
+  DesignerFetchCustomerProduct,
+  CustomerFetchProducts,
+  CustomerFetchProduct,
 } from './dto/create-product.input';
 import { UpdateProductInput } from './dto/update-product.input';
 
@@ -86,25 +91,73 @@ export class ProductsService {
     }
   }
 
-  async FindAll(fetchArgs: FetchArgs) {
+  async FindAll(fetchArgs: FetchArguments) {
     return await this.prismaService.products.findMany({
       skip: fetchArgs.Skip,
       take: fetchArgs.Take,
     });
   }
 
-  async FindCustomerProducts(
-    fetchCustomersArgument: FetchCustomersArgument,
+  async DesignerFetchCustomersProducts(
+    designerFetchCustomersProducts: DesignerFetchCustomersProducts,
     req: express.Request,
   ) {
     return await this.prismaService.products.findMany({
-      skip: fetchCustomersArgument.Skip,
-      take: fetchCustomersArgument.Take,
+      skip: designerFetchCustomersProducts.Skip,
+      take: designerFetchCustomersProducts.Take,
       where: {
         DesignerID: {
           hasSome: [req.sub.Designer?.DesignerID],
         },
-        CustomerID: fetchCustomersArgument.CustomerID,
+      },
+    });
+  }
+
+  async DesignerFetchCustomerProducts(
+    designerFetchCustomerProducts: DesignerFetchCustomerProducts,
+    req: express.Request,
+  ) {
+    return await this.prismaService.products.findMany({
+      skip: designerFetchCustomerProducts.Skip,
+      take: designerFetchCustomerProducts.Take,
+      where: {
+        DesignerID: {
+          hasSome: [req.sub.Designer?.DesignerID],
+        },
+        CustomerID: designerFetchCustomerProducts.CustomerID,
+      },
+    });
+  }
+
+  async DesignerFetchCustomerProduct(
+    designerFetchCustomerProduct: DesignerFetchCustomerProduct,
+    req: express.Request,
+  ) {
+    return await this.prismaService.products.findUnique({
+      where: {
+        DesignerID: {
+          hasSome: [req.sub.Designer?.DesignerID],
+        },
+        ProductID: designerFetchCustomerProduct.ProductID,
+      },
+    });
+  }
+
+  async CustomerFetchProducts(customerFetchProducts: CustomerFetchProducts) {
+    return await this.prismaService.products.findMany({
+      skip: customerFetchProducts.Skip,
+      take: customerFetchProducts.Take,
+      where: {
+        CustomerID: customerFetchProducts.CustomerID,
+      },
+    });
+  }
+
+  async CustomerFetchProduct(customerFetchProduct: CustomerFetchProduct) {
+    return await this.prismaService.products.findUnique({
+      where: {
+        CustomerID: customerFetchProduct.CustomerID,
+        ProductID: customerFetchProduct.ProductID,
       },
     });
   }
