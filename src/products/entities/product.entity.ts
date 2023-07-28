@@ -1,4 +1,4 @@
-import { ItemStatus } from '../../common/interface';
+import { ItemStatus } from '../../common';
 
 export interface Statuses {
   ItemStatus: ItemStatus;

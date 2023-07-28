@@ -1,10 +1,10 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import * as express from 'express';
 import { Role } from '../../common/interface';
-import { GraphRequest, Roles } from '../../user.decorator';
+import { GraphRequest, Roles } from '../../common/user.decorator';
 import {
-    CreateShipmentInput,
-    FindShipmentInput,
+  CreateShipmentInput,
+  FindShipmentInput,
 } from './dto/create-shipment.input';
 import { UpdateShipmentInput } from './dto/update-shipment.input';
 import { Shipment } from './models/shipments.schema';

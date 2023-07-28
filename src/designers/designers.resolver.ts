@@ -1,9 +1,6 @@
 import * as express from 'express';
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { BadRequestException, ConflictException } from '@nestjs/common';
-import { Role } from '../common/interface';
-import { FetchArgs } from '../common/address.input';
-import { GraphRequest, Roles } from '../user.decorator';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { DesignersService } from './designers.service';
 import {
   CreateDesignerInput,
@@ -11,6 +8,7 @@ import {
 } from './dto/create-designer.input';
 import { UpdateDesignerInput } from './dto/update-designer.input';
 import { Designer } from './models/designers.schema';
+import { FetchArgs, GraphRequest, Roles, Role } from '../common';
 
 @Resolver()
 export class DesignersResolver {
@@ -42,7 +40,7 @@ export class DesignersResolver {
     }
   }
 
-  @Roles(Role.DESIGNER)
+  @Roles(Role.ADMIN)
   @Query(() => [Designer], { name: 'GetDesignersProfile' })
   FindAll(@Args() fetchArgs: FetchArgs) {
     return this.designersService.FindAll(fetchArgs);

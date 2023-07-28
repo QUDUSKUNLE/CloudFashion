@@ -11,13 +11,12 @@ import * as fs from 'fs';
 import { Model } from 'mongoose';
 import * as path from 'path';
 import { v4 } from 'uuid';
+import { FetchArgs, FetchCustomersArgument, PrismaService } from '../common';
+import { Statuses } from '../products/entities/product.entity';
 import { UpdateItemInput } from '../services/orders/dto/create-order.input';
 import { Item, ItemDocument } from '../services/orders/models/orders.schema';
-import { Statuses } from '../products/entities/product.entity';
 import { QueueJobs } from '../services/queue/queue.enums';
 import { QueueService } from '../services/queue/queue.service';
-import { PrismaService } from '../prisma/prisma.service';
-import { FetchArgs } from '../common/address.input';
 import {
   CreateProductInput,
   FindProductInput,
@@ -87,15 +86,25 @@ export class ProductsService {
     }
   }
 
-  async FindAll(fetchArgs: FetchArgs, req: express.Request) {
+  async FindAll(fetchArgs: FetchArgs) {
     return await this.prismaService.products.findMany({
       skip: fetchArgs.Skip,
       take: fetchArgs.Take,
+    });
+  }
+
+  async FindCustomerProducts(
+    fetchCustomersArgument: FetchCustomersArgument,
+    req: express.Request,
+  ) {
+    return await this.prismaService.products.findMany({
+      skip: fetchCustomersArgument.Skip,
+      take: fetchCustomersArgument.Take,
       where: {
         DesignerID: {
           hasSome: [req.sub.Designer?.DesignerID],
         },
-        CustomerID: fetchArgs.CustomerID,
+        CustomerID: fetchCustomersArgument.CustomerID,
       },
     });
   }

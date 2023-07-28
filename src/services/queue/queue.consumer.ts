@@ -6,13 +6,13 @@ import * as fs from 'fs';
 import { Model } from 'mongoose';
 import { ItemStatus } from 'src/common/interface';
 import { v4 } from 'uuid';
+import { PrismaService } from '../../common/prisma/prisma.service';
 import {
   Item,
   ItemDocument,
   Order,
   OrderDocument,
 } from '../orders/models/orders.schema';
-import { PrismaService } from '../../prisma/prisma.service';
 import { YoutubeService } from '../youtube/youtube.service';
 import { QueueJobs } from './queue.enums';
 

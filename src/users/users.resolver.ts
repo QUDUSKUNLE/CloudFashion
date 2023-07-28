@@ -1,3 +1,5 @@
+import * as express from 'express';
+import { Prisma } from '@prisma/client';
 import {
   ConflictException,
   Inject,
@@ -6,12 +8,7 @@ import {
   forwardRef,
 } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { Prisma } from '@prisma/client';
-import * as express from 'express';
-import { Role } from '../common/interface';
-import { FetchArgs } from '../common/address.input';
 import { AuthService } from '../services/auth/auth.service';
-import { GraphRequest, Roles } from '../user.decorator';
 import {
   CreateUserInput,
   FindUserInput,
@@ -20,6 +17,7 @@ import {
 import { UpdateUserInput } from './dto/update-user.input';
 import { LoginResponse, LogoutResponse, User } from './models/user.schema';
 import { UsersService } from './users.service';
+import { Role, GraphRequest, Roles, FetchArgs } from '../common';
 
 @Resolver(() => User)
 @Injectable()

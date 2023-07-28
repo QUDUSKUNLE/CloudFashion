@@ -1,18 +1,16 @@
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import * as express from 'express';
-import { Role } from '../common/interface';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { UpdateItemInput } from '../services/orders/dto/create-order.input';
 import { ItemResponse } from '../services/orders/entities/order.entity';
 import { Item } from '../services/orders/models/orders.schema';
-import { GraphRequest, Roles } from '../user.decorator';
 import {
   CreateProductInput,
   FindProductInput,
 } from './dto/create-product.input';
 import { UpdateProductInput } from './dto/update-product.input';
 import { Product } from './models/products.schema';
-import { FetchArgs } from '../common/address.input';
 import { ProductsService } from './products.service';
+import { Role, GraphRequest, Roles, FetchArgs } from '../common';
 
 @Resolver(() => Product)
 export class ProductsResolver {
@@ -28,10 +26,10 @@ export class ProductsResolver {
     return this.productsService.Create(createProductInput, req);
   }
 
-  @Roles(Role.DESIGNER)
+  @Roles(Role.ADMIN)
   @Query(() => [Product], { name: 'GetProducts' })
-  FindAll(@Args() fetchArgs: FetchArgs, @GraphRequest() req: express.Request) {
-    return this.productsService.FindAll(fetchArgs, req);
+  FindAll(@Args() fetchArgs: FetchArgs) {
+    return this.productsService.FindAll(fetchArgs);
   }
 
   @Roles(Role.DESIGNER)
@@ -68,7 +66,7 @@ export class ProductsResolver {
     return this.productsService.FindOne(findProductInput.ProductID, req);
   }
 
-  @Roles(Role.VENDOR)
+  @Roles(Role.DESIGNER)
   @Mutation(() => Product, { name: 'UpdateProduct' })
   updateProduct(
     @Args('updateProductInput', { type: () => UpdateProductInput })
@@ -78,7 +76,7 @@ export class ProductsResolver {
     return this.productsService.Update(updateProductInput, req);
   }
 
-  @Roles(Role.VENDOR)
+  @Roles(Role.ADMIN)
   @Mutation(() => Product, { name: 'DeleteProduct' })
   removeProduct(
     @Args('findProductInput', { type: () => FindProductInput })

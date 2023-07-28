@@ -1,9 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { DesignersResolver } from './designers.resolver';
 import { DesignersService } from './designers.service';
-import { Role } from '../common/interface';
 import { createRequest } from 'node-mocks-http';
 import { MockData, MODULE } from '../mock/mock.data';
+import { Role } from '../common';
 
 describe('DesignersResolver', () => {
   let resolver: DesignersResolver;

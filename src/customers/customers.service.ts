@@ -1,15 +1,14 @@
-import * as express from 'express';
-import { PrismaService } from '../prisma/prisma.service';
 import {
-  Injectable,
   BadRequestException,
+  Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { FetchArgs } from '../common/address.input';
+import * as express from 'express';
 import {
   CreateCustomerInput,
   CustomerEntity,
 } from './dto/create-customer.input';
+import { FetchArgs, PrismaService } from '../common';
 
 @Injectable()
 export class CustomersService {
@@ -49,16 +48,10 @@ export class CustomersService {
     }
   }
 
-  async FindAll(fetchCustomersArgs: FetchArgs, req: express.Request) {
-    const designer = await this.prismaService.designers.findUnique({
-      where: { UserID: req.sub.UserID },
+  async FindAll(fetchArgs: FetchArgs) {
+    return await this.prismaService.customers.findMany({
+      skip: fetchArgs.Skip,
+      take: fetchArgs.Take,
     });
-    return designer
-      ? await this.prismaService.customers.findMany({
-          skip: fetchCustomersArgs.Skip,
-          take: fetchCustomersArgs.Take,
-          where: { DesignerID: { hasSome: [designer.DesignerID] } },
-        })
-      : [];
   }
 }

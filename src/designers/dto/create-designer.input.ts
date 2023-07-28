@@ -13,8 +13,7 @@ import {
   Min,
   Max,
 } from 'class-validator';
-import { Address } from '../../common/address.input';
-import { Role, State } from '../../common/interface';
+import { Role, State, Address } from '../../common';
 
 @InputType()
 export class CreateDesignerInput {

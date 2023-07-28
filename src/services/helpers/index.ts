@@ -1,5 +1,5 @@
 import { Injectable, UnprocessableEntityException } from '@nestjs/common';
-import { PrismaService } from '../../prisma/prisma.service';
+import { PrismaService } from '../../common/prisma/prisma.service';
 import { CreateOrderInput } from '../orders/dto/create-order.input';
 
 @Injectable()

@@ -1,7 +1,7 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import * as express from 'express';
 import { Role } from '../../common/interface';
-import { GraphRequest, Roles } from '../../user.decorator';
+import { GraphRequest, Roles } from '../../common/user.decorator';
 import { FindPaymentInput } from './dto/create-payment.input';
 import { UpdatePaymentInput } from './dto/update-payment.input';
 import { Payment } from './models/payment.schema';

@@ -1,11 +1,9 @@
-import * as express from 'express';
 import { Injectable, NotFoundException } from '@nestjs/common';
+import * as express from 'express';
 
-import { Role } from '../common/interface';
-import { FetchArgs } from '../common/address.input';
 import { CreateDesignerInput } from './dto/create-designer.input';
 import { UpdateDesignerInput } from './dto/update-designer.input';
-import { PrismaService } from '../prisma/prisma.service';
+import { FetchArgs, Role, PrismaService } from '../common';
 
 @Injectable()
 export class DesignersService {

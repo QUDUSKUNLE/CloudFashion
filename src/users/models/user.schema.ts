@@ -1,8 +1,7 @@
 import { Field, GraphQLISODateTime, ObjectType } from '@nestjs/graphql';
 import GraphQLJSON from 'graphql-type-json';
-import { Address } from '../../common/address.input';
 import { Designer } from '../../designers/models/designers.schema';
-import { Role } from '../../common/interface';
+import { Role, Address } from '../../common';
 
 @ObjectType()
 export class User {

@@ -1,7 +1,7 @@
-import * as bcrypt from 'bcryptjs';
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { FetchArgs } from '../common/address.input';
-import { PrismaService } from '../prisma/prisma.service';
+import * as bcrypt from 'bcryptjs';
+import { FetchArgs } from '../common';
+import { PrismaService } from '../common/prisma/prisma.service';
 import { CreateUserInput, FindUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 
