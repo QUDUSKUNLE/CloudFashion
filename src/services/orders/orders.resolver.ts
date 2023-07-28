@@ -1,7 +1,7 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import * as express from 'express';
 import { Role } from '../../common/interface';
-import { GraphRequest, Roles } from '../../user.decorator';
+import { GraphRequest, Roles } from '../../common/user.decorator';
 import { HelperService } from '../helpers/index';
 import { CreateOrderInput, FindOrderInput } from './dto/create-order.input';
 import { UpdateOrderInput } from './dto/update-order.input';

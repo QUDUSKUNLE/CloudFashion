@@ -1,9 +1,9 @@
-import { Test, TestingModule } from '@nestjs/testing';
 import { JwtModule } from '@nestjs/jwt';
+import { Test, TestingModule } from '@nestjs/testing';
+import { PrismaService } from '../common/prisma/prisma.service';
 import { AuthService } from '../services/auth/auth.service';
 import { UsersResolver } from './users.resolver';
 import { UsersService } from './users.service';
-import { PrismaService } from '../prisma/prisma.service';
 
 describe('UsersResolver', () => {
   let resolver: UsersResolver;

@@ -8,9 +8,9 @@ import {
 import { Reflector } from '@nestjs/core';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import * as express from 'express';
-import { Role } from './common/interface';
-import { User } from './users/models/user.schema';
-import { AuthService } from './services/auth/auth.service';
+import { AuthService } from '../services/auth/auth.service';
+import { User } from '../users/models/user.schema';
+import { Role } from './interface';
 
 @Injectable()
 export class RolesGuard implements CanActivate {

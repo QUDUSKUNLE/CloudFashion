@@ -24,7 +24,7 @@ export class PaymentsService {
         PaymentID: v4(),
       });
       const payment = await instance.save();
-      this.queueService.queueJobs(payment, QueueJobs.PAYMENTS);
+      this.queueService.QueueJobs(payment, QueueJobs.PAYMENTS);
       return payment;
     } catch (error) {
       throw error;

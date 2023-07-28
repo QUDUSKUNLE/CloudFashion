@@ -242,9 +242,6 @@ type Product {
   """Product Price"""
   ProductPrice: Float!
 
-  """Product Discount."""
-  ProductDiscount: Float!
-
   """Product CreatedAt."""
   CreatedAt: DateTime
 
@@ -301,29 +298,29 @@ type ClothsPayload {
 }
 
 type Query {
-  GetProducts(skip: Int = 0, take: Int = 25): [Product!]!
-  GetVendorProducts: [Product!]!
+  GetProducts(Skip: Int = 0, Take: Int = 25): [Product!]!
+  GetCustomerProducts(findProductInput: FindProductInput!): [Product!]!
   ProductLists: [Item!]!
   GetProduct(findProductInput: FindProductInput!): Product!
   GetOrders: [AOrder!]!
   GetOrder(findOrderInput: FindOrderInput!): AOrder!
-  GetUsersProfile(skip: Int = 0, take: Int = 25): [User!]!
+  GetUsersProfile(Skip: Int = 0, Take: Int = 25): [User!]!
   GetUserProfile(findUserInput: FindUserInput!): User!
   GetPayments: [Payment!]!
   GetPayment(findPaymentInput: FindPaymentInput!): Payment!
   GetShipments: [Shipment!]!
   GetShipment(findShipmentInput: FindShipmentInput!): Shipment!
-  GetDesignersProfile(skip: Int = 0, take: Int = 25): [Designer!]!
+  GetDesignersProfile(Skip: Int = 0, Take: Int = 25): [Designer!]!
   GetDesigner(findDesignerInput: FindDesignerInput!): Designer!
   GetClothsRequest: [ClothsPayload!]!
   GetMeasurements: [Measurement!]!
   GetClothRequest(findClothingInput: FindClothingInput!): ClothsPayload!
   GetMeasurement(findMeasurementInput: FindMeasurementInput!): Measurement!
-  FetchCustomers(skip: Int = 0, take: Int = 25): [Customers!]!
+  FetchCustomers(Skip: Int = 0, Take: Int = 25): [Customers!]!
 }
 
 input FindProductInput {
-  """Product ID"""
+  """Product Identity."""
   ProductID: String!
 }
 
@@ -408,8 +405,8 @@ input CreateProductInput {
   """Product quantity."""
   ProductQuantity: Int!
 
-  """Product quantity."""
-  CustomerID: Int!
+  """Customer Identity."""
+  CustomerID: String!
 }
 
 """Product name"""
@@ -458,8 +455,8 @@ input UpdateProductInput {
   """Product quantity."""
   ProductQuantity: Int
 
-  """Product quantity."""
-  CustomerID: Int
+  """Customer Identity."""
+  CustomerID: String
 
   """Product ID."""
   ProductID: String!

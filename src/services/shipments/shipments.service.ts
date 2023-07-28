@@ -46,7 +46,7 @@ export class ShipmentsService {
             ShipmentID: v4(),
           });
           const shipment = await createdShipment.save();
-          this.queueService.queueJobs(shipment, QueueJobs.SHIPMENTS);
+          this.queueService.QueueJobs(shipment, QueueJobs.SHIPMENTS);
           return shipment;
         } else {
           throw new UnprocessableEntityException();

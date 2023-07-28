@@ -1,7 +1,7 @@
 import { Field, GraphQLISODateTime, ObjectType } from '@nestjs/graphql';
 import GraphQLJSON from 'graphql-type-json';
-import { Address } from '../../common/address.input';
-import { Role } from '../../common/interface';
+import { Designer } from '../../designers/models/designers.schema';
+import { Role, Address } from '../../common';
 
 @ObjectType()
 export class User {
@@ -48,6 +48,38 @@ export class User {
 }
 
 @ObjectType()
+export class UserEntity {
+  @Field(() => String, { nullable: true, description: 'User Identity.' })
+  UserID: string;
+
+  @Field(() => String, { description: 'User Email' })
+  Email: string;
+
+  @Field(() => [String], {
+    nullable: true,
+    description: 'User PhoneNumbers.',
+  })
+  PhoneNumbers?: string[];
+
+  @Field(() => String, { nullable: true, description: 'User FirstName.' })
+  FirstName?: string;
+
+  @Field(() => String, { nullable: true, description: 'User LastName.' })
+  LastName?: string;
+
+  @Field(() => GraphQLJSON, {
+    nullable: true,
+    description: 'User Address.',
+  })
+  Address?: Address;
+
+  @Field(() => [String], { nullable: true, description: 'User Roles.' })
+  Roles: Role[];
+
+  Designer?: Designer;
+}
+
+@ObjectType()
 export class LoginResponse {
   @Field(() => String, { description: 'User AccessToken.' })
   AccessToken: string;
@@ -60,7 +92,7 @@ export class LogoutResponse {
 }
 
 @ObjectType()
-export class Sabi extends User {}
+export class Sabi extends UserEntity {}
 
 declare global {
   namespace Express {

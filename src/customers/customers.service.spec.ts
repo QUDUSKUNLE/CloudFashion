@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { CustomersService } from './customers.service';
 import { createRequest } from 'node-mocks-http';
-import { PrismaService } from '../prisma/prisma.service';
-import { MockData, MODULE } from '../mock/mock.data';
+import { PrismaService } from '../common';
+import { MODULE, MockData } from '../mock/mock.data';
+import { CustomersService } from './customers.service';
 
 describe('CustomersService', () => {
   let service: CustomersService;
@@ -82,7 +82,6 @@ describe('CustomersService', () => {
         .mockReturnValue(MockData.SERVICES[MODULE.CUSTOMER].FIND_ALL.RESULT);
       const result = await service.FindAll(
         MockData.SERVICES[MODULE.CUSTOMER].FIND_ALL.ARGS,
-        req,
       );
       expect(prisma.customers.findMany).toHaveBeenCalled();
       expect(result.length).toBeGreaterThanOrEqual(1);

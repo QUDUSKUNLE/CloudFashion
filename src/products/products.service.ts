@@ -11,14 +11,16 @@ import * as fs from 'fs';
 import { Model } from 'mongoose';
 import * as path from 'path';
 import { v4 } from 'uuid';
+import { FetchArgs, FetchCustomersArgument, PrismaService } from '../common';
+import { Statuses } from '../products/entities/product.entity';
 import { UpdateItemInput } from '../services/orders/dto/create-order.input';
 import { Item, ItemDocument } from '../services/orders/models/orders.schema';
-import { Statuses } from '../products/entities/product.entity';
 import { QueueJobs } from '../services/queue/queue.enums';
 import { QueueService } from '../services/queue/queue.service';
-import { PrismaService } from '../prisma/prisma.service';
-import { FetchArgs } from '../common/address.input';
-import { CreateProductInput } from './dto/create-product.input';
+import {
+  CreateProductInput,
+  FindProductInput,
+} from './dto/create-product.input';
 import { UpdateProductInput } from './dto/update-product.input';
 
 @Injectable()
@@ -28,7 +30,7 @@ export class ProductsService {
     private readonly queueService: QueueService,
     private readonly prismaService: PrismaService,
   ) {}
-  async create(createProductInput: CreateProductInput, req: express.Request) {
+  async Create(createProductInput: CreateProductInput, req: express.Request) {
     let [filePath] = [''];
     try {
       if (createProductInput.ProductVideo) {
@@ -58,10 +60,19 @@ export class ProductsService {
             createProductInput.ProductPrice *
             createProductInput.ProductQuantity,
           ProductVideo: process.env.TEST_VIDEO,
-          CustomerID: createProductInput.CustomerID,
+          Customer: {
+            connect: {
+              CustomerID: createProductInput.CustomerID,
+            },
+          },
+          Designers: {
+            connect: {
+              DesignerID: req.sub.Designer?.DesignerID,
+            },
+          },
         },
       });
-      this.queueService.queueJobs(
+      this.queueService.QueueJobs(
         {
           filePath,
           createProductInput,
@@ -69,26 +80,42 @@ export class ProductsService {
         },
         QueueJobs.PRODUCTS,
       );
-      return 'Product Created';
+      return createdProduct;
     } catch (error) {
       throw error;
     }
   }
 
-  async findAll(fetchArgs: FetchArgs) {
+  async FindAll(fetchArgs: FetchArgs) {
     return await this.prismaService.products.findMany({
-      skip: fetchArgs.skip,
-      take: fetchArgs.take,
+      skip: fetchArgs.Skip,
+      take: fetchArgs.Take,
     });
   }
 
-  async find(req: express.Request) {
+  async FindCustomerProducts(
+    fetchCustomersArgument: FetchCustomersArgument,
+    req: express.Request,
+  ) {
+    return await this.prismaService.products.findMany({
+      skip: fetchCustomersArgument.Skip,
+      take: fetchCustomersArgument.Take,
+      where: {
+        DesignerID: {
+          hasSome: [req.sub.Designer?.DesignerID],
+        },
+        CustomerID: fetchCustomersArgument.CustomerID,
+      },
+    });
+  }
+
+  async Find(findProductInput: FindProductInput) {
     return await this.prismaService.products.findUnique({
-      where: { ProductID: req.sub.UserID },
+      where: { ProductID: findProductInput.ProductID },
     });
   }
 
-  async updateItemStatus(updateItemStatus: UpdateItemInput) {
+  async UpdateItemStatus(updateItemStatus: UpdateItemInput) {
     try {
       const item = await this.ItemModel.findOne({
         ItemID: updateItemStatus.ItemID,
@@ -139,14 +166,14 @@ export class ProductsService {
     }
   }
 
-  async findOne(ProductID: string, req: express.Request) {
+  async FindOne(ProductID: string, req: express.Request) {
     return await this.prismaService.products.findUnique({
       where: { ProductID },
       // UserID: req.sub.UserID,
     });
   }
 
-  async update(updateProductInput: UpdateProductInput, req: express.Request) {
+  async Update(updateProductInput: UpdateProductInput, req: express.Request) {
     let [filePath] = [''];
     if (updateProductInput.ProductVideo) {
       const { createReadStream, filename } =
@@ -166,7 +193,7 @@ export class ProductsService {
           ),
       );
     }
-    this.queueService.queueJobs(
+    this.queueService.QueueJobs(
       {
         filePath,
         updateProductInput,
@@ -182,7 +209,7 @@ export class ProductsService {
     });
   }
 
-  remove(ProductID: string, req: express.Request) {
+  Remove(ProductID: string, req: express.Request) {
     return this.prismaService.products.delete({
       where: { ProductID },
     });

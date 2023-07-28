@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { DesignersService } from './designers.service';
 import { createRequest } from 'node-mocks-http';
-import { PrismaService } from '../prisma/prisma.service';
-import { MockData, MODULE } from '../mock/mock.data';
+import { MODULE, MockData } from '../mock/mock.data';
+import { DesignersService } from './designers.service';
+import { PrismaService } from '../common';
 
 describe('DesignersService', () => {
   let service: DesignersService;

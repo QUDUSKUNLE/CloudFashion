@@ -2,15 +2,15 @@ import { BadRequestException } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import * as express from 'express';
 import { Role } from '../../common/interface';
-import { GraphRequest, Roles } from '../../user.decorator';
+import { GraphRequest, Roles } from '../../common/user.decorator';
 import { ClothingService } from './clothing.service';
 import {
-    CreateClothingInput,
-    FindClothingInput,
+  CreateClothingInput,
+  FindClothingInput,
 } from './dto/create-clothing.input';
 import {
-    CreateMeasurementInput,
-    FindMeasurementInput,
+  CreateMeasurementInput,
+  FindMeasurementInput,
 } from './dto/create-measurement.input';
 import { UpdateClothingInput } from './dto/update-clothing.input';
 import { UpdateMeasurementInput } from './dto/update-measurement.input';

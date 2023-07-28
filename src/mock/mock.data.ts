@@ -26,8 +26,8 @@ export const SERVICES = {
     },
     FIND_ALL: {
       ARGS: {
-        skip: 0,
-        take: 2,
+        Skip: 0,
+        Take: 2,
       },
       RESULT: [
         {
@@ -110,8 +110,8 @@ export const SERVICES = {
     ERROR_MESSAGE: 'User`s already a designer',
   },
   ARGS: {
-    skip: 0,
-    take: 2,
+    Skip: 0,
+    Take: 2,
   },
 };
 

@@ -1,6 +1,6 @@
 import { Field, GraphQLISODateTime, ObjectType } from '@nestjs/graphql';
 import GraphQLJSON from 'graphql-type-json';
-import { Address } from '../../common/address.input';
+import { Address } from '../../common';
 
 @ObjectType()
 export class Designer {

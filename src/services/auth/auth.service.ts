@@ -1,7 +1,8 @@
-import * as bcryptjs from 'bcryptjs';
-import { JwtService } from '@nestjs/jwt';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { PrismaService } from '../../prisma/prisma.service';
+import { JwtService } from '@nestjs/jwt';
+import * as bcryptjs from 'bcryptjs';
+import * as mongoose from 'mongoose';
+import { PrismaService } from '../../common/prisma/prisma.service';
 import { User } from '../../users/models/user.schema';
 
 @Injectable()
@@ -33,11 +34,17 @@ export class AuthService {
   ): Promise<{ isValid: boolean; user?: User }> {
     try {
       const { sub } = this.jwtService.verify(token);
-      const user = await this.prismaService.users.findUnique({
-        where: { UserID: sub },
-      });
-      if (!user) throw new UnauthorizedException('User`s not found.');
-      return { ...user, isValid: true };
+      if (mongoose.Types.ObjectId.isValid(sub)) {
+        const user = await this.prismaService.users.findUnique({
+          where: { UserID: sub },
+          include: {
+            Designer: true,
+          },
+        });
+        if (user) return { ...user, isValid: true };
+        throw new UnauthorizedException('User`s not found.');
+      }
+      throw new UnauthorizedException('Unauthorized user.');
     } catch (e) {
       if (e.message?.includes('null')) {
         throw new UnauthorizedException('Unauthorizied user.');

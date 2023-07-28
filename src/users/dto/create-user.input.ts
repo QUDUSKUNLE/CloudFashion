@@ -1,4 +1,4 @@
-import { InputType, Field } from '@nestjs/graphql';
+import { InputType, Field, Int, ArgsType } from '@nestjs/graphql';
 import {
   IsEmail,
   IsString,
@@ -8,6 +8,8 @@ import {
   ValidateNested,
   Validate,
   MinLength,
+  Min,
+  Max,
 } from 'class-validator';
 import { PasswordValidator } from '../helpers/users.validation';
 import { Address } from '../../common/address.input';
@@ -65,4 +67,19 @@ export class LogInUserInput {
   @Field(() => String, { description: 'User password.', nullable: false })
   @IsString({ message: 'Password is not valid.' })
   Password: string;
+}
+
+@ArgsType()
+export class FetchUsersArguments {
+  @Field(() => Int)
+  @Min(0)
+  Skip = 0;
+
+  @Field(() => Int)
+  @Min(1)
+  @Max(50)
+  Take = 25;
+
+  @Field(() => String, { nullable: true, description: 'Designer Identity.' })
+  UserID?: string;
 }

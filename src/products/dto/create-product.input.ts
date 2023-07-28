@@ -4,11 +4,13 @@ import {
   registerEnumType,
   Float,
   Int,
+  ArgsType,
 } from '@nestjs/graphql';
-import { IsUUID, IsEnum, IsNumber, IsInt, IsMongoId } from 'class-validator';
+import { IsEnum, IsNumber, IsInt, Validate, Min, Max } from 'class-validator';
 import { ProductEnum } from '../interfaces/product.enums';
 import * as GraphQLUpload from 'graphql-upload/GraphQLUpload.js';
 import { FileUpload } from 'graphql-upload/processRequest.js';
+import { MoongooseIDValidator } from '../../common/mongoose.id.validation';
 
 @InputType()
 export class CreateProductInput {
@@ -30,8 +32,8 @@ export class CreateProductInput {
   @IsInt()
   ProductQuantity: number;
 
-  @Field(() => Int, { description: 'Product quantity.' })
-  @IsMongoId()
+  @Field(() => String, { description: 'Customer Identity.' })
+  @Validate(MoongooseIDValidator, [], { always: true })
   CustomerID: string;
 }
 
@@ -42,7 +44,22 @@ registerEnumType(ProductEnum, {
 
 @InputType()
 export class FindProductInput {
-  @Field(() => String, { description: 'Product ID' })
-  @IsUUID()
+  @Field(() => String, { description: 'Product Identity.' })
+  @Validate(MoongooseIDValidator, [], { always: true })
   ProductID: string;
+}
+
+@ArgsType()
+export class FetchProductsArguments {
+  @Field(() => Int)
+  @Min(0)
+  Skip = 0;
+
+  @Field(() => Int)
+  @Min(1)
+  @Max(50)
+  Take = 25;
+
+  @Field(() => String, { nullable: true, description: 'Designer Identity.' })
+  ProductID?: string;
 }

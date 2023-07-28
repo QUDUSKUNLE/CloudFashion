@@ -6,13 +6,13 @@ import * as fs from 'fs';
 import { Model } from 'mongoose';
 import { ItemStatus } from 'src/common/interface';
 import { v4 } from 'uuid';
+import { PrismaService } from '../../common/prisma/prisma.service';
 import {
   Item,
   ItemDocument,
   Order,
   OrderDocument,
 } from '../orders/models/orders.schema';
-import { PrismaService } from '../../prisma/prisma.service';
 import { YoutubeService } from '../youtube/youtube.service';
 import { QueueJobs } from './queue.enums';
 
@@ -96,18 +96,22 @@ export class HalalMarketConsumer {
   };
 
   processProductJobs = async (job: Job): Promise<string> => {
-    const { data } = job;
-    const { secure_url } = await this.cloudinaryService.uploadToCloud(
-      data.filePath,
-    );
-    await this.prismaService.products.update({
-      where: { ProductID: data.ProductID },
-      data: { ProductVideo: secure_url as string },
-    });
-    fs.unlink(data.filePath, (error) => {
-      if (error) throw error;
-    });
-    return 'Done';
+    try {
+      const { data } = job;
+      const { secure_url } = await this.cloudinaryService.uploadToCloud(
+        data.filePath,
+      );
+      await this.prismaService.products.update({
+        where: { ProductID: data.ProductID },
+        data: { ProductVideo: secure_url as string },
+      });
+      fs.unlink(data.filePath, (error) => {
+        if (error) throw error;
+      });
+      return 'Done';
+    } catch (error) {
+      throw error;
+    }
   };
 
   processPaymentJobs = async (job: Job): Promise<string> => {
