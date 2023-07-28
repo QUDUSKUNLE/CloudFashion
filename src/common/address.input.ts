@@ -42,7 +42,4 @@ export class FetchArgs {
   @Min(1)
   @Max(50)
   Take = 25;
-
-  @Field(() => String, { nullable: true, description: 'Customer Identity.' })
-  CustomerID?: string;
 }
