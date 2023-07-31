@@ -1,4 +1,17 @@
-import { Address } from '../../../common';
+import { Address } from '../../common';
+import {
+  CreateMeasurementInput,
+  FindMeasurementInput,
+} from '../dto/create-measurement.input';
+import { UpdateMeasurementInput } from '../dto/update-measurement.input';
+
+export interface IMeasurement<T> {
+  CreateMeasurement(data: CreateMeasurementInput): Promise<T>;
+  GetMeasurement(findMeasurementInput: FindMeasurementInput): Promise<T>;
+  GetMeasruements(): Promise<T[]>;
+  UpdateMeasurement(updateMeasurementInput: UpdateMeasurementInput): Promise<T>;
+  DeleteMeasurement(MeasurementID: FindMeasurementInput): Promise<void>;
+}
 
 export interface Measurements {
   MeasurementUnit: Measurement;
@@ -42,6 +55,15 @@ export type MeasurementClass = {
   [MeasurementType.SELF]: string;
 };
 
+export enum MeasurementTypes {
+  KAFTAN = 'KAFTAN',
+  COMPLETE = 'COMPLETE',
+  CASUAL_SHIRT = 'CASUAL_SHIRT',
+  KAFTAN_SENATOR = 'KAFTAN_SENATOR',
+  PALM_TROUSER = 'PALM_TROUSER',
+  SUITES = 'SUITES',
+}
+
 export enum ButtonType {
   EMBEDDED = 'EMBEDDED',
   EXPOSED = 'EXPOSED',
@@ -78,7 +100,6 @@ export enum CapType {
 }
 
 export enum Measurement {
-  mm = 'mm',
   cm = 'cm',
   m = 'm',
   inch = 'inch',

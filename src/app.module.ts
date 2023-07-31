@@ -7,9 +7,10 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { MongooseModule } from '@nestjs/mongoose';
 import GraphQLJSON from 'graphql-type-json';
 
-import { RolesGuard, PrismaService } from './common';
+import { PrismaService, RolesGuard } from './common';
 import { CustomersModule } from './customers/customers.module';
 import { DesignersModule } from './designers/designers.module';
+import { MeasurementsModule } from './measurements/measurements.module';
 import { ProductsModule } from './products/products.module';
 import { AuthModule } from './services/auth/auth.module';
 import { ClothingModule } from './services/clothing/clothing.module';
@@ -66,6 +67,7 @@ import { UsersModule } from './users/users.module';
     ClothingModule,
     StacksModule,
     CustomersModule,
+    MeasurementsModule,
   ],
   controllers: [],
   providers: [

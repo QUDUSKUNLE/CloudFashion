@@ -37,6 +37,20 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type Measurement {
+  """Measurement identity"""
+  MeasurementID: String!
+
+  """Cloth measurement."""
+  Measurement: JSON
+
+  """Measurement CreatedAt."""
+  CreatedAt: DateTime
+
+  """Measurement UpdatedAt."""
+  UpdatedAt: DateTime
+}
+
 type User {
   """User Identity."""
   UserID: String
@@ -215,7 +229,7 @@ type Designer {
   UpdatedAt: DateTime
 }
 
-type Measurement {
+type MeasurementE {
   """Measurement identity"""
   MeasurementID: String!
 
@@ -251,7 +265,7 @@ type ClothsPayload {
   ClothID: String!
 
   """Measurement Identity."""
-  MeasurementPayload: Measurement
+  MeasurementPayload: MeasurementE
 
   """Cloth Request Data"""
   ClothRequestPayload: JSON
@@ -337,10 +351,10 @@ type Query {
   GetDesignersProfile(Skip: Int = 0, Take: Int = 25): [Designer!]!
   GetDesigner(findDesignerInput: FindDesignerInput!): Designer!
   GetClothsRequest: [ClothsPayload!]!
-  GetMeasurements: [Measurement!]!
   GetClothRequest(findClothingInput: FindClothingInput!): ClothsPayload!
-  GetMeasurement(findMeasurementInput: FindMeasurementInput!): Measurement!
   FetchCustomers(Skip: Int = 0, Take: Int = 25): [Customers!]!
+  mesaurements: [Measurement!]!
+  mesaurement(id: Int!): Measurement!
 }
 
 input FindProductInput {
@@ -378,11 +392,6 @@ input FindClothingInput {
   ClothID: String!
 }
 
-input FindMeasurementInput {
-  """Measurement ID."""
-  MeasurementID: String!
-}
-
 type Mutation {
   CreateProduct(createProductInput: CreateProductInput!): Product!
   UpdateItemStatus(updateItemStatus: UpdateItemInput!): ItemResponse!
@@ -405,12 +414,12 @@ type Mutation {
   UpdateDesignerProfile(updateDesignerInput: UpdateDesignerInput!): Designer!
   DeleteDesignerProfile(findDesignerInput: FindDesignerInput!): Designer!
   CreateClothRequest(createClothingInput: CreateClothingInput!): ClothsPayload!
-  CreateMeasurement(createMeasurementInput: CreateMeasurementInput!): Measurement!
   UpdateClothRequest(updateClothingInput: UpdateClothingInput!): Clothing!
-  UpdateMeasurement(updateMeasurementInput: UpdateMeasurementInput!): Measurement!
   DeleteClothRequest(findClothingInput: FindClothingInput!): Clothing!
-  DeleteMeasurement(findMeasurementInput: FindMeasurementInput!): Measurement!
   CreateCustomer(createCustomerInput: CreateCustomerInput!): Customer!
+  createMesaurement(createMeasurementInput: CreateMeasurementInput!): Measurement!
+  updateMesaurement(updateMesaurementInput: UpdateMeasurementInput!): Measurement!
+  removeMesaurement(id: Int!): Measurement!
 }
 
 input CreateProductInput {
@@ -435,11 +444,12 @@ input CreateProductInput {
 
 """Product name"""
 enum ProductName {
-  Kaftan
-  Complete
-  CasualShirt
-  KaftanSenator
-  PalmTrouser
+  KAFTAN
+  COMPLETE
+  CASUAL_SHIRT
+  KAFTAN_SENATOR
+  PALM_TROUSER
+  SUITES
 }
 
 """The `Upload` scalar type represents a file upload."""
@@ -839,24 +849,54 @@ input ReturnInput {
   ClothID: String!
 }
 
+input UpdateClothingInput {
+  """Cloth Pickup Input"""
+  ClothToSow: [ClothPickUpInput!]
+
+  """PickUp Date"""
+  PickUpDate: DateTime
+
+  """Delivery Date"""
+  DeliveryDate: DateTime
+
+  """Cloth Return Input"""
+  ClothToReturn: [ClothReturnInput!]
+
+  """Cloth Review Input"""
+  ClothToReview: [ClothReturnInput!]
+
+  """Cloth Complain Input"""
+  ClothToComplain: [ClothReturnInput!]
+
+  """Clothing ID."""
+  ClothID: String!
+}
+
+input CreateCustomerInput {
+  """Create Customers"""
+  CreateCustomers: [CreateCustomer!]!
+}
+
+input CreateCustomer {
+  """Customer name"""
+  CustomerName: String!
+
+  """Customer Email"""
+  CustomerEmail: String!
+
+  """Customer Phonenumbers"""
+  CustomerPhoneNumbers: [String!]
+
+  """User Address."""
+  CustomerAddress: Address
+}
+
 input CreateMeasurementInput {
-  """SELF Measurement"""
-  SELF: [CreateMeasurement!]!
+  """Measurement"""
+  Measurement: CreateMeasurement!
 
-  """Father Measurement"""
-  FATHER: [CreateMeasurement!]
-
-  """Brother Measurement"""
-  BROTHER: [CreateMeasurement!]
-
-  """Son Measurement"""
-  SON: [CreateMeasurement!]
-
-  """Uncle Measurement"""
-  UNCLE: [CreateMeasurement!]
-
-  """Grandfather Measurement"""
-  GRANDFATHER: [CreateMeasurement!]
+  """Measurement Type"""
+  MeasurementType: MeasurementTypes!
 }
 
 input CreateMeasurement {
@@ -878,7 +918,6 @@ input CreateMeasurement {
 
 """Measurement unit"""
 enum MeasurementUnit {
-  mm
   cm
   m
   inch
@@ -991,67 +1030,23 @@ input AgbadaInput {
   Height: Float!
 }
 
-input UpdateClothingInput {
-  """Cloth Pickup Input"""
-  ClothToSow: [ClothPickUpInput!]
-
-  """PickUp Date"""
-  PickUpDate: DateTime
-
-  """Delivery Date"""
-  DeliveryDate: DateTime
-
-  """Cloth Return Input"""
-  ClothToReturn: [ClothReturnInput!]
-
-  """Cloth Review Input"""
-  ClothToReview: [ClothReturnInput!]
-
-  """Cloth Complain Input"""
-  ClothToComplain: [ClothReturnInput!]
-
-  """Clothing ID."""
-  ClothID: String!
+"""Measurement type"""
+enum MeasurementTypes {
+  KAFTAN
+  COMPLETE
+  CASUAL_SHIRT
+  KAFTAN_SENATOR
+  PALM_TROUSER
+  SUITES
 }
 
 input UpdateMeasurementInput {
-  """SELF Measurement"""
-  SELF: [CreateMeasurement!]
+  """Measurement"""
+  Measurement: CreateMeasurement
 
-  """Father Measurement"""
-  FATHER: [CreateMeasurement!]
-
-  """Brother Measurement"""
-  BROTHER: [CreateMeasurement!]
-
-  """Son Measurement"""
-  SON: [CreateMeasurement!]
-
-  """Uncle Measurement"""
-  UNCLE: [CreateMeasurement!]
-
-  """Grandfather Measurement"""
-  GRANDFATHER: [CreateMeasurement!]
+  """Measurement Type"""
+  MeasurementType: MeasurementTypes
 
   """Measurement ID."""
   MeasurementID: String!
-}
-
-input CreateCustomerInput {
-  """Create Customers"""
-  CreateCustomers: [CreateCustomer!]!
-}
-
-input CreateCustomer {
-  """Customer name"""
-  CustomerName: String!
-
-  """Customer Email"""
-  CustomerEmail: String!
-
-  """Customer Phonenumbers"""
-  CustomerPhoneNumbers: [String!]
-
-  """User Address."""
-  CustomerAddress: Address
 }

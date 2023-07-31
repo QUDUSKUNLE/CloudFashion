@@ -12,11 +12,12 @@ import { UpdateProductInput } from '../dto/update-product.input';
 import { FetchArguments } from '../../common';
 
 export enum ProductEnum {
-  Kaftan = 'Kaftan',
-  Complete = 'Complete',
-  CasualShirt = 'CasualShirt',
-  KaftanSenator = 'KaftanSenator',
-  PalmTrouser = 'PalmTrouser',
+  KAFTAN = 'KAFTAN',
+  COMPLETE = 'COMPLETE',
+  CASUAL_SHIRT = 'CASUAL_SHIRT',
+  KAFTAN_SENATOR = 'KAFTAN_SENATOR',
+  PALM_TROUSER = 'PALM_TROUSER',
+  SUITES = 'SUITES',
 }
 
 export enum SizeEnum {
