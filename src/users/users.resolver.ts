@@ -1,12 +1,10 @@
 import {
-  ConflictException,
   Inject,
   Injectable,
   UnauthorizedException,
   forwardRef,
 } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { Prisma } from '@prisma/client';
 import * as express from 'express';
 import { FetchArguments, GraphRequest, Role, Roles } from '../common';
 import { AuthService } from '../services/auth/auth.service';
@@ -37,11 +35,6 @@ export class UsersResolver {
     try {
       return await this.usersService.create(createUserInput);
     } catch (error) {
-      if (error instanceof Prisma.PrismaClientKnownRequestError) {
-        if (error.code === 'P2002')
-          throw new ConflictException('User`s already exist.');
-        throw error;
-      }
       throw error;
     }
   }
