@@ -1,36 +1,40 @@
 import {
-  ConflictException,
   HttpException,
   HttpStatus,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
 import * as express from 'express';
 import * as fs from 'fs';
-import { Model } from 'mongoose';
 import * as path from 'path';
 import { v4 } from 'uuid';
-import { FetchArgs, FetchCustomersArgument, PrismaService } from '../common';
-import { Statuses } from '../products/entities/product.entity';
+import { Products } from '@prisma/client';
+import { FetchArguments, PrismaService } from '../common';
 import { UpdateItemInput } from '../services/orders/dto/create-order.input';
-import { Item, ItemDocument } from '../services/orders/models/orders.schema';
 import { QueueJobs } from '../services/queue/queue.enums';
 import { QueueService } from '../services/queue/queue.service';
 import {
   CreateProductInput,
   FindProductInput,
+  DesignerFetchCustomersProducts,
+  DesignerFetchCustomerProducts,
+  DesignerFetchCustomerProduct,
+  CustomerFetchProducts,
+  CustomerFetchProduct,
 } from './dto/create-product.input';
+import { IProductService } from './interfaces/product.enums';
 import { UpdateProductInput } from './dto/update-product.input';
 
 @Injectable()
-export class ProductsService {
+export class ProductsService implements IProductService<Products> {
   constructor(
-    @InjectModel(Item.name) private ItemModel: Model<ItemDocument>,
     private readonly queueService: QueueService,
     private readonly prismaService: PrismaService,
   ) {}
-  async Create(createProductInput: CreateProductInput, req: express.Request) {
+  async CreateProduct(
+    createProductInput: CreateProductInput,
+    req: express.Request,
+  ) {
     let [filePath] = [''];
     try {
       if (createProductInput.ProductVideo) {
@@ -86,94 +90,74 @@ export class ProductsService {
     }
   }
 
-  async FindAll(fetchArgs: FetchArgs) {
-    return await this.prismaService.products.findMany({
-      skip: fetchArgs.Skip,
-      take: fetchArgs.Take,
-    });
-  }
-
-  async FindCustomerProducts(
-    fetchCustomersArgument: FetchCustomersArgument,
+  async DesignerFetchCustomersProducts(
+    designerFetchCustomersProducts: DesignerFetchCustomersProducts,
     req: express.Request,
   ) {
     return await this.prismaService.products.findMany({
-      skip: fetchCustomersArgument.Skip,
-      take: fetchCustomersArgument.Take,
+      skip: designerFetchCustomersProducts.Skip,
+      take: designerFetchCustomersProducts.Take,
       where: {
         DesignerID: {
           hasSome: [req.sub.Designer?.DesignerID],
         },
-        CustomerID: fetchCustomersArgument.CustomerID,
       },
     });
   }
 
-  async Find(findProductInput: FindProductInput) {
-    return await this.prismaService.products.findUnique({
-      where: { ProductID: findProductInput.ProductID },
+  async DesignerFetchCustomerProducts(
+    designerFetchCustomerProducts: DesignerFetchCustomerProducts,
+    req: express.Request,
+  ) {
+    return await this.prismaService.products.findMany({
+      skip: designerFetchCustomerProducts.Skip,
+      take: designerFetchCustomerProducts.Take,
+      where: {
+        DesignerID: {
+          hasSome: [req.sub.Designer?.DesignerID],
+        },
+        CustomerID: designerFetchCustomerProducts.CustomerID,
+      },
     });
   }
 
-  async UpdateItemStatus(updateItemStatus: UpdateItemInput) {
-    try {
-      const item = await this.ItemModel.findOne({
-        ItemID: updateItemStatus.ItemID,
-      }).exec();
-      if (item && item.Statuses) {
-        const statuses: Statuses[] = item.Statuses;
-        if (
-          statuses.some(
-            (prev) => prev.ItemStatus === updateItemStatus.ItemStatus,
-          )
-        ) {
-          throw new ConflictException(
-            `Item already ${updateItemStatus.ItemStatus}.`,
-          );
-        }
-        statuses.push({
-          ItemStatus: updateItemStatus.ItemStatus,
-          DateTime: new Date(),
-        });
-        await this.ItemModel.findOneAndUpdate(
-          {
-            ItemID: updateItemStatus.ItemID,
-          },
-          {
-            $set: {
-              Statuses: statuses,
-              ItemStatus: updateItemStatus.ItemStatus,
-            },
-          },
-        ).exec();
-        return {
-          ItemMessage: 'Item updated.',
-          ItemStatus: updateItemStatus.ItemStatus,
-          ItemID: updateItemStatus.ItemID,
-        };
-      }
-      throw new NotFoundException('Item not found.');
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  async Items(req: express.Request) {
-    try {
-      return [];
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  async FindOne(ProductID: string, req: express.Request) {
+  async DesignerFetchCustomerProduct(
+    designerFetchCustomerProduct: DesignerFetchCustomerProduct,
+    req: express.Request,
+  ) {
     return await this.prismaService.products.findUnique({
-      where: { ProductID },
-      // UserID: req.sub.UserID,
+      where: {
+        DesignerID: {
+          hasSome: [req.sub.Designer?.DesignerID],
+        },
+        ProductID: designerFetchCustomerProduct.ProductID,
+      },
     });
   }
 
-  async Update(updateProductInput: UpdateProductInput, req: express.Request) {
+  async CustomerFetchProducts(customerFetchProducts: CustomerFetchProducts) {
+    return await this.prismaService.products.findMany({
+      skip: customerFetchProducts.Skip,
+      take: customerFetchProducts.Take,
+      where: {
+        CustomerID: customerFetchProducts.CustomerID,
+      },
+    });
+  }
+
+  async CustomerFetchProduct(customerFetchProduct: CustomerFetchProduct) {
+    return await this.prismaService.products.findUnique({
+      where: {
+        CustomerID: customerFetchProduct.CustomerID,
+        ProductID: customerFetchProduct.ProductID,
+      },
+    });
+  }
+
+  async DesignerUpdateProduct(
+    updateProductInput: UpdateProductInput,
+    req: express.Request,
+  ) {
     let [filePath] = [''];
     if (updateProductInput.ProductVideo) {
       const { createReadStream, filename } =
@@ -209,9 +193,38 @@ export class ProductsService {
     });
   }
 
+  async FindAll(fetchArgs: FetchArguments) {
+    return await this.prismaService.products.findMany({
+      skip: fetchArgs.Skip,
+      take: fetchArgs.Take,
+    });
+  }
+
+  async FindOne(findProductInput: FindProductInput) {
+    return await this.prismaService.products.findUnique({
+      where: { ProductID: findProductInput.ProductID },
+    });
+  }
+
   Remove(ProductID: string, req: express.Request) {
     return this.prismaService.products.delete({
       where: { ProductID },
     });
+  }
+
+  async UpdateItemStatus(updateItemStatus: UpdateItemInput) {
+    try {
+      throw new NotFoundException('Item not found.');
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async Items(req: express.Request) {
+    try {
+      return [];
+    } catch (error) {
+      throw error;
+    }
   }
 }

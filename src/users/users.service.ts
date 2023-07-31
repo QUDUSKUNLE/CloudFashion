@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcryptjs';
-import { FetchArgs } from '../common';
+import { FetchArguments } from '../common';
 import { PrismaService } from '../common/prisma/prisma.service';
 import { CreateUserInput, FindUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
@@ -28,7 +28,7 @@ export class UsersService {
     return result;
   }
 
-  async findAll(fetch: FetchArgs) {
+  async findAll(fetch: FetchArguments) {
     return await this.prismaService.users.findMany({
       skip: fetch.Skip,
       take: fetch.Take,

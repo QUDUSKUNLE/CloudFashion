@@ -1,10 +1,10 @@
-import * as express from 'express';
 import { ConflictException, Injectable } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import * as express from 'express';
+import { FetchArguments, GraphRequest, Role, Roles } from '../common';
 import { CustomersService } from './customers.service';
 import { CreateCustomerInput } from './dto/create-customer.input';
 import { Customer, Customers } from './entities/customer.entity';
-import { FetchArgs, Role, GraphRequest, Roles } from '../common';
 
 @Resolver(() => Customer)
 @Injectable()
@@ -29,7 +29,7 @@ export class CustomersResolver {
 
   @Roles(Role.ADMIN)
   @Query(() => [Customers])
-  async FetchCustomers(@Args() fetchCustomersArgs: FetchArgs) {
+  async FetchCustomers(@Args() fetchCustomersArgs: FetchArguments) {
     return await this.customersService.FindAll(fetchCustomersArgs);
   }
 }

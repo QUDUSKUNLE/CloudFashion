@@ -41,6 +41,7 @@ export enum Role {
   ADMIN = 'ADMIN',
   USER = 'USER',
   VENDOR = 'VENDOR',
+  CUSTOMER = 'CUSTOMER',
   DESIGNER = 'DESIGNER',
   PUBLIC = 'PUBLIC',
 }

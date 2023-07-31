@@ -1,13 +1,12 @@
-import * as express from 'express';
-import { Prisma } from '@prisma/client';
 import {
-  ConflictException,
   Inject,
   Injectable,
   UnauthorizedException,
   forwardRef,
 } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import * as express from 'express';
+import { FetchArguments, GraphRequest, Role, Roles } from '../common';
 import { AuthService } from '../services/auth/auth.service';
 import {
   CreateUserInput,
@@ -17,7 +16,6 @@ import {
 import { UpdateUserInput } from './dto/update-user.input';
 import { LoginResponse, LogoutResponse, User } from './models/user.schema';
 import { UsersService } from './users.service';
-import { Role, GraphRequest, Roles, FetchArgs } from '../common';
 
 @Resolver(() => User)
 @Injectable()
@@ -37,11 +35,6 @@ export class UsersResolver {
     try {
       return await this.usersService.create(createUserInput);
     } catch (error) {
-      if (error instanceof Prisma.PrismaClientKnownRequestError) {
-        if (error.code === 'P2002')
-          throw new ConflictException('User`s already exist.');
-        throw error;
-      }
       throw error;
     }
   }
@@ -66,7 +59,7 @@ export class UsersResolver {
 
   @Roles(Role.PUBLIC)
   @Query(() => [User], { name: 'GetUsersProfile' })
-  findAll(@Args() fetch: FetchArgs) {
+  findAll(@Args() fetch: FetchArguments) {
     return this.usersService.findAll(fetch);
   }
 

@@ -1,6 +1,6 @@
-import { InputType, Field, Int, ArgsType } from '@nestjs/graphql';
-import { IsEnum, IsString, IsInt, IsDate, Min, Max } from 'class-validator';
-import { State, ItemStatus } from './interface';
+import { ArgsType, Field, InputType, Int } from '@nestjs/graphql';
+import { IsDate, IsEnum, IsInt, IsString, Max, Min } from 'class-validator';
+import { ItemStatus, State } from './interface';
 
 @InputType()
 export class Address {
@@ -33,7 +33,7 @@ export class Status {
 }
 
 @ArgsType()
-export class FetchArgs {
+export class FetchArguments {
   @Field(() => Int)
   @Min(0)
   Skip = 0;

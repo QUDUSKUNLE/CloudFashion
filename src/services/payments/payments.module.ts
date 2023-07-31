@@ -13,7 +13,7 @@ import { PaymentsService } from './payments.service';
     MongooseModule.forFeature([{ name: Payment.name, schema: PaymentSchema }]),
     AuthModule,
     forwardRef(() => ProductsModule),
-    QueueModule,
+    forwardRef(() => QueueModule),
   ],
   providers: [PaymentsResolver, PaymentsService],
   exports: [PaymentsService, MongooseModule],

@@ -5,6 +5,7 @@ export enum MODULE {
   CUSTOMER = 'CUSTOMER',
   DESIGNER = 'DESIGNER',
   USER = 'USER',
+  PRODUCT = 'PRODUCT',
 }
 
 export const SERVICES = {
@@ -108,6 +109,30 @@ export const SERVICES = {
     ],
     REMOVE_MESSAGE: 'Designer archived.',
     ERROR_MESSAGE: 'User`s already a designer',
+  },
+  [MODULE.PRODUCT]: {
+    FindAll: {
+      Skip: 2,
+      Take: 5,
+    },
+    FindAllMockResponse: [
+      {
+        ProductID: '64c2d0a7f04e125b10071272',
+        ProductName: 'Kaftan',
+        ProductVideo:
+          'https://res.cloudinary.com/halalmeat/video/upload/v1690489007/dpnvbfs8urpfkazaabnw.mp4',
+        CreatedAt: '2023-07-27T20:16:39.176Z',
+        UpdatedAt: '2023-07-27T20:16:50.557Z',
+      },
+      {
+        ProductID: '64c2d3100971510d557f35bd',
+        ProductName: 'Kaftan',
+        ProductVideo:
+          'https://res.cloudinary.com/halalmeat/video/upload/v1690489624/k6k1qwjoo3poq0kfyqbg.mp4',
+        CreatedAt: '2023-07-27T20:26:55.455Z',
+        UpdatedAt: '2023-07-27T20:27:06.975Z',
+      },
+    ],
   },
   ARGS: {
     Skip: 0,
