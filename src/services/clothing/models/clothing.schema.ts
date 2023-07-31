@@ -116,5 +116,4 @@ export class ClothsPayload {
   UpdatedAt: Date;
 }
 
-export const MeasurementSchema = SchemaFactory.createForClass(MeasurementE);
 export const ClothingSchema = SchemaFactory.createForClass(Clothing);

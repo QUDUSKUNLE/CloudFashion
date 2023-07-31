@@ -3,22 +3,13 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import * as express from 'express';
 import { Role } from '../../common/interface';
 import { GraphRequest, Roles } from '../../common/user.decorator';
-import {
-  CreateMeasurementInput,
-  FindMeasurementInput,
-} from '../../measurements/dto/create-measurement.input';
-import { UpdateMeasurementInput } from '../../measurements/dto/update-measurement.input';
 import { ClothingService } from './clothing.service';
 import {
   CreateClothingInput,
   FindClothingInput,
 } from './dto/create-clothing.input';
 import { UpdateClothingInput } from './dto/update-clothing.input';
-import {
-  Clothing,
-  ClothsPayload,
-  MeasurementE,
-} from './models/clothing.schema';
+import { Clothing, ClothsPayload } from './models/clothing.schema';
 
 @Resolver()
 export class ClothingResolver {
@@ -37,25 +28,9 @@ export class ClothingResolver {
   }
 
   @Roles(Role.USER)
-  @Mutation(() => MeasurementE, { name: 'CreateMeasurement' })
-  createMeasurement(
-    @Args('createMeasurementInput', { type: () => CreateMeasurementInput })
-    createMeasurementInput: CreateMeasurementInput,
-    @GraphRequest() req: express.Request,
-  ) {
-    return this.clothingService.createMeasurement(createMeasurementInput, req);
-  }
-
-  @Roles(Role.USER)
   @Query(() => [ClothsPayload], { name: 'GetClothsRequest' })
   findAll(@GraphRequest() req: express.Request) {
     return this.clothingService.findAll(req);
-  }
-
-  @Roles(Role.USER)
-  @Query(() => [MeasurementE], { name: 'GetMeasurements' })
-  findAllMeasurement(@GraphRequest() req: express.Request) {
-    return this.clothingService.findAllMeasurement(req);
   }
 
   @Roles(Role.USER)
@@ -69,16 +44,6 @@ export class ClothingResolver {
   }
 
   @Roles(Role.USER)
-  @Query(() => MeasurementE, { name: 'GetMeasurement' })
-  findOneMeasurement(
-    @Args('findMeasurementInput', { type: () => FindMeasurementInput })
-    findMeasurementInput: FindMeasurementInput,
-    @GraphRequest() req: express.Request,
-  ) {
-    return this.clothingService.findOneMeasurement(findMeasurementInput, req);
-  }
-
-  @Roles(Role.USER)
   @Mutation(() => Clothing, { name: 'UpdateClothRequest' })
   updateClothing(
     @Args('updateClothingInput', { type: () => UpdateClothingInput })
@@ -89,16 +54,6 @@ export class ClothingResolver {
   }
 
   @Roles(Role.USER)
-  @Mutation(() => MeasurementE, { name: 'UpdateMeasurement' })
-  updateMeasurement(
-    @Args('updateMeasurementInput', { type: () => UpdateMeasurementInput })
-    updateMeasurementInput: UpdateMeasurementInput,
-    @GraphRequest() req: express.Request,
-  ) {
-    return this.clothingService.updateMeasurement(updateMeasurementInput, req);
-  }
-
-  @Roles(Role.USER)
   @Mutation(() => Clothing, { name: 'DeleteClothRequest' })
   removeClothing(
     @Args('findClothingInput', { type: () => FindClothingInput })
@@ -106,15 +61,5 @@ export class ClothingResolver {
     @GraphRequest() req: express.Request,
   ) {
     return this.clothingService.remove(findClothingInput, req);
-  }
-
-  @Roles(Role.USER)
-  @Mutation(() => MeasurementE, { name: 'DeleteMeasurement' })
-  removeMeasurement(
-    @Args('findMeasurementInput', { type: () => FindMeasurementInput })
-    findMeasurementInput: FindMeasurementInput,
-    @GraphRequest() req: express.Request,
-  ) {
-    return this.clothingService.removeMeasurement(findMeasurementInput, req);
   }
 }

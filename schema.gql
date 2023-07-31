@@ -351,9 +351,7 @@ type Query {
   GetDesignersProfile(Skip: Int = 0, Take: Int = 25): [Designer!]!
   GetDesigner(findDesignerInput: FindDesignerInput!): Designer!
   GetClothsRequest: [ClothsPayload!]!
-  GetMeasurements: [MeasurementE!]!
   GetClothRequest(findClothingInput: FindClothingInput!): ClothsPayload!
-  GetMeasurement(findMeasurementInput: FindMeasurementInput!): MeasurementE!
   FetchCustomers(Skip: Int = 0, Take: Int = 25): [Customers!]!
   mesaurements: [Measurement!]!
   mesaurement(id: Int!): Measurement!
@@ -394,11 +392,6 @@ input FindClothingInput {
   ClothID: String!
 }
 
-input FindMeasurementInput {
-  """Measurement ID."""
-  MeasurementID: String!
-}
-
 type Mutation {
   CreateProduct(createProductInput: CreateProductInput!): Product!
   UpdateItemStatus(updateItemStatus: UpdateItemInput!): ItemResponse!
@@ -421,11 +414,8 @@ type Mutation {
   UpdateDesignerProfile(updateDesignerInput: UpdateDesignerInput!): Designer!
   DeleteDesignerProfile(findDesignerInput: FindDesignerInput!): Designer!
   CreateClothRequest(createClothingInput: CreateClothingInput!): ClothsPayload!
-  CreateMeasurement(createMeasurementInput: CreateMeasurementInput!): MeasurementE!
   UpdateClothRequest(updateClothingInput: UpdateClothingInput!): Clothing!
-  UpdateMeasurement(updateMeasurementInput: UpdateMeasurementInput!): MeasurementE!
   DeleteClothRequest(findClothingInput: FindClothingInput!): Clothing!
-  DeleteMeasurement(findMeasurementInput: FindMeasurementInput!): MeasurementE!
   CreateCustomer(createCustomerInput: CreateCustomerInput!): Customer!
   createMesaurement(createMeasurementInput: CreateMeasurementInput!): Measurement!
   updateMesaurement(updateMesaurementInput: UpdateMeasurementInput!): Measurement!
@@ -859,6 +849,48 @@ input ReturnInput {
   ClothID: String!
 }
 
+input UpdateClothingInput {
+  """Cloth Pickup Input"""
+  ClothToSow: [ClothPickUpInput!]
+
+  """PickUp Date"""
+  PickUpDate: DateTime
+
+  """Delivery Date"""
+  DeliveryDate: DateTime
+
+  """Cloth Return Input"""
+  ClothToReturn: [ClothReturnInput!]
+
+  """Cloth Review Input"""
+  ClothToReview: [ClothReturnInput!]
+
+  """Cloth Complain Input"""
+  ClothToComplain: [ClothReturnInput!]
+
+  """Clothing ID."""
+  ClothID: String!
+}
+
+input CreateCustomerInput {
+  """Create Customers"""
+  CreateCustomers: [CreateCustomer!]!
+}
+
+input CreateCustomer {
+  """Customer name"""
+  CustomerName: String!
+
+  """Customer Email"""
+  CustomerEmail: String!
+
+  """Customer Phonenumbers"""
+  CustomerPhoneNumbers: [String!]
+
+  """User Address."""
+  CustomerAddress: Address
+}
+
 input CreateMeasurementInput {
   """Measurement"""
   Measurement: CreateMeasurement!
@@ -1008,29 +1040,6 @@ enum MeasurementTypes {
   SUITES
 }
 
-input UpdateClothingInput {
-  """Cloth Pickup Input"""
-  ClothToSow: [ClothPickUpInput!]
-
-  """PickUp Date"""
-  PickUpDate: DateTime
-
-  """Delivery Date"""
-  DeliveryDate: DateTime
-
-  """Cloth Return Input"""
-  ClothToReturn: [ClothReturnInput!]
-
-  """Cloth Review Input"""
-  ClothToReview: [ClothReturnInput!]
-
-  """Cloth Complain Input"""
-  ClothToComplain: [ClothReturnInput!]
-
-  """Clothing ID."""
-  ClothID: String!
-}
-
 input UpdateMeasurementInput {
   """Measurement"""
   Measurement: CreateMeasurement
@@ -1040,23 +1049,4 @@ input UpdateMeasurementInput {
 
   """Measurement ID."""
   MeasurementID: String!
-}
-
-input CreateCustomerInput {
-  """Create Customers"""
-  CreateCustomers: [CreateCustomer!]!
-}
-
-input CreateCustomer {
-  """Customer name"""
-  CustomerName: String!
-
-  """Customer Email"""
-  CustomerEmail: String!
-
-  """Customer Phonenumbers"""
-  CustomerPhoneNumbers: [String!]
-
-  """User Address."""
-  CustomerAddress: Address
 }
