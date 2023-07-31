@@ -37,6 +37,11 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type Mesaurement {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
 type User {
   """User Identity."""
   UserID: String
@@ -341,6 +346,8 @@ type Query {
   GetClothRequest(findClothingInput: FindClothingInput!): ClothsPayload!
   GetMeasurement(findMeasurementInput: FindMeasurementInput!): Measurement!
   FetchCustomers(Skip: Int = 0, Take: Int = 25): [Customers!]!
+  mesaurements: [Mesaurement!]!
+  mesaurement(id: Int!): Mesaurement!
 }
 
 input FindProductInput {
@@ -411,6 +418,9 @@ type Mutation {
   DeleteClothRequest(findClothingInput: FindClothingInput!): Clothing!
   DeleteMeasurement(findMeasurementInput: FindMeasurementInput!): Measurement!
   CreateCustomer(createCustomerInput: CreateCustomerInput!): Customer!
+  createMesaurement(createMesaurementInput: CreateMesaurementInput!): Mesaurement!
+  updateMesaurement(updateMesaurementInput: UpdateMesaurementInput!): Mesaurement!
+  removeMesaurement(id: Int!): Mesaurement!
 }
 
 input CreateProductInput {
@@ -1054,4 +1064,15 @@ input CreateCustomer {
 
   """User Address."""
   CustomerAddress: Address
+}
+
+input CreateMesaurementInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateMesaurementInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
 }

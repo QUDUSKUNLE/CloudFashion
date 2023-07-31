@@ -1,4 +1,4 @@
-import { Address } from '../../../common/address.input';
+import { Address } from '../../../common';
 
 export interface Measurements {
   MeasurementUnit: Measurement;

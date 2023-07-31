@@ -3,11 +3,12 @@ import {
   Injectable,
   UnauthorizedException,
   forwardRef,
+  ConflictException,
 } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import * as express from 'express';
-import { FetchArguments, GraphRequest, Role, Roles } from '../common';
 import { AuthService } from '../services/auth/auth.service';
+import { FetchArguments, GraphRequest, Role, Roles } from '../common';
 import {
   CreateUserInput,
   FindUserInput,
@@ -35,6 +36,9 @@ export class UsersResolver {
     try {
       return await this.usersService.create(createUserInput);
     } catch (error) {
+      if (error.code === 'P2002') {
+        throw new ConflictException('User Email already exist.');
+      }
       throw error;
     }
   }

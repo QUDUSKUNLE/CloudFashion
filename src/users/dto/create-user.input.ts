@@ -9,15 +9,15 @@ import {
   MinLength,
   Min,
   Max,
+  Validate,
 } from 'class-validator';
-import { PasswordValidator, EmailValidator } from '../helpers/users.validation';
-import { Address, ValidationConstructor, PrismaService } from '../../common';
+import { PasswordValidator } from '../helpers/users.validation';
+import { Address } from '../../common';
 
 @InputType()
 export class CreateUserInput {
   @Field(() => String, { description: 'User Email.', nullable: false })
   @IsEmail({}, { message: 'Email is not valid.' })
-  @ValidationConstructor(new EmailValidator(new PrismaService()))
   readonly Email: string;
 
   @Field(() => String, { description: 'User Password', nullable: false })
@@ -27,7 +27,7 @@ export class CreateUserInput {
 
   @Field(() => String, { description: 'User ConfirmPassword', nullable: false })
   @IsString({ message: 'ConfirmPassword is not valid.' })
-  @ValidationConstructor(new PasswordValidator())
+  @Validate(PasswordValidator)
   readonly ConfirmPassword: string;
 
   @Field(() => [String], { nullable: true, description: 'User PhoneNumber.' })

@@ -1,8 +1,4 @@
-import {
-  BadRequestException,
-  ConflictException,
-  Injectable,
-} from '@nestjs/common';
+import { BadRequestException, ConflictException } from '@nestjs/common';
 import {
   ValidatorConstraint,
   ValidatorConstraintInterface,
@@ -11,7 +7,6 @@ import {
 import { PrismaService } from '../../common';
 
 @ValidatorConstraint({ name: 'ConfirmPassword', async: false })
-@Injectable()
 export class PasswordValidator implements ValidatorConstraintInterface {
   validate(confirmPassword: string, args: ValidationArguments) {
     const result = confirmPassword
@@ -23,7 +18,6 @@ export class PasswordValidator implements ValidatorConstraintInterface {
 }
 
 @ValidatorConstraint({ name: 'Email', async: false })
-@Injectable()
 export class EmailValidator implements ValidatorConstraintInterface {
   constructor(private readonly prisma: PrismaService) {}
 

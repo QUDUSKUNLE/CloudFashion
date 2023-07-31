@@ -6,16 +6,11 @@ import {
   Int,
   ArgsType,
 } from '@nestjs/graphql';
-import { IsEnum, IsNumber, IsInt, Min, Max } from 'class-validator';
+import { IsEnum, IsNumber, IsInt, Min, Max, Validate } from 'class-validator';
 import { ProductEnum } from '../interfaces/product.enums';
 import * as GraphQLUpload from 'graphql-upload/GraphQLUpload.js';
 import { FileUpload } from 'graphql-upload/processRequest.js';
-import {
-  isObjectIDValid,
-  MoongooseIDValidator,
-  ValidationConstructor,
-  FetchArguments,
-} from '../../common';
+import { MoongooseIDValidator, FetchArguments } from '../../common';
 
 @InputType()
 export class CreateProductInput {
@@ -38,7 +33,7 @@ export class CreateProductInput {
   ProductQuantity: number;
 
   @Field(() => String, { description: 'Customer Identity.' })
-  @ValidationConstructor(new MoongooseIDValidator())
+  @Validate(MoongooseIDValidator)
   CustomerID: string;
 }
 
@@ -50,7 +45,7 @@ registerEnumType(ProductEnum, {
 @InputType()
 export class FindProductInput {
   @Field(() => String, { description: 'Product Identity.' })
-  @isObjectIDValid()
+  @Validate(MoongooseIDValidator)
   ProductID: string;
 }
 
@@ -75,14 +70,14 @@ export class DesignerFetchCustomersProducts extends FetchArguments {}
 @ArgsType()
 export class DesignerFetchCustomerProducts extends FetchArguments {
   @Field(() => String, { nullable: false, description: 'Customer Identity.' })
-  @isObjectIDValid()
+  @Validate(MoongooseIDValidator)
   CustomerID: string;
 }
 
 @ArgsType()
 export class DesignerFetchCustomerProduct {
   @Field(() => String, { nullable: false, description: 'Product Identity.' })
-  @isObjectIDValid()
+  @Validate(MoongooseIDValidator)
   ProductID: string;
 }
 
@@ -92,24 +87,24 @@ export class CustomerFetchProducts extends DesignerFetchCustomerProducts {}
 @ArgsType()
 export class CustomerFetchProduct extends DesignerFetchCustomerProduct {
   @Field(() => String, { nullable: false, description: 'Customer Identity.' })
-  @isObjectIDValid()
+  @Validate(MoongooseIDValidator)
   CustomerID: string;
 }
 
 @ArgsType()
 export class FetchDesignerProductsArguments extends FetchArguments {
   @Field(() => String, { nullable: false, description: 'Designer Identity.' })
-  @isObjectIDValid()
+  @Validate(MoongooseIDValidator)
   DesignerID: string;
 }
 
 @ArgsType()
 export class FetchDesignerCustomersProductsArguments extends FetchArguments {
   @Field(() => String, { nullable: false, description: 'Designer Identity.' })
-  @isObjectIDValid()
+  @Validate(MoongooseIDValidator)
   DesignerID: string;
 
   @Field(() => String, { nullable: false, description: 'Customer Identity.' })
-  @isObjectIDValid()
+  @Validate(MoongooseIDValidator)
   CustomerID: string;
 }
