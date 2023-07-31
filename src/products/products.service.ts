@@ -8,6 +8,7 @@ import * as express from 'express';
 import * as fs from 'fs';
 import * as path from 'path';
 import { v4 } from 'uuid';
+import { Products } from '@prisma/client';
 import { FetchArguments, PrismaService } from '../common';
 import { UpdateItemInput } from '../services/orders/dto/create-order.input';
 import { QueueJobs } from '../services/queue/queue.enums';
@@ -21,10 +22,11 @@ import {
   CustomerFetchProducts,
   CustomerFetchProduct,
 } from './dto/create-product.input';
+import { IProductService } from './interfaces/product.enums';
 import { UpdateProductInput } from './dto/update-product.input';
 
 @Injectable()
-export class ProductsService {
+export class ProductsService implements IProductService<Products> {
   constructor(
     private readonly queueService: QueueService,
     private readonly prismaService: PrismaService,
@@ -86,13 +88,6 @@ export class ProductsService {
     } catch (error) {
       throw error;
     }
-  }
-
-  async FindAll(fetchArgs: FetchArguments) {
-    return await this.prismaService.products.findMany({
-      skip: fetchArgs.Skip,
-      take: fetchArgs.Take,
-    });
   }
 
   async DesignerFetchCustomersProducts(
@@ -159,36 +154,10 @@ export class ProductsService {
     });
   }
 
-  async Find(findProductInput: FindProductInput) {
-    return await this.prismaService.products.findUnique({
-      where: { ProductID: findProductInput.ProductID },
-    });
-  }
-
-  async UpdateItemStatus(updateItemStatus: UpdateItemInput) {
-    try {
-      throw new NotFoundException('Item not found.');
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  async Items(req: express.Request) {
-    try {
-      return [];
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  async FindOne(ProductID: string, req: express.Request) {
-    return await this.prismaService.products.findUnique({
-      where: { ProductID },
-      // UserID: req.sub.UserID,
-    });
-  }
-
-  async Update(updateProductInput: UpdateProductInput, req: express.Request) {
+  async DesignerUpdateProduct(
+    updateProductInput: UpdateProductInput,
+    req: express.Request,
+  ) {
     let [filePath] = [''];
     if (updateProductInput.ProductVideo) {
       const { createReadStream, filename } =
@@ -224,9 +193,38 @@ export class ProductsService {
     });
   }
 
+  async FindAll(fetchArgs: FetchArguments) {
+    return await this.prismaService.products.findMany({
+      skip: fetchArgs.Skip,
+      take: fetchArgs.Take,
+    });
+  }
+
+  async FindOne(findProductInput: FindProductInput) {
+    return await this.prismaService.products.findUnique({
+      where: { ProductID: findProductInput.ProductID },
+    });
+  }
+
   Remove(ProductID: string, req: express.Request) {
     return this.prismaService.products.delete({
       where: { ProductID },
     });
+  }
+
+  async UpdateItemStatus(updateItemStatus: UpdateItemInput) {
+    try {
+      throw new NotFoundException('Item not found.');
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async Items(req: express.Request) {
+    try {
+      return [];
+    } catch (error) {
+      throw error;
+    }
   }
 }

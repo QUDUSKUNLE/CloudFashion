@@ -17,6 +17,7 @@ import { UpdateProductInput } from './dto/update-product.input';
 import { Product } from './models/products.schema';
 import { ProductsService } from './products.service';
 
+// Single Responsibility Principle related to Product
 @Resolver(() => Product)
 export class ProductsResolver {
   constructor(private readonly productsService: ProductsService) {}
@@ -29,21 +30,6 @@ export class ProductsResolver {
     @GraphRequest() req: express.Request,
   ) {
     return await this.productsService.CreateProduct(createProductInput, req);
-  }
-
-  @Roles(Role.ADMIN)
-  @Query(() => [Product], { name: 'GetProducts' })
-  async FindAll(@Args() fetchArgs: FetchArguments) {
-    return await this.productsService.FindAll(fetchArgs);
-  }
-
-  @Roles(Role.ADMIN)
-  @Query(() => [Product], { name: 'GetCustomerProducts' })
-  async Find(
-    @Args('findProductInput', { type: () => FindProductInput })
-    findProductInput: FindProductInput,
-  ) {
-    return await this.productsService.Find(findProductInput);
   }
 
   @Roles(Role.DESIGNER)
@@ -83,6 +69,21 @@ export class ProductsResolver {
   }
 
   @Roles(Role.ADMIN)
+  @Query(() => [Product], { name: 'GetProducts' })
+  async FindAll(@Args() fetchArgs: FetchArguments) {
+    return await this.productsService.FindAll(fetchArgs);
+  }
+
+  @Roles(Role.ADMIN)
+  @Query(() => [Product], { name: 'GetCustomerProducts' })
+  async FindOne(
+    @Args('findProductInput', { type: () => FindProductInput })
+    findProductInput: FindProductInput,
+  ) {
+    return await this.productsService.FindOne(findProductInput);
+  }
+
+  @Roles(Role.ADMIN)
   @Query(() => [Product], { name: 'CustomerFetchProducts' })
   async CustomerFetchProducts(
     @Args() customerFetchProducts: CustomerFetchProducts,
@@ -118,28 +119,18 @@ export class ProductsResolver {
   }
 
   @Roles(Role.ADMIN)
-  @Query(() => Product, { name: 'GetProduct' })
-  FindOne(
-    @Args('findProductInput', { type: () => FindProductInput })
-    findProductInput: FindProductInput,
-    @GraphRequest() req: express.Request,
-  ) {
-    return this.productsService.FindOne(findProductInput.ProductID, req);
-  }
-
-  @Roles(Role.ADMIN)
   @Mutation(() => Product, { name: 'UpdateProduct' })
-  updateProduct(
+  UpdateProduct(
     @Args('updateProductInput', { type: () => UpdateProductInput })
     updateProductInput: UpdateProductInput,
     @GraphRequest() req: express.Request,
   ) {
-    return this.productsService.Update(updateProductInput, req);
+    return this.productsService.DesignerUpdateProduct(updateProductInput, req);
   }
 
   @Roles(Role.ADMIN)
   @Mutation(() => Product, { name: 'DeleteProduct' })
-  removeProduct(
+  RemoveProduct(
     @Args('findProductInput', { type: () => FindProductInput })
     findProductInput: FindProductInput,
     @GraphRequest() req: express.Request,
