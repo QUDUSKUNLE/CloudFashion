@@ -76,24 +76,26 @@ type LogoutResponse {
   Message: String!
 }
 
-type Designer {
-  """Designer Identity"""
-  DesignerID: String
+type OrderResponse {
+  """Order Response."""
+  OrderMessage: String!
 
-  """Designer Name"""
-  DesignerName: String!
+  """Order status."""
+  OrderStatus: String!
 
-  """Designer PhoneNumbers."""
-  DesignerPhoneNumbers: [String!]
+  """Order Identity."""
+  OrderID: String!
+}
 
-  """Designer Address."""
-  DesignerAddress: JSON!
+type ItemResponse {
+  """Item Response."""
+  ItemMessage: String!
 
-  """Designer CreatedAt."""
-  CreatedAt: DateTime
+  """Item status."""
+  ItemStatus: String!
 
-  """Designer UpdatedAt."""
-  UpdatedAt: DateTime
+  """Item Identity."""
+  ItemID: String!
 }
 
 type Item {
@@ -170,62 +172,6 @@ type AOrder {
   OrderItems: [Item!]!
 }
 
-type OrderResponse {
-  """Order Response."""
-  OrderMessage: String!
-
-  """Order status."""
-  OrderStatus: String!
-
-  """Order Identity."""
-  OrderID: String!
-}
-
-type ItemResponse {
-  """Item Response."""
-  ItemMessage: String!
-
-  """Item status."""
-  ItemStatus: String!
-
-  """Item Identity."""
-  ItemID: String!
-}
-
-type Payment {
-  """Payment Identity"""
-  PaymentID: String
-
-  """Payment Amount"""
-  PaymentAmount: Float!
-
-  """Payment status"""
-  PaymentStatus: String!
-
-  """Payment Tracking Identity"""
-  PaymentTrackingID: String!
-
-  """Payment CreatedAt."""
-  CreatedAt: DateTime
-
-  """Payment UpdatedAt."""
-  UpdatedAt: DateTime
-}
-
-type Shipment {
-  """Shipment Identity"""
-  ShipmentID: String
-
-  """Item entity."""
-  Item: Item
-
-  """Shipment CreatedAt."""
-  CreatedAt: DateTime
-
-  """Shipment UpdatedAt."""
-  UpdatedAt: DateTime
-}
-
 type Product {
   """Product Identity"""
   ProductID: String
@@ -246,6 +192,26 @@ type Product {
   CreatedAt: DateTime
 
   """Product UpdatedAt."""
+  UpdatedAt: DateTime
+}
+
+type Designer {
+  """Designer Identity"""
+  DesignerID: String
+
+  """Designer Name"""
+  DesignerName: String!
+
+  """Designer PhoneNumbers."""
+  DesignerPhoneNumbers: [String!]
+
+  """Designer Address."""
+  DesignerAddress: JSON!
+
+  """Designer CreatedAt."""
+  CreatedAt: DateTime
+
+  """Designer UpdatedAt."""
   UpdatedAt: DateTime
 }
 
@@ -297,9 +263,41 @@ type ClothsPayload {
   UpdatedAt: DateTime
 }
 
+type Payment {
+  """Payment Identity"""
+  PaymentID: String
+
+  """Payment Amount"""
+  PaymentAmount: Float!
+
+  """Payment status"""
+  PaymentStatus: String!
+
+  """Payment Tracking Identity"""
+  PaymentTrackingID: String!
+
+  """Payment CreatedAt."""
+  CreatedAt: DateTime
+
+  """Payment UpdatedAt."""
+  UpdatedAt: DateTime
+}
+
+type Shipment {
+  """Shipment Identity"""
+  ShipmentID: String
+
+  """Item entity."""
+  Item: Item
+
+  """Shipment CreatedAt."""
+  CreatedAt: DateTime
+
+  """Shipment UpdatedAt."""
+  UpdatedAt: DateTime
+}
+
 type Query {
-  GetProducts(Skip: Int = 0, Take: Int = 25): [Product!]!
-  GetCustomerProducts(findProductInput: FindProductInput!): [Product!]!
   DesignerGetCustomersProducts(Skip: Int = 0, Take: Int = 25): [Product!]!
   DesignerGetCustomerProducts(
     Skip: Int = 0
@@ -312,6 +310,8 @@ type Query {
     """Product Identity."""
     ProductID: String!
   ): Product!
+  GetProducts(Skip: Int = 0, Take: Int = 25): [Product!]!
+  GetCustomerProducts(findProductInput: FindProductInput!): [Product!]!
   CustomerFetchProducts(
     """Customer Identity."""
     CustomerID: String!
@@ -326,7 +326,6 @@ type Query {
     CustomerID: String!
   ): Product!
   ProductLists: [Item!]!
-  GetProduct(findProductInput: FindProductInput!): Product!
   GetUsersProfile(Skip: Int = 0, Take: Int = 25): [User!]!
   GetUserProfile(findUserInput: FindUserInput!): User!
   GetOrders: [AOrder!]!
