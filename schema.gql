@@ -37,9 +37,18 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
-type Mesaurement {
-  """Example field (placeholder)"""
-  exampleField: Int!
+type Measurement {
+  """Measurement identity"""
+  MeasurementID: String!
+
+  """Cloth measurement."""
+  Measurement: JSON
+
+  """Measurement CreatedAt."""
+  CreatedAt: DateTime
+
+  """Measurement UpdatedAt."""
+  UpdatedAt: DateTime
 }
 
 type User {
@@ -220,7 +229,7 @@ type Designer {
   UpdatedAt: DateTime
 }
 
-type Measurement {
+type MeasurementE {
   """Measurement identity"""
   MeasurementID: String!
 
@@ -256,7 +265,7 @@ type ClothsPayload {
   ClothID: String!
 
   """Measurement Identity."""
-  MeasurementPayload: Measurement
+  MeasurementPayload: MeasurementE
 
   """Cloth Request Data"""
   ClothRequestPayload: JSON
@@ -342,12 +351,12 @@ type Query {
   GetDesignersProfile(Skip: Int = 0, Take: Int = 25): [Designer!]!
   GetDesigner(findDesignerInput: FindDesignerInput!): Designer!
   GetClothsRequest: [ClothsPayload!]!
-  GetMeasurements: [Measurement!]!
+  GetMeasurements: [MeasurementE!]!
   GetClothRequest(findClothingInput: FindClothingInput!): ClothsPayload!
-  GetMeasurement(findMeasurementInput: FindMeasurementInput!): Measurement!
+  GetMeasurement(findMeasurementInput: FindMeasurementInput!): MeasurementE!
   FetchCustomers(Skip: Int = 0, Take: Int = 25): [Customers!]!
-  mesaurements: [Mesaurement!]!
-  mesaurement(id: Int!): Mesaurement!
+  mesaurements: [Measurement!]!
+  mesaurement(id: Int!): Measurement!
 }
 
 input FindProductInput {
@@ -412,15 +421,15 @@ type Mutation {
   UpdateDesignerProfile(updateDesignerInput: UpdateDesignerInput!): Designer!
   DeleteDesignerProfile(findDesignerInput: FindDesignerInput!): Designer!
   CreateClothRequest(createClothingInput: CreateClothingInput!): ClothsPayload!
-  CreateMeasurement(createMeasurementInput: CreateMeasurementInput!): Measurement!
+  CreateMeasurement(createMeasurementInput: CreateMeasurementInput!): MeasurementE!
   UpdateClothRequest(updateClothingInput: UpdateClothingInput!): Clothing!
-  UpdateMeasurement(updateMeasurementInput: UpdateMeasurementInput!): Measurement!
+  UpdateMeasurement(updateMeasurementInput: UpdateMeasurementInput!): MeasurementE!
   DeleteClothRequest(findClothingInput: FindClothingInput!): Clothing!
-  DeleteMeasurement(findMeasurementInput: FindMeasurementInput!): Measurement!
+  DeleteMeasurement(findMeasurementInput: FindMeasurementInput!): MeasurementE!
   CreateCustomer(createCustomerInput: CreateCustomerInput!): Customer!
-  createMesaurement(createMesaurementInput: CreateMesaurementInput!): Mesaurement!
-  updateMesaurement(updateMesaurementInput: UpdateMesaurementInput!): Mesaurement!
-  removeMesaurement(id: Int!): Mesaurement!
+  createMesaurement(createMeasurementInput: CreateMeasurementInput!): Measurement!
+  updateMesaurement(updateMesaurementInput: UpdateMeasurementInput!): Measurement!
+  removeMesaurement(id: Int!): Measurement!
 }
 
 input CreateProductInput {
@@ -445,11 +454,12 @@ input CreateProductInput {
 
 """Product name"""
 enum ProductName {
-  Kaftan
-  Complete
-  CasualShirt
-  KaftanSenator
-  PalmTrouser
+  KAFTAN
+  COMPLETE
+  CASUAL_SHIRT
+  KAFTAN_SENATOR
+  PALM_TROUSER
+  SUITES
 }
 
 """The `Upload` scalar type represents a file upload."""
@@ -850,23 +860,11 @@ input ReturnInput {
 }
 
 input CreateMeasurementInput {
-  """SELF Measurement"""
-  SELF: [CreateMeasurement!]!
+  """Measurement"""
+  Measurement: CreateMeasurement!
 
-  """Father Measurement"""
-  FATHER: [CreateMeasurement!]
-
-  """Brother Measurement"""
-  BROTHER: [CreateMeasurement!]
-
-  """Son Measurement"""
-  SON: [CreateMeasurement!]
-
-  """Uncle Measurement"""
-  UNCLE: [CreateMeasurement!]
-
-  """Grandfather Measurement"""
-  GRANDFATHER: [CreateMeasurement!]
+  """Measurement Type"""
+  MeasurementType: MeasurementTypes!
 }
 
 input CreateMeasurement {
@@ -888,7 +886,6 @@ input CreateMeasurement {
 
 """Measurement unit"""
 enum MeasurementUnit {
-  mm
   cm
   m
   inch
@@ -1001,6 +998,16 @@ input AgbadaInput {
   Height: Float!
 }
 
+"""Measurement type"""
+enum MeasurementTypes {
+  KAFTAN
+  COMPLETE
+  CASUAL_SHIRT
+  KAFTAN_SENATOR
+  PALM_TROUSER
+  SUITES
+}
+
 input UpdateClothingInput {
   """Cloth Pickup Input"""
   ClothToSow: [ClothPickUpInput!]
@@ -1025,23 +1032,11 @@ input UpdateClothingInput {
 }
 
 input UpdateMeasurementInput {
-  """SELF Measurement"""
-  SELF: [CreateMeasurement!]
+  """Measurement"""
+  Measurement: CreateMeasurement
 
-  """Father Measurement"""
-  FATHER: [CreateMeasurement!]
-
-  """Brother Measurement"""
-  BROTHER: [CreateMeasurement!]
-
-  """Son Measurement"""
-  SON: [CreateMeasurement!]
-
-  """Uncle Measurement"""
-  UNCLE: [CreateMeasurement!]
-
-  """Grandfather Measurement"""
-  GRANDFATHER: [CreateMeasurement!]
+  """Measurement Type"""
+  MeasurementType: MeasurementTypes
 
   """Measurement ID."""
   MeasurementID: String!
@@ -1064,15 +1059,4 @@ input CreateCustomer {
 
   """User Address."""
   CustomerAddress: Address
-}
-
-input CreateMesaurementInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
-}
-
-input UpdateMesaurementInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
 }

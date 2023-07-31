@@ -38,7 +38,6 @@ model Customers {
   CustomerEmail           String        @unique
   CustomerName            String?
   CustomerPhoneNumbers    String[]      @default([])
-  Roles                   String        @default("CUSTOMER")
   CustomerAddress         Address?
   CreatedAt               DateTime       @default(now())
   UpdatedAt               DateTime       @updatedAt
@@ -47,6 +46,7 @@ model Customers {
   DesignerID              String[]        @db.ObjectId
 
   Products                Products[]
+  Measurements            Measurements[]
 }
 
 model Designers {
@@ -69,7 +69,6 @@ model Designers {
   @@fulltext([UserID, CreatedAt(sort: Desc)])
 }
 
-
 model Products {
   ProductID             String        @id @default(auto()) @map("_id") @db.ObjectId
   ProductName           String
@@ -86,5 +85,23 @@ model Products {
   Designers             Designers[]   @relation(fields: [DesignerID], references: [DesignerID])
   DesignerID            String[]      @db.ObjectId
 
+  Measurement           Measurements  @relation(fields: [MeasurementID], references: [MeasurementID])
+  MeasurementID         String        @db.ObjectId
+
   @@fulltext([CustomerID, CreatedAt(sort: Desc)])
+}
+
+model Measurements {
+  MeasurementID     String           @id @default(auto()) @map("_id") @db.ObjectId
+  MeasurementType   String
+  Measurement       Json
+  CreatedAt         DateTime          @default(now())
+  UpdatedAt         DateTime          @updatedAt
+
+  Customer          Customers         @relation(fields: [CustomerID], references: [CustomerID])
+  CustomerID        String            @db.ObjectId
+  Products          Products[]
+
+
+  @@fulltext([CustomerID, MeasurementType, CreatedAt(sort: Desc)])
 }

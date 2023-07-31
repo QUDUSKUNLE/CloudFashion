@@ -7,7 +7,7 @@ import { ClothingService } from './clothing.service';
 import {
   Clothing,
   ClothingSchema,
-  Measurement,
+  MeasurementE,
   MeasurementSchema,
 } from './models/clothing.schema';
 
@@ -15,7 +15,7 @@ import {
   imports: [
     MongooseModule.forFeature([
       { name: Clothing.name, schema: ClothingSchema },
-      { name: Measurement.name, schema: MeasurementSchema },
+      { name: MeasurementE.name, schema: MeasurementSchema },
     ]),
     AuthModule,
   ],

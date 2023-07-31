@@ -69,6 +69,11 @@ export class ProductsService implements IProductService<Products> {
               CustomerID: createProductInput.CustomerID,
             },
           },
+          Measurement: {
+            connect: {
+              MeasurementID: createProductInput.CustomerID,
+            },
+          },
           Designers: {
             connect: {
               DesignerID: req.sub.Designer?.DesignerID,

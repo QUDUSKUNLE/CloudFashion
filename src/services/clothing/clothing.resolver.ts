@@ -3,18 +3,22 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import * as express from 'express';
 import { Role } from '../../common/interface';
 import { GraphRequest, Roles } from '../../common/user.decorator';
+import {
+  CreateMeasurementInput,
+  FindMeasurementInput,
+} from '../../measurements/dto/create-measurement.input';
+import { UpdateMeasurementInput } from '../../measurements/dto/update-measurement.input';
 import { ClothingService } from './clothing.service';
 import {
   CreateClothingInput,
   FindClothingInput,
 } from './dto/create-clothing.input';
-import {
-  CreateMeasurementInput,
-  FindMeasurementInput,
-} from './dto/create-measurement.input';
 import { UpdateClothingInput } from './dto/update-clothing.input';
-import { UpdateMeasurementInput } from './dto/update-measurement.input';
-import { Clothing, ClothsPayload, Measurement } from './models/clothing.schema';
+import {
+  Clothing,
+  ClothsPayload,
+  MeasurementE,
+} from './models/clothing.schema';
 
 @Resolver()
 export class ClothingResolver {
@@ -33,7 +37,7 @@ export class ClothingResolver {
   }
 
   @Roles(Role.USER)
-  @Mutation(() => Measurement, { name: 'CreateMeasurement' })
+  @Mutation(() => MeasurementE, { name: 'CreateMeasurement' })
   createMeasurement(
     @Args('createMeasurementInput', { type: () => CreateMeasurementInput })
     createMeasurementInput: CreateMeasurementInput,
@@ -49,7 +53,7 @@ export class ClothingResolver {
   }
 
   @Roles(Role.USER)
-  @Query(() => [Measurement], { name: 'GetMeasurements' })
+  @Query(() => [MeasurementE], { name: 'GetMeasurements' })
   findAllMeasurement(@GraphRequest() req: express.Request) {
     return this.clothingService.findAllMeasurement(req);
   }
@@ -65,7 +69,7 @@ export class ClothingResolver {
   }
 
   @Roles(Role.USER)
-  @Query(() => Measurement, { name: 'GetMeasurement' })
+  @Query(() => MeasurementE, { name: 'GetMeasurement' })
   findOneMeasurement(
     @Args('findMeasurementInput', { type: () => FindMeasurementInput })
     findMeasurementInput: FindMeasurementInput,
@@ -85,7 +89,7 @@ export class ClothingResolver {
   }
 
   @Roles(Role.USER)
-  @Mutation(() => Measurement, { name: 'UpdateMeasurement' })
+  @Mutation(() => MeasurementE, { name: 'UpdateMeasurement' })
   updateMeasurement(
     @Args('updateMeasurementInput', { type: () => UpdateMeasurementInput })
     updateMeasurementInput: UpdateMeasurementInput,
@@ -105,7 +109,7 @@ export class ClothingResolver {
   }
 
   @Roles(Role.USER)
-  @Mutation(() => Measurement, { name: 'DeleteMeasurement' })
+  @Mutation(() => MeasurementE, { name: 'DeleteMeasurement' })
   removeMeasurement(
     @Args('findMeasurementInput', { type: () => FindMeasurementInput })
     findMeasurementInput: FindMeasurementInput,

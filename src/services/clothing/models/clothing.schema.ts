@@ -5,12 +5,12 @@ import { Field, GraphQLISODateTime, ObjectType } from '@nestjs/graphql';
 import { CreateClothingInput } from '../dto/create-clothing.input';
 import { MeasurementCategories } from '../interface/interface';
 
-export type MeasurementDocument = Measurement & Document;
+export type MeasurementDocument = MeasurementE & Document;
 export type ClothingDocument = Clothing & Document;
 
 @Schema()
 @ObjectType()
-export class Measurement {
+export class MeasurementE {
   @Field(() => String, { description: 'Measurement identity' })
   @Prop({
     type: String,
@@ -91,11 +91,11 @@ export class ClothsPayload {
   @Field(() => String, { description: 'Cloth Identity' })
   ClothID: string;
 
-  @Field(() => Measurement, {
+  @Field(() => MeasurementE, {
     nullable: true,
     description: 'Measurement Identity.',
   })
-  MeasurementPayload: Measurement;
+  MeasurementPayload: MeasurementE;
 
   @Field(() => GraphQLJSON, {
     nullable: true,
@@ -116,5 +116,5 @@ export class ClothsPayload {
   UpdatedAt: Date;
 }
 
-export const MeasurementSchema = SchemaFactory.createForClass(Measurement);
+export const MeasurementSchema = SchemaFactory.createForClass(MeasurementE);
 export const ClothingSchema = SchemaFactory.createForClass(Clothing);

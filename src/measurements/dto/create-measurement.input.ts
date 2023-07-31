@@ -1,14 +1,21 @@
-import { IsEnum, IsUUID, IsNumber, ValidateNested } from 'class-validator';
-import { InputType, Field, PickType, Float } from '@nestjs/graphql';
 import {
+  Field,
+  Float,
+  InputType,
+  PickType,
+  registerEnumType,
+} from '@nestjs/graphql';
+import { IsEnum, IsNumber, ValidateNested } from 'class-validator';
+import {
+  ButtonType,
+  ColarNeckType,
+  DesignType,
+  LinkType,
   Measurement,
   PucketType,
   WaistTightType,
-  ButtonType,
-  DesignType,
-  ColarNeckType,
-  LinkType,
-} from '../interface/interface';
+  MeasurementTypes,
+} from '../interface/measurement.interface';
 
 @InputType()
 export class TrouserInput {
@@ -76,6 +83,7 @@ export class ShirtInput extends PickType(TrouserInput, [
   ColarNeckType: ColarNeckType;
 
   @Field(() => LinkType, { nullable: true, description: 'Shirt Link Type' })
+  @IsEnum(LinkType)
   LinkType: LinkType;
 }
 
@@ -104,59 +112,72 @@ export class CreateMeasurement {
 
   @Field(() => ShirtInput, { description: 'Shirt measurements' })
   @ValidateNested()
-  readonly Shirt: ShirtInput;
+  readonly Shirt?: ShirtInput;
 
   @Field(() => CapInput, { nullable: true, description: 'Cap measurements' })
   @ValidateNested({ each: true })
-  readonly Cap: CapInput;
+  readonly Cap?: CapInput;
 
   @Field(() => AgbadaInput, {
     nullable: true,
     description: 'Agbada measurements',
   })
   @ValidateNested({ each: true })
-  readonly Agbada: AgbadaInput;
+  readonly Agbada?: AgbadaInput;
 }
 
 @InputType()
 export class CreateMeasurementInput {
-  @Field(() => [CreateMeasurement], { description: 'SELF Measurement' })
-  readonly SELF: CreateMeasurement[];
+  @Field(() => CreateMeasurement, { description: 'Measurement' })
+  Measurement: CreateMeasurement;
 
-  @Field(() => [CreateMeasurement], {
-    nullable: true,
-    description: 'Father Measurement',
-  })
-  readonly FATHER?: CreateMeasurement[];
-
-  @Field(() => [CreateMeasurement], {
-    nullable: true,
-    description: 'Brother Measurement',
-  })
-  readonly BROTHER?: CreateMeasurement[];
-
-  @Field(() => [CreateMeasurement], {
-    nullable: true,
-    description: 'Son Measurement',
-  })
-  readonly SON?: CreateMeasurement[];
-
-  @Field(() => [CreateMeasurement], {
-    nullable: true,
-    description: 'Uncle Measurement',
-  })
-  readonly UNCLE?: CreateMeasurement[];
-
-  @Field(() => [CreateMeasurement], {
-    nullable: true,
-    description: 'Grandfather Measurement',
-  })
-  readonly GRANDFATHER?: CreateMeasurement[];
+  @Field(() => MeasurementTypes, { description: 'Measurement Type' })
+  @IsEnum(MeasurementTypes)
+  MeasurementType: MeasurementTypes;
 }
 
 @InputType()
 export class FindMeasurementInput {
   @Field(() => String, { description: 'Measurement ID.', nullable: false })
-  @IsUUID()
   MeasurementID: string;
 }
+
+registerEnumType(Measurement, {
+  name: 'MeasurementUnit',
+  description: 'Measurement unit',
+});
+
+registerEnumType(PucketType, {
+  name: 'PucketType',
+  description: 'Pucket type',
+});
+
+registerEnumType(WaistTightType, {
+  name: 'WaistTightType',
+  description: 'Waist tighening type',
+});
+
+registerEnumType(ButtonType, {
+  name: 'ButtonType',
+  description: 'Button type',
+});
+
+registerEnumType(DesignType, {
+  name: 'DesignType',
+  description: 'Shirt Design Type',
+});
+
+registerEnumType(ColarNeckType, {
+  name: 'ColarNeckType',
+  description: 'Shirt Collar Neck Type',
+});
+
+registerEnumType(LinkType, {
+  name: 'LinkType',
+  description: 'Arm Link Type',
+});
+
+registerEnumType(MeasurementTypes, {
+  name: 'MeasurementTypes',
+  description: 'Measurement type',
+});

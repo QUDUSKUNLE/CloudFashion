@@ -1,22 +1,22 @@
-import * as express from 'express';
-import { v4 } from 'uuid';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import * as express from 'express';
 import { Model } from 'mongoose';
+import { v4 } from 'uuid';
+import {
+  CreateMeasurementInput,
+  FindMeasurementInput,
+} from '../../measurements/dto/create-measurement.input';
+import { UpdateMeasurementInput } from '../../measurements/dto/update-measurement.input';
 import {
   CreateClothingInput,
   FindClothingInput,
 } from './dto/create-clothing.input';
-import {
-  CreateMeasurementInput,
-  FindMeasurementInput,
-} from './dto/create-measurement.input';
 import { UpdateClothingInput } from './dto/update-clothing.input';
-import { UpdateMeasurementInput } from './dto/update-measurement.input';
 import {
   Clothing,
   ClothingDocument,
-  Measurement,
+  MeasurementE,
   MeasurementDocument,
 } from './models/clothing.schema';
 
@@ -24,7 +24,7 @@ import {
 export class ClothingService {
   constructor(
     @InjectModel(Clothing.name) private ClothingModel: Model<ClothingDocument>,
-    @InjectModel(Measurement.name)
+    @InjectModel(MeasurementE.name)
     private MeasurementModel: Model<MeasurementDocument>,
   ) {}
   async create(createClothingInput: CreateClothingInput, req: express.Request) {
