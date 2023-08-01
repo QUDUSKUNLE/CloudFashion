@@ -1,29 +1,40 @@
+import * as express from 'express';
 import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { CreateMeasurementInput } from './dto/create-measurement.input';
 import { UpdateMeasurementInput } from './dto/update-measurement.input';
 import { Measurement } from './entities/measurement.entity';
 import { MeasurementsService } from './measurements.service';
+import { GraphRequest, Role, Roles } from '../common';
 
 @Resolver(() => Measurement)
 export class MeasurementsResolver {
-  constructor(private readonly mesaurementsService: MeasurementsService) {}
+  constructor(private readonly measurementsService: MeasurementsService) {}
 
+  @Roles(Role.DESIGNER)
   @Mutation(() => Measurement)
-  createMesaurement(
+  async CreateMesaurement(
     @Args('createMeasurementInput')
     createMeasurementInput: CreateMeasurementInput,
+    @GraphRequest() req: express.Request,
   ) {
-    return this.mesaurementsService.create(createMeasurementInput);
+    try {
+      return await this.measurementsService.CreateMeasurement(
+        createMeasurementInput,
+        req,
+      );
+    } catch (e) {
+      throw e;
+    }
   }
 
   @Query(() => [Measurement], { name: 'mesaurements' })
   findAll() {
-    return this.mesaurementsService.findAll();
+    return this.measurementsService.findAll();
   }
 
   @Query(() => Measurement, { name: 'mesaurement' })
   findOne(@Args('id', { type: () => Int }) id: number) {
-    return this.mesaurementsService.findOne(id);
+    return this.measurementsService.findOne(id);
   }
 
   @Mutation(() => Measurement)
@@ -31,7 +42,7 @@ export class MeasurementsResolver {
     @Args('updateMesaurementInput')
     updateMesaurementInput: UpdateMeasurementInput,
   ) {
-    return this.mesaurementsService.update(
+    return this.measurementsService.update(
       +updateMesaurementInput.MeasurementID,
       updateMesaurementInput,
     );
@@ -39,6 +50,6 @@ export class MeasurementsResolver {
 
   @Mutation(() => Measurement)
   removeMesaurement(@Args('id', { type: () => Int }) id: number) {
-    return this.mesaurementsService.remove(id);
+    return this.measurementsService.remove(id);
   }
 }

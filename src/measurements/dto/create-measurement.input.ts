@@ -5,7 +5,7 @@ import {
   PickType,
   registerEnumType,
 } from '@nestjs/graphql';
-import { IsEnum, IsNumber, ValidateNested } from 'class-validator';
+import { IsEnum, IsNumber, ValidateNested, Validate } from 'class-validator';
 import {
   ButtonType,
   ColarNeckType,
@@ -16,6 +16,7 @@ import {
   WaistTightType,
   MeasurementTypes,
 } from '../interface/measurement.interface';
+import { MoongooseIDValidator } from '../../common';
 
 @InputType()
 export class TrouserInput {
@@ -134,6 +135,10 @@ export class CreateMeasurementInput {
   @Field(() => MeasurementTypes, { description: 'Measurement Type' })
   @IsEnum(MeasurementTypes)
   MeasurementType: MeasurementTypes;
+
+  @Field(() => String, { description: 'Customer ID.', nullable: false })
+  @Validate(MoongooseIDValidator)
+  CustomerID: string;
 }
 
 @InputType()

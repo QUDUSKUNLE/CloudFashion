@@ -40,3 +40,5 @@ export const isObjectIDValid =
       options: validationOptions,
       validator: MoongooseIDValidator,
     });
+
+export const Parser = (data: unknown) => JSON.parse(JSON.stringify(data));

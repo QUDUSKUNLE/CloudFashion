@@ -41,6 +41,9 @@ type Measurement {
   """Measurement identity"""
   MeasurementID: String!
 
+  """Measurement Type"""
+  MeasurementType: MeasurementTypes!
+
   """Cloth measurement."""
   Measurement: JSON
 
@@ -49,6 +52,16 @@ type Measurement {
 
   """Measurement UpdatedAt."""
   UpdatedAt: DateTime
+}
+
+"""Measurement type"""
+enum MeasurementTypes {
+  KAFTAN
+  COMPLETE
+  CASUAL_SHIRT
+  KAFTAN_SENATOR
+  PALM_TROUSER
+  SUITES
 }
 
 type User {
@@ -417,7 +430,7 @@ type Mutation {
   UpdateClothRequest(updateClothingInput: UpdateClothingInput!): Clothing!
   DeleteClothRequest(findClothingInput: FindClothingInput!): Clothing!
   CreateCustomer(createCustomerInput: CreateCustomerInput!): Customer!
-  createMesaurement(createMeasurementInput: CreateMeasurementInput!): Measurement!
+  CreateMesaurement(createMeasurementInput: CreateMeasurementInput!): Measurement!
   updateMesaurement(updateMesaurementInput: UpdateMeasurementInput!): Measurement!
   removeMesaurement(id: Int!): Measurement!
 }
@@ -897,6 +910,9 @@ input CreateMeasurementInput {
 
   """Measurement Type"""
   MeasurementType: MeasurementTypes!
+
+  """Customer ID."""
+  CustomerID: String!
 }
 
 input CreateMeasurement {
@@ -1030,22 +1046,15 @@ input AgbadaInput {
   Height: Float!
 }
 
-"""Measurement type"""
-enum MeasurementTypes {
-  KAFTAN
-  COMPLETE
-  CASUAL_SHIRT
-  KAFTAN_SENATOR
-  PALM_TROUSER
-  SUITES
-}
-
 input UpdateMeasurementInput {
   """Measurement"""
   Measurement: CreateMeasurement
 
   """Measurement Type"""
   MeasurementType: MeasurementTypes
+
+  """Customer ID."""
+  CustomerID: String
 
   """Measurement ID."""
   MeasurementID: String!

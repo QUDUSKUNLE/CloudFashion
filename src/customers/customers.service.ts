@@ -33,10 +33,10 @@ export class CustomersService {
         );
       }
       const result = await this.prismaService.customers.createMany({
-        data: createCustomerInput.CreateCustomers.reduce<CustomerEntity[]>(
+        data: createCustomerInput.CreateCustomers.reduce(
           (accumulator, customer) => {
-            customer['DesignerID'] = [DesignerID];
-            accumulator.push(<CustomerEntity>customer);
+            customer['DesignerIDs'] = [DesignerID];
+            accumulator.push(customer);
             return accumulator;
           },
           [],

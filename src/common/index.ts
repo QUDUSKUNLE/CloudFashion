@@ -4,6 +4,7 @@ import {
   isObjectIDValid,
   ValidationConstructor,
   MoongooseIDValidator,
+  Parser,
 } from './mongoose.id.validation';
 import { PrismaService } from './prisma/prisma.service';
 import { RolesGuard } from './roles.guard';
@@ -22,4 +23,5 @@ export {
   RolesGuard,
   State,
   isObjectIDValid,
+  Parser,
 };

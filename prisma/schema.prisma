@@ -19,89 +19,89 @@ type Address {
 }
 
 model Users {
-  UserID        String                @id @default(auto()) @map("_id") @db.ObjectId
-  Email         String                @unique
-  Password      String                @map("Password")
-  PhoneNumbers  String[]              @default([])
+  UserID        String                    @id @default(auto()) @map("_id") @db.ObjectId
+  Email         String                    @unique
+  Password      String                    @map("Password")
+  PhoneNumbers  String[]                  @default([])
   FirstName     String?               
   LastName      String?               
   Address       Address?
-  Roles         String[]              @default(["USER"])
-  CreatedAt     DateTime              @default(now())
-  UpdatedAt     DateTime              @updatedAt
+  Roles         String[]                  @default(["USER"])
+  CreatedAt     DateTime                  @default(now())
+  UpdatedAt     DateTime                  @updatedAt
 
   Designer      Designers?
 }
 
 model Customers {
-  CustomerID              String        @id @default(auto()) @map("_id") @db.ObjectId
-  CustomerEmail           String        @unique
+  CustomerID              String          @id @default(auto()) @map("_id") @db.ObjectId
+  CustomerEmail           String          @unique
   CustomerName            String?
-  CustomerPhoneNumbers    String[]      @default([])
+  CustomerPhoneNumbers    String[]        @default([])
   CustomerAddress         Address?
-  CreatedAt               DateTime       @default(now())
-  UpdatedAt               DateTime       @updatedAt
+  CreatedAt               DateTime        @default(now())
+  UpdatedAt               DateTime        @updatedAt
 
-  Designers               Designers[]     @relation(fields: [DesignerID], references: [DesignerID])
-  DesignerID              String[]        @db.ObjectId
+  Designers               Designers[]     @relation(fields: [DesignerIDs], references: [DesignerID])
+  DesignerIDs              String[]        @db.ObjectId
 
   Products                Products[]
   Measurements            Measurements[]
 }
 
 model Designers {
-  DesignerID            String       @id @default(auto()) @map("_id") @db.ObjectId
-  DesignerName          String       @unique
-  DesignerPhoneNumbers  String[]     @default([])
+  DesignerID            String            @id @default(auto()) @map("_id") @db.ObjectId
+  DesignerName          String            @unique
+  DesignerPhoneNumbers  String[]          @default([])
   DesignerAddress       Address?
-  CreatedAt             DateTime     @default(now())
-  UpdatedAt             DateTime     @updatedAt
+  CreatedAt             DateTime          @default(now())
+  UpdatedAt             DateTime          @updatedAt
 
-  User                  Users        @relation(fields: [UserID], references: [UserID])
-  UserID                String       @unique @db.ObjectId
+  User                  Users             @relation(fields: [UserID], references: [UserID])
+  UserID                String            @unique @db.ObjectId
 
-  Customers              Customers[] @relation(fields: [CustomerID], references: [CustomerID])
-  CustomerID             String[]    @db.ObjectId
+  Customers              Customers[]      @relation(fields: [CustomerID], references: [CustomerID])
+  CustomerID             String[]         @db.ObjectId
 
-  Products               Products[]  @relation(fields: [ProductID], references: [ProductID])
-  ProductID              String[]    @db.ObjectId
+  Products               Products[]       @relation(fields: [ProductID], references: [ProductID])
+  ProductID              String[]         @db.ObjectId
 
   @@fulltext([UserID, CreatedAt(sort: Desc)])
 }
 
 model Products {
-  ProductID             String        @id @default(auto()) @map("_id") @db.ObjectId
+  ProductID             String            @id @default(auto()) @map("_id") @db.ObjectId
   ProductName           String
   ProductQuantity       Int
   ProductVideo          String?       
   ProductPrice          Float
   ProductCosts          Float
-  CreatedAt             DateTime      @default(now())
-  UpdatedAt             DateTime      @updatedAt
+  CreatedAt             DateTime          @default(now())
+  UpdatedAt             DateTime          @updatedAt
 
-  Customer              Customers     @relation(fields: [CustomerID], references: [CustomerID], onDelete: Cascade, onUpdate: Cascade)
-  CustomerID            String        @db.ObjectId
+  Customer              Customers         @relation(fields: [CustomerID], references: [CustomerID], onDelete: Cascade, onUpdate: Cascade)
+  CustomerID            String            @db.ObjectId
 
-  Designers             Designers[]   @relation(fields: [DesignerID], references: [DesignerID])
-  DesignerID            String[]      @db.ObjectId
+  Designers             Designers[]       @relation(fields: [DesignerID], references: [DesignerID])
+  DesignerID            String[]          @db.ObjectId
 
-  Measurement           Measurements  @relation(fields: [MeasurementID], references: [MeasurementID])
-  MeasurementID         String        @db.ObjectId
+  Measurement           Measurements      @relation(fields: [MeasurementID], references: [MeasurementID])
+  MeasurementID         String            @db.ObjectId
 
   @@fulltext([CustomerID, CreatedAt(sort: Desc)])
 }
 
 model Measurements {
-  MeasurementID     String           @id @default(auto()) @map("_id") @db.ObjectId
+  MeasurementID     String                @id @default(auto()) @map("_id") @db.ObjectId
   MeasurementType   String
   Measurement       Json
-  CreatedAt         DateTime          @default(now())
-  UpdatedAt         DateTime          @updatedAt
+  CreatedAt         DateTime              @default(now())
+  UpdatedAt         DateTime              @updatedAt
 
-  Customer          Customers         @relation(fields: [CustomerID], references: [CustomerID])
-  CustomerID        String            @db.ObjectId
+  Customer          Customers             @relation(fields: [CustomerID], references: [CustomerID])
+  CustomerID        String                @db.ObjectId
+
   Products          Products[]
-
 
   @@fulltext([CustomerID, MeasurementType, CreatedAt(sort: Desc)])
 }

@@ -1,3 +1,4 @@
+import * as express from 'express';
 import { Address } from '../../common';
 import {
   CreateMeasurementInput,
@@ -6,11 +7,23 @@ import {
 import { UpdateMeasurementInput } from '../dto/update-measurement.input';
 
 export interface IMeasurement<T> {
-  CreateMeasurement(data: CreateMeasurementInput): Promise<T>;
-  GetMeasurement(findMeasurementInput: FindMeasurementInput): Promise<T>;
-  GetMeasruements(): Promise<T[]>;
-  UpdateMeasurement(updateMeasurementInput: UpdateMeasurementInput): Promise<T>;
-  DeleteMeasurement(MeasurementID: FindMeasurementInput): Promise<void>;
+  CreateMeasurement(
+    createMeasurementInput: CreateMeasurementInput,
+    req: express.Request,
+  ): Promise<T>;
+  GetMeasurement(
+    findMeasurementInput: FindMeasurementInput,
+    req: express.Request,
+  ): Promise<T>;
+  GetMeasurements(req: express.Request): Promise<T[]>;
+  UpdateMeasurement(
+    updateMeasurementInput: UpdateMeasurementInput,
+    req: express.Request,
+  ): Promise<T>;
+  DeleteMeasurement(
+    findMeasurementInput: FindMeasurementInput,
+    req: express.Request,
+  ): Promise<void>;
 }
 
 export interface Measurements {
