@@ -12,7 +12,11 @@ export class DesignersService {
     try {
       const result = await this.prismaService.designers.create({
         data: {
-          UserID: req.sub.UserID,
+          User: {
+            connect: {
+              UserID: req.sub.UserID,
+            },
+          },
           DesignerName: createDesignerInput.DesignerName,
           DesignerPhoneNumbers: createDesignerInput.DesignerPhoneNumbers,
           DesignerAddress: {

@@ -43,7 +43,7 @@ model Customers {
   UpdatedAt               DateTime        @updatedAt
 
   Designers               Designers[]     @relation(fields: [DesignerIDs], references: [DesignerID])
-  DesignerIDs              String[]        @db.ObjectId
+  DesignerIDs             String[]        @db.ObjectId
 
   Products                Products[]
   Measurements            Measurements[]
@@ -60,11 +60,11 @@ model Designers {
   User                  Users             @relation(fields: [UserID], references: [UserID])
   UserID                String            @unique @db.ObjectId
 
-  Customers              Customers[]      @relation(fields: [CustomerID], references: [CustomerID])
-  CustomerID             String[]         @db.ObjectId
+  Customers              Customers[]      @relation(fields: [CustomerIDs], references: [CustomerID])
+  CustomerIDs            String[]         @db.ObjectId
 
-  Products               Products[]       @relation(fields: [ProductID], references: [ProductID])
-  ProductID              String[]         @db.ObjectId
+  Products               Products[]       @relation(fields: [ProductIDs], references: [ProductID])
+  ProductIDs             String[]         @db.ObjectId
 
   @@fulltext([UserID, CreatedAt(sort: Desc)])
 }
@@ -82,11 +82,11 @@ model Products {
   Customer              Customers         @relation(fields: [CustomerID], references: [CustomerID], onDelete: Cascade, onUpdate: Cascade)
   CustomerID            String            @db.ObjectId
 
-  Designers             Designers[]       @relation(fields: [DesignerID], references: [DesignerID])
-  DesignerID            String[]          @db.ObjectId
+  Designers             Designers[]       @relation(fields: [DesignerIDs], references: [DesignerID])
+  DesignerIDs           String[]          @db.ObjectId
 
-  Measurement           Measurements      @relation(fields: [MeasurementID], references: [MeasurementID])
-  MeasurementID         String            @db.ObjectId
+  Measurement           Measurements?     @relation(fields: [MeasurementID], references: [MeasurementID])
+  MeasurementID         String?           @db.ObjectId
 
   @@fulltext([CustomerID, CreatedAt(sort: Desc)])
 }
