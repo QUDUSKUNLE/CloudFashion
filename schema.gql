@@ -366,8 +366,9 @@ type Query {
   GetClothsRequest: [ClothsPayload!]!
   GetClothRequest(findClothingInput: FindClothingInput!): ClothsPayload!
   FetchCustomers(Skip: Int = 0, Take: Int = 25): [Customers!]!
-  mesaurements: [Measurement!]!
-  mesaurement(id: Int!): Measurement!
+  Measurements: [Measurement!]!
+  GetCustomerMeasurements(getCustomerMeasurementInput: GetCustomerMeasurementInput!): [Measurement!]!
+  Measurement(findMeasurementInput: FindMeasurementInput!): Measurement!
 }
 
 input FindProductInput {
@@ -405,6 +406,16 @@ input FindClothingInput {
   ClothID: String!
 }
 
+input GetCustomerMeasurementInput {
+  """Customer Identity"""
+  CustomerID: String!
+}
+
+input FindMeasurementInput {
+  """Measurement ID."""
+  MeasurementID: String!
+}
+
 type Mutation {
   CreateProduct(createProductInput: CreateProductInput!): Product!
   UpdateItemStatus(updateItemStatus: UpdateItemInput!): ItemResponse!
@@ -431,8 +442,7 @@ type Mutation {
   DeleteClothRequest(findClothingInput: FindClothingInput!): Clothing!
   CreateCustomer(createCustomerInput: CreateCustomerInput!): Customer!
   CreateMesaurement(createMeasurementInput: CreateMeasurementInput!): Measurement!
-  updateMesaurement(updateMesaurementInput: UpdateMeasurementInput!): Measurement!
-  removeMesaurement(id: Int!): Measurement!
+  UpdateMeasurement(updateMeasurementInput: UpdateMeasurementInput!): Measurement!
 }
 
 input CreateProductInput {
