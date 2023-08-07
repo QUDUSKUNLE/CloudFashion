@@ -64,16 +64,7 @@ export class ProductsService implements IProductService<Products> {
             createProductInput.ProductPrice *
             createProductInput.ProductQuantity,
           ProductVideo: process.env.TEST_VIDEO,
-          Customer: {
-            connect: {
-              CustomerID: createProductInput.CustomerID,
-            },
-          },
-          Measurement: {
-            connect: {
-              MeasurementID: createProductInput.CustomerID,
-            },
-          },
+          CustomerID: createProductInput.CustomerID,
           Designers: {
             connect: {
               DesignerID: req.sub.Designer?.DesignerID,
@@ -103,7 +94,7 @@ export class ProductsService implements IProductService<Products> {
       skip: designerFetchCustomersProducts.Skip,
       take: designerFetchCustomersProducts.Take,
       where: {
-        DesignerID: {
+        DesignerIDs: {
           hasSome: [req.sub.Designer?.DesignerID],
         },
       },
@@ -118,7 +109,7 @@ export class ProductsService implements IProductService<Products> {
       skip: designerFetchCustomerProducts.Skip,
       take: designerFetchCustomerProducts.Take,
       where: {
-        DesignerID: {
+        DesignerIDs: {
           hasSome: [req.sub.Designer?.DesignerID],
         },
         CustomerID: designerFetchCustomerProducts.CustomerID,
@@ -132,7 +123,7 @@ export class ProductsService implements IProductService<Products> {
   ) {
     return await this.prismaService.products.findUnique({
       where: {
-        DesignerID: {
+        DesignerIDs: {
           hasSome: [req.sub.Designer?.DesignerID],
         },
         ProductID: designerFetchCustomerProduct.ProductID,
