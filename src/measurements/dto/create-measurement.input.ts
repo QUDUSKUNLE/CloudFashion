@@ -147,6 +147,13 @@ export class FindMeasurementInput {
   MeasurementID: string;
 }
 
+@InputType()
+export class GetCustomerMeasurementInput {
+  @Field(() => String, { description: 'Customer Identity', nullable: false })
+  @Validate(MoongooseIDValidator)
+  CustomerID: string;
+}
+
 registerEnumType(Measurement, {
   name: 'MeasurementUnit',
   description: 'Measurement unit',

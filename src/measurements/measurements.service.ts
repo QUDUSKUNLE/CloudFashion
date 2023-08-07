@@ -6,13 +6,15 @@ import {
 } from '@nestjs/common';
 import { Measurement } from './entities/measurement.entity';
 import { PrismaService, Parser } from '../common';
-import { IMeasurement } from './interface/measurement.interface';
-import { CreateMeasurementInput } from './dto/create-measurement.input';
-import { FindMeasurementInput } from './dto/create-measurement.input';
+import {
+  CreateMeasurementInput,
+  GetCustomerMeasurementInput,
+  FindMeasurementInput,
+} from './dto/create-measurement.input';
 import { UpdateMeasurementInput } from './dto/update-measurement.input';
 
 @Injectable()
-export class MeasurementsService implements IMeasurement<Measurement> {
+export class MeasurementsService {
   constructor(private readonly prisma: PrismaService) {}
   async CreateMeasurement(
     createMeasurementInput: CreateMeasurementInput,
@@ -68,26 +70,30 @@ export class MeasurementsService implements IMeasurement<Measurement> {
   ): Promise<void> {
     throw new UnprocessableEntityException('Method not implemented.');
   }
-  GetMeasurements(req: express.Request): Promise<Measurement[]> {
-    throw new UnprocessableEntityException('Method not implemented.');
+  async GetMeasurements(req: express.Request) {
+    return await this.prisma.measurements.findMany();
   }
   create(createMeasurementInput: CreateMeasurementInput) {
     return 'This action adds a new mesaurement';
   }
 
-  findAll() {
-    return `This action returns all mesaurements`;
+  async GetCustomerMeasurement(
+    getCustomerMeasurementInput: GetCustomerMeasurementInput,
+  ) {
+    return await this.prisma.measurements.findMany({
+      where: {
+        CustomerID: getCustomerMeasurementInput.CustomerID,
+      },
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} mesaurement`;
+  async findOne(findMeasurementInput: FindMeasurementInput) {
+    return await this.prisma.measurements.findUnique({
+      where: { MeasurementID: findMeasurementInput.MeasurementID },
+    });
   }
 
   update(id: number, updateMesaurementInput: UpdateMeasurementInput) {
     return `This action updates a #${id} mesaurement`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} mesaurement`;
   }
 }
